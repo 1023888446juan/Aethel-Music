@@ -1,3 +1,9 @@
+/* =========================================================
+   1. IMPORTS, ESTADO Y EFECTOS
+   ========================================================= */
+
+import React from "react";
+
 function Mixer({
     leftChannelLevel,
     setLeftChannelLevel,
@@ -7,6 +13,27 @@ function Mixer({
     setCrossfade
 }) {
 
+    /* =========================================================
+       2. HANDLERS
+       ========================================================= */
+
+    const handleLeftChange = (e) => {
+        setLeftChannelLevel(Number(e.target.value));
+    };
+
+    const handleRightChange = (e) => {
+        setRightChannelLevel(Number(e.target.value));
+    };
+
+    const handleCrossfadeChange = (e) => {
+        setCrossfade(Number(e.target.value));
+    };
+
+
+    /* =========================================================
+       3. RENDER PRINCIPAL
+       ========================================================= */
+
     return (
         <section className="mixer">
 
@@ -14,9 +41,9 @@ function Mixer({
                 MIXER
             </div>
 
-            {/* =================================
+            {/* -------------------------------------------------
                 FADER A
-                ================================= */}
+            ------------------------------------------------- */}
 
             <div className="vertical-fader">
 
@@ -29,13 +56,7 @@ function Mixer({
                     min="0"
                     max="8"
                     value={leftChannelLevel}
-                    onChange={(e) =>
-                        setLeftChannelLevel(
-                            Number(
-                                e.target.value
-                            )
-                        )
-                    }
+                    onChange={handleLeftChange}
                     style={{
                         "--fader-progress": `${
                             (leftChannelLevel / 8) *
@@ -50,9 +71,9 @@ function Mixer({
 
             </div>
 
-            {/* =================================
+            {/* -------------------------------------------------
                 FADER B
-                ================================= */}
+            ------------------------------------------------- */}
 
             <div className="vertical-fader">
 
@@ -65,13 +86,7 @@ function Mixer({
                     min="0"
                     max="8"
                     value={rightChannelLevel}
-                    onChange={(e) =>
-                        setRightChannelLevel(
-                            Number(
-                                e.target.value
-                            )
-                        )
-                    }
+                    onChange={handleRightChange}
                     style={{
                         "--fader-progress": `${
                             (rightChannelLevel / 8) *
@@ -86,9 +101,9 @@ function Mixer({
 
             </div>
 
-            {/* =================================
+            {/* -------------------------------------------------
                 CROSSFADER
-                ================================= */}
+            ------------------------------------------------- */}
 
             <div className="crossfader">
 
@@ -104,13 +119,7 @@ function Mixer({
                     style={{
                         "--crossfade-progress": `${crossfade}%`,
                     }}
-                    onChange={(e) =>
-                        setCrossfade(
-                            Number(
-                                e.target.value
-                            )
-                        )
-                    }
+                    onChange={handleCrossfadeChange}
                 />
 
                 <span>

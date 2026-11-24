@@ -7,17 +7,34 @@ import ConfiguracionDelAlbum from "./configuraciondelAlbum";
 
 
 // =========================================
-// LISTA DE PLAYLISTS
+// LISTA DE ÁLBUMES
 // =========================================
 
 function ListaDeAlbums({
     albums,
     onCreate,
     onDelete,
-    onUpdate
+    onUpdate,
+    onSelectAlbum
 }) {
 
-    const [albumSeleccionado, setAlbumSeleccionado] = useState(null);
+    const [albumSeleccionado, setAlbumSeleccionado] =
+        useState(null);
+
+
+    // =========================================
+    // SELECCIONAR ÁLBUM
+    // =========================================
+
+    const seleccionarAlbum = (album) => {
+
+        setAlbumSeleccionado(album);
+
+        if (onSelectAlbum) {
+            onSelectAlbum(album);
+        }
+
+    };
 
 
     // =========================================
@@ -60,14 +77,14 @@ function ListaDeAlbums({
                     </span>
 
                     <h2>
-                        PLAYLISTS
+                        ÁLBUMES
                     </h2>
 
                 </div>
 
 
                 <span className="folder-counter">
-                    {albums.length} playlists
+                    {albums.length} álbumes
                 </span>
 
             </div>
@@ -81,7 +98,7 @@ function ListaDeAlbums({
 
 
                 {/* =================================
-                    PLAYLISTS
+                    ÁLBUMES
                     ================================= */}
 
                 {albums.map((album) => (
@@ -142,7 +159,7 @@ function ListaDeAlbums({
                         <div className="album-card-info">
 
                             <span className="album-card-label">
-                                PLAYLIST
+                                ÁLBUM
                             </span>
 
                             <h3>
@@ -167,6 +184,9 @@ function ListaDeAlbums({
                         <button
                             type="button"
                             className="album-open-button"
+                            onClick={() =>
+                                seleccionarAlbum(album)
+                            }
                         >
 
                             ABRIR
@@ -179,7 +199,7 @@ function ListaDeAlbums({
 
 
                 {/* =================================
-                    NUEVA PLAYLIST
+                    NUEVO ÁLBUM
                     ================================= */}
 
                 <button
@@ -193,7 +213,7 @@ function ListaDeAlbums({
                     </span>
 
                     <span className="new-album-title">
-                        NUEVA PLAYLIST
+                        NUEVO ÁLBUM
                     </span>
 
                     <span className="new-album-text">
@@ -207,7 +227,7 @@ function ListaDeAlbums({
 
 
             {/* =====================================
-                CONFIGURACIÓN DE PLAYLIST
+                CONFIGURACIÓN DE ÁLBUM
                 ===================================== */}
 
             {albumSeleccionado && (
@@ -216,19 +236,27 @@ function ListaDeAlbums({
 
                     album={albumSeleccionado}
 
-                    onClose={cerrarConfiguracion}
+                    onClose={
+                        cerrarConfiguracion
+                    }
+
 
                     onUpdate={(updatedAlbum) => {
 
-                        onUpdate(updatedAlbum);
+                        onUpdate(
+                            updatedAlbum
+                        );
 
                         cerrarConfiguracion();
 
                     }}
 
+
                     onDelete={(albumId) => {
 
-                        onDelete(albumId);
+                        onDelete(
+                            albumId
+                        );
 
                         cerrarConfiguracion();
 

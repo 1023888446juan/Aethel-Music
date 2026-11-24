@@ -1,6 +1,84 @@
-/* =========================================
-   HOME
-   ========================================= */
+/* =========================================================
+   1. VARIABLES DE TEMA (SOLO PALETAS DE COLOR)
+   ========================================================= */
+
+:root,
+:root[data-theme="dark"],
+.home-container,
+.home-container[data-theme="dark"],
+.player-side,
+.player-side[data-theme="dark"] {
+    --home-bg: #202124;
+    --home-player-bg:
+        radial-gradient(
+            circle at 50% 45%,
+            rgba(124, 153, 248, 0.06),
+            transparent 45%
+        ),
+        #202124;
+    --home-text: #ffffff;
+    --home-text-muted: rgba(255, 255, 255, 0.5);
+    --home-text-time: rgba(255, 255, 255, 0.4);
+    --home-accent-purple: #cd93fc;
+    --home-accent-blue: #7c99f8;
+    --home-playing-label: rgba(205, 147, 252, 0.7);
+
+    --home-art-bg:
+        linear-gradient(
+            145deg,
+            #18191d,
+            #28292d
+        );
+    --home-art-border: rgba(255, 255, 255, 0.08);
+    --home-progress-track: rgba(255, 255, 255, 0.1);
+    --home-progress-dot: #ffffff;
+    --home-hover-bg: rgba(255, 255, 255, 0.07);
+    --home-sec-hover-bg: rgba(255, 255, 255, 0.06);
+    --home-icon-filter: none;
+}
+
+/* Modo Claro Creativo: Daylight Studio Lavender & Ice Blue */
+:root[data-theme="light"],
+.home-container[data-theme="light"],
+.player-side[data-theme="light"] {
+    --home-bg: #f4f3fa;
+    --home-player-bg:
+        radial-gradient(
+            circle at 50% 42%,
+            rgba(168, 85, 247, 0.12),
+            transparent 48%
+        ),
+        linear-gradient(
+            135deg,
+            #f8f7fc,
+            #f1eff9 52%,
+            #e9ecf8
+        );
+    --home-text: #181624;
+    --home-text-muted: #5c5872;
+    --home-text-time: #777191;
+    --home-accent-purple: #8942d6;
+    --home-accent-blue: #4a6cf7;
+    --home-playing-label: #7b42bd;
+
+    --home-art-bg:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #efeafd
+        );
+    --home-art-border: rgba(137, 66, 214, 0.18);
+    --home-progress-track: rgba(120, 108, 165, 0.18);
+    --home-progress-dot: #8942d6;
+    --home-hover-bg: rgba(137, 66, 214, 0.08);
+    --home-sec-hover-bg: rgba(137, 66, 214, 0.07);
+    --home-icon-filter: invert(0.85);
+}
+
+
+/* =========================================================
+   2. CONTENEDOR Y FONDO
+   ========================================================= */
 
 .home-container {
     position: relative;
@@ -10,12 +88,10 @@
     display: grid;
     grid-template-columns: 380px minmax(0, 1fr);
     overflow: hidden;
-    background: #202124;
+    background: var(--home-bg);
+    color: var(--home-text);
+    transition: background 0.3s ease, color 0.3s ease;
 }
-
-/* =========================================
-   PLAYER
-   ========================================= */
 
 .player-side {
     position: relative;
@@ -27,18 +103,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background:
-        radial-gradient(
-            circle at 50% 45%,
-            rgba(124, 153, 248, 0.06),
-            transparent 45%
-        ),
-        #202124;
+    background: var(--home-player-bg);
+    transition: background 0.3s ease;
 }
-
-/* =========================================
-   FONDO DEL PLAYER
-   ========================================= */
 
 .player-background {
     position: absolute;
@@ -82,49 +149,11 @@
         transform 0.8s ease;
 }
 
-/* =========================================
-   FONDO ACTIVO CUANDO REPRODUCE
-   ========================================= */
-
 .player-side.is-playing .player-background {
     animation-play-state: running;
     opacity: 0.9;
     filter: blur(28px);
 }
-
-/* =========================================
-   ANIMACIONES DEL FONDO
-   ========================================= */
-
-@keyframes playerGlow {
-
-    0% {
-        transform: scale(0.85);
-    }
-
-    50% {
-        transform: scale(1.05);
-    }
-
-    100% {
-        transform: scale(1.18);
-    }
-}
-
-@keyframes playerRotate {
-
-    0% {
-        rotate: 0deg;
-    }
-
-    100% {
-        rotate: 360deg;
-    }
-}
-
-/* =========================================
-   HALO EXTERIOR
-   ========================================= */
 
 .player-side::before {
     content: "";
@@ -166,25 +195,6 @@
     animation-play-state: running;
 }
 
-@keyframes ambientRotate {
-
-    from {
-        transform: rotate(0deg) scale(1);
-    }
-
-    50% {
-        transform: rotate(180deg) scale(1.15);
-    }
-
-    to {
-        transform: rotate(360deg) scale(1);
-    }
-}
-
-/* =========================================
-   SEGUNDO HALO
-   ========================================= */
-
 .player-side::after {
     content: "";
 
@@ -219,23 +229,10 @@
     animation-play-state: running;
 }
 
-@keyframes pulseAmbient {
 
-    0%,
-    100% {
-        transform: scale(0.8);
-        opacity: 0.35;
-    }
-
-    50% {
-        transform: scale(1.25);
-        opacity: 0.75;
-    }
-}
-
-/* =========================================
-   CONTENIDO PLAYER
-   ========================================= */
+/* =========================================================
+   3. CONTENIDO DEL REPRODUCTOR Y PORTADA
+   ========================================================= */
 
 .player-content {
     position: relative;
@@ -257,10 +254,6 @@
 
     overflow: hidden;
 }
-
-/* =========================================
-   PORTADA
-   ========================================= */
 
 .album-art {
     position: relative;
@@ -285,20 +278,14 @@
 
     border-radius: 25px;
 
-    background:
-        linear-gradient(
-            145deg,
-            #18191d,
-            #28292d
-        );
+    background: var(--home-art-bg);
 
     border:
-        1px solid
-        rgba(255, 255, 255, 0.08);
+        1px solid var(--home-art-border);
 
     box-shadow:
         0 25px 70px
-        rgba(0, 0, 0, 0.4);
+        rgba(0, 0, 0, 0.35);
 
     overflow: hidden;
 
@@ -307,15 +294,11 @@
 
     transition:
         box-shadow 0.8s ease,
-        transform 0.8s ease;
+        transform 0.8s ease,
+        background 0.3s ease;
 }
 
-/* =========================================
-   PORTADA CUANDO REPRODUCE
-   ========================================= */
-
 .player-side.is-playing .album-art {
-
     box-shadow:
         0 25px 70px
         rgba(0, 0, 0, 0.5),
@@ -326,10 +309,6 @@
         0 0 80px
         rgba(124, 153, 248, 0.10);
 }
-
-/* =========================================
-   BRILLO DE LA PORTADA
-   ========================================= */
 
 .album-glow {
     position: absolute;
@@ -361,24 +340,6 @@
         albumGlowPulse 3s ease-in-out infinite;
 }
 
-@keyframes albumGlowPulse {
-
-    0%,
-    100% {
-        transform: scale(0.85);
-        opacity: 0.45;
-    }
-
-    50% {
-        transform: scale(1.15);
-        opacity: 1;
-    }
-}
-
-/* =========================================
-   LOGO
-   ========================================= */
-
 .logo-player {
     position: relative;
 
@@ -393,6 +354,7 @@
     object-fit: contain;
 
     filter:
+        var(--home-icon-filter)
         drop-shadow(
             0 0 25px
             rgba(205, 147, 252, 0.25)
@@ -404,8 +366,8 @@
 }
 
 .player-side.is-playing .logo-player {
-
     filter:
+        var(--home-icon-filter)
         drop-shadow(
             0 0 30px
             rgba(205, 147, 252, 0.55)
@@ -418,25 +380,10 @@
     transform: scale(1.03);
 }
 
-/* =========================================
-   ANIMACIÓN PORTADA
-   ========================================= */
 
-@keyframes albumFloat {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-8px);
-    }
-}
-
-/* =========================================
-   INFORMACIÓN DE CANCIÓN ACTUAL
-   ========================================= */
+/* =========================================================
+   4. INFORMACIÓN DE CANCIÓN Y BARRA DE PROGRESO
+   ========================================================= */
 
 .now-playing {
     margin-bottom:
@@ -452,11 +399,10 @@
 
     margin-bottom: 7px;
 
-    font-size: 10px;
+    font-size: calc(10px * var(--cfg-text-scale, 1));
     letter-spacing: 3px;
 
-    color:
-        rgba(205, 147, 252, 0.7);
+    color: var(--home-playing-label);
 
     transition:
         text-shadow 0.6s ease;
@@ -476,19 +422,24 @@
         sans-serif;
 
     font-size:
-        clamp(20px, 3vh, 30px);
+        clamp(
+            calc(20px * var(--cfg-text-scale, 1)),
+            3vh,
+            calc(30px * var(--cfg-text-scale, 1))
+        );
 
     font-weight: 500;
     letter-spacing: 1px;
 
-    color: white;
+    color: var(--home-text);
 
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 
     transition:
-        text-shadow 0.6s ease;
+        text-shadow 0.6s ease,
+        color 0.3s ease;
 }
 
 .player-side.is-playing .now-playing h2 {
@@ -500,19 +451,14 @@
 .now-playing p {
     margin: 0;
 
-    font-size: 14px;
+    font-size: calc(14px * var(--cfg-text-scale, 1));
 
-    color:
-        rgba(255, 255, 255, 0.5);
+    color: var(--home-text-muted);
 
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-
-/* =========================================
-   PROGRESO
-   ========================================= */
 
 .time-controls {
     width: 100%;
@@ -531,19 +477,14 @@
 .time-controls > span {
     min-width: 35px;
 
-    font-size: 10px;
+    font-size: calc(10px * var(--cfg-text-scale, 1));
 
-    color:
-        rgba(255, 255, 255, 0.4);
+    color: var(--home-text-time);
 }
 
 .time-controls > span:last-child {
     text-align: right;
 }
-
-/* =========================================
-   BARRA DE PROGRESO
-   ========================================= */
 
 .progress-bar {
     position: relative;
@@ -554,8 +495,7 @@
 
     border-radius: 10px;
 
-    background:
-        rgba(255, 255, 255, 0.1);
+    background: var(--home-progress-track);
 }
 
 .progress-fill {
@@ -593,7 +533,7 @@
 
     border-radius: 50%;
 
-    background: white;
+    background: var(--home-progress-dot);
 
     transform:
         translate(-50%, -50%);
@@ -615,9 +555,10 @@
         rgba(124, 153, 248, 0.45);
 }
 
-/* =========================================
-   CONTROLES PRINCIPALES
-   ========================================= */
+
+/* =========================================================
+   5. CONTROLES PRINCIPALES Y SECUNDARIOS
+   ========================================================= */
 
 .player-controls {
     display: flex;
@@ -657,16 +598,13 @@
         box-shadow 0.3s ease;
 }
 
-/* =========================================
-   IMÁGENES DE CONTROLES
-   ========================================= */
-
 .player-controls button img {
     width: 22px;
     height: 22px;
 
     object-fit: contain;
     display: block;
+    filter: var(--home-icon-filter);
 
     transition:
         transform 0.25s ease,
@@ -674,8 +612,7 @@
 }
 
 .player-controls button:hover {
-    background:
-        rgba(255, 255, 255, 0.07);
+    background: var(--home-hover-bg);
 
     transform:
         scale(1.1);
@@ -685,10 +622,6 @@
     transform:
         scale(1.08);
 }
-
-/* =========================================
-   BOTÓN PLAY / PAUSA
-   ========================================= */
 
 .player-controls .play-button {
     width: 62px;
@@ -716,6 +649,7 @@
     height: 28px;
 
     object-fit: contain;
+    filter: none;
 }
 
 .player-controls .play-button:hover {
@@ -734,13 +668,8 @@
         rgba(124, 153, 248, 0.45);
 }
 
-/* =========================================
-   BOTÓN PLAY CON MÚSICA
-   ========================================= */
-
 .player-side.is-playing
 .player-controls .play-button {
-
     box-shadow:
         0 8px 25px
         rgba(124, 153, 248, 0.4),
@@ -752,8 +681,222 @@
         playPulse 2.5s ease-in-out infinite;
 }
 
-@keyframes playPulse {
+.secondary-controls {
+    display: flex;
 
+    align-items: center;
+    justify-content: center;
+
+    gap: 22px;
+
+    flex-shrink: 0;
+}
+
+.secondary-controls button {
+    position: relative;
+    width: 34px;
+    height: 34px;
+
+    padding: 0;
+
+    border: 1px solid transparent;
+
+    background: transparent;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    transition:
+        transform 0.25s ease,
+        background 0.25s ease,
+        border-color 0.25s ease,
+        filter 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.secondary-controls button img {
+    position: relative;
+    z-index: 2;
+    width: 18px;
+    height: 18px;
+
+    object-fit: contain;
+    display: block;
+    filter: var(--home-icon-filter);
+
+    transition:
+        transform 0.25s ease,
+        filter 0.25s ease;
+}
+
+.secondary-controls button:hover {
+    transform:
+        scale(1.14);
+
+    background: var(--home-sec-hover-bg);
+
+    filter:
+        drop-shadow(
+            0 0 7px
+            rgba(124, 153, 248, 0.65)
+        );
+}
+
+.secondary-controls button:hover img {
+    transform:
+        scale(1.08);
+}
+
+/* Botón Repetir: estado activado vs desactivado */
+.repeat-button.is-active {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(205, 147, 252, 0.22),
+            rgba(124, 153, 248, 0.22)
+        );
+    border-color: rgba(205, 147, 252, 0.55);
+    box-shadow:
+        0 0 16px rgba(205, 147, 252, 0.35),
+        inset 0 0 8px rgba(124, 153, 248, 0.25);
+}
+
+.repeat-button.is-active img {
+    animation: repeatSpinOnce 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    filter:
+        drop-shadow(0 0 8px rgba(205, 147, 252, 0.85));
+}
+
+.repeat-button.is-active::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--home-accent-purple);
+    box-shadow: 0 0 8px var(--home-accent-purple);
+}
+
+/* Botón Favorito: animación creativa al dar like y al quitar */
+.favorite-button.is-favorite {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(205, 147, 252, 0.24),
+            rgba(124, 153, 248, 0.22)
+        );
+    border-color: rgba(205, 147, 252, 0.6);
+    box-shadow:
+        0 0 18px rgba(205, 147, 252, 0.4);
+}
+
+.favorite-button.is-favorite::before {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(205, 147, 252, 0.75);
+    animation: favoriteRingBurst 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    pointer-events: none;
+}
+
+.favorite-button.is-popping img {
+    animation: heartBeatPop 0.62s cubic-bezier(0.22, 1.35, 0.36, 1);
+    filter:
+        drop-shadow(0 0 10px rgba(205, 147, 252, 0.95));
+}
+
+.favorite-button.is-unfavoriting img {
+    animation: heartShrinkFade 0.38s ease-out;
+}
+
+
+/* =========================================================
+   6. ANIMACIONES
+   ========================================================= */
+
+@keyframes playerGlow {
+    0% {
+        transform: scale(0.85);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1.18);
+    }
+}
+
+@keyframes playerRotate {
+    0% {
+        rotate: 0deg;
+    }
+
+    100% {
+        rotate: 360deg;
+    }
+}
+
+@keyframes ambientRotate {
+    from {
+        transform: rotate(0deg) scale(1);
+    }
+
+    50% {
+        transform: rotate(180deg) scale(1.15);
+    }
+
+    to {
+        transform: rotate(360deg) scale(1);
+    }
+}
+
+@keyframes pulseAmbient {
+    0%,
+    100% {
+        transform: scale(0.8);
+        opacity: 0.35;
+    }
+
+    50% {
+        transform: scale(1.25);
+        opacity: 0.75;
+    }
+}
+
+@keyframes albumGlowPulse {
+    0%,
+    100% {
+        transform: scale(0.85);
+        opacity: 0.45;
+    }
+
+    50% {
+        transform: scale(1.15);
+        opacity: 1;
+    }
+}
+
+@keyframes albumFloat {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+@keyframes playPulse {
     0%,
     100% {
         box-shadow:
@@ -774,82 +917,77 @@
     }
 }
 
-/* =========================================
-   CONTROLES SECUNDARIOS
-   ========================================= */
+@keyframes repeatSpinOnce {
+    0% {
+        transform: rotate(0deg) scale(1);
+    }
 
-.secondary-controls {
-    display: flex;
+    50% {
+        transform: rotate(180deg) scale(1.22);
+    }
 
-    align-items: center;
-    justify-content: center;
-
-    gap: 22px;
-
-    flex-shrink: 0;
+    100% {
+        transform: rotate(360deg) scale(1.06);
+    }
 }
 
-.secondary-controls button {
-    width: 30px;
-    height: 30px;
+@keyframes heartBeatPop {
+    0% {
+        transform: scale(0.75) rotate(-10deg);
+    }
 
-    padding: 0;
+    35% {
+        transform: scale(1.42) rotate(8deg);
+    }
 
-    border: none;
+    60% {
+        transform: scale(0.95) rotate(-4deg);
+    }
 
-    background: transparent;
+    82% {
+        transform: scale(1.18) rotate(2deg);
+    }
 
-    cursor: pointer;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 50%;
-
-    transition:
-        transform 0.25s ease,
-        background 0.25s ease,
-        filter 0.25s ease;
+    100% {
+        transform: scale(1.08) rotate(0deg);
+    }
 }
 
-.secondary-controls button img {
-    width: 18px;
-    height: 18px;
+@keyframes favoriteRingBurst {
+    0% {
+        transform: scale(0.85);
+        opacity: 0.95;
+    }
 
-    object-fit: contain;
-    display: block;
-
-    transition:
-        transform 0.25s ease,
-        filter 0.25s ease;
+    100% {
+        transform: scale(1.65);
+        opacity: 0;
+    }
 }
 
-.secondary-controls button:hover {
-    transform:
-        scale(1.15);
+@keyframes heartShrinkFade {
+    0% {
+        transform: scale(1.12);
+        opacity: 1;
+    }
 
-    background:
-        rgba(255, 255, 255, 0.06);
+    45% {
+        transform: scale(0.72) rotate(-12deg);
+        opacity: 0.45;
+    }
 
-    filter:
-        drop-shadow(
-            0 0 7px
-            rgba(124, 153, 248, 0.65)
-        );
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
 }
 
-.secondary-controls button:hover img {
-    transform:
-        scale(1.08);
-}
 
-/* =========================================
-   PANTALLAS MEDIANAS
-   ========================================= */
+/* =========================================================
+   7. RESPONSIVE
+   ========================================================= */
 
 @media (max-width: 900px) {
-
     .home-container {
         grid-template-columns:
             300px
@@ -870,12 +1008,7 @@
     }
 }
 
-/* =========================================
-   PANTALLAS PEQUEÑAS
-   ========================================= */
-
 @media (max-width: 700px) {
-
     .home-container {
         grid-template-columns: 1fr;
     }
@@ -893,12 +1026,7 @@
     }
 }
 
-/* =========================================
-   VENTANAS MUY BAJAS
-   ========================================= */
-
 @media (max-height: 700px) {
-
     .player-content {
         padding:
             10px 0;
@@ -927,12 +1055,7 @@
     }
 }
 
-/* =========================================
-   VENTANAS EXTREMADAMENTE BAJAS
-   ========================================= */
-
 @media (max-height: 550px) {
-
     .album-art {
         width:
             min(170px, 24vh);
@@ -950,11 +1073,11 @@
     }
 
     .now-playing h2 {
-        font-size: 20px;
+        font-size: calc(20px * var(--cfg-text-scale, 1));
     }
 
     .now-playing p {
-        font-size: 12px;
+        font-size: calc(12px * var(--cfg-text-scale, 1));
     }
 
     .time-controls {

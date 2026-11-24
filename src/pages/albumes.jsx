@@ -1,333 +1,541 @@
-import { useRef, useState, useEffect } from "react";
+/* =========================================================
+   1. IMPORTS, ESTADO Y EFECTOS
+   ========================================================= */
+
+import { useEffect, useRef, useState } from "react";
+
 import "../styles/interfaces_navbar/albumes.css";
 
-// =========================================
-// ICONOS DEL REPRODUCTOR
-// =========================================
+import List from "../components/List";
 
-import playIcon from "../assets/img/reproductor_icons/play.png";
-import pausaIcon from "../assets/img/reproductor_icons/pausa.png";
-import atras15Icon from "../assets/img/reproductor_icons/atras15.png";
-import atrasIcon from "../assets/img/reproductor_icons/atras.png";
-import repetirIcon from "../assets/img/reproductor_icons/repetir.png";
-import adelante15Icon from "../assets/img/reproductor_icons/adelante15.png";
-import adelanteIcon from "../assets/img/reproductor_icons/adelante.png";
-import favoritosIcon from "../assets/img/reproductor_icons/favoritos.png";
-
-// =========================================
-// TEXTURAS DE ÁLBUMES
-// =========================================
+import Favoritos from "../components/albumes/favoritos";
+import ListaDeAlbums from "../components/albumes/listadeAlbums";
+import CrearAlbum from "../components/albumes/crearAlbum";
 
 import albumTexture from "../assets/img/Albumes/Album.png";
-import favoritasTexture from "../assets/img/Albumes/Favoritas.png";
 
+const STORAGE_KEYS = {
+    colorMode: "aethel_color_mode",
+    textSize: "aethel_text_size"
+};
 
 function Albumes() {
+    const [colorMode, setColorMode] = useState(() => {
+        const saved = localStorage.getItem(STORAGE_KEYS.colorMode);
+        return saved === "light" || saved === "dark" ? saved : "dark";
+    });
 
-    // =========================================
-    // CANCIONES
-    // =========================================
+    const [textSize, setTextSize] = useState(() => {
+        const saved = Number(localStorage.getItem(STORAGE_KEYS.textSize));
+        return saved >= 80 && saved <= 130 ? saved : 100;
+    });
+
+    const [albums, setAlbums] = useState([]);
+
+    const [mostrarCrearAlbum, setMostrarCrearAlbum] =
+        useState(false);
 
     const [songs, setSongs] = useState([]);
 
+    const [albumSeleccionado, setAlbumSeleccionado] =
+        useState(null);
 
-    // =========================================
-    // ÁLBUMES / CARPETAS
-    // =========================================
-
-    const [albums] = useState([
-        {
-            id: 1,
-            name: "Mis canciones",
-            description: "Mi colección personal",
-            songs: 12,
-            texture: albumTexture
-        },
-        {
-            id: 2,
-            name: "Trap favorito",
-            description: "Mis canciones de Trap",
-            songs: 8,
-            texture: albumTexture
-        },
-        {
-            id: 3,
-            name: "Para entrenar",
-            description: "Música para ponerse serio",
-            songs: 15,
-            texture: albumTexture
-        }
-    ]);
-
-
-    // =========================================
-    // ESTADOS
-    // =========================================
-
-    const [selectedSong, setSelectedSong] = useState(null);
-
-    const [isPlaying, setIsPlaying] = useState(false);
+    const [mostrarFavoritos, setMostrarFavoritos] =
+        useState(false);
 
     const fileInputRef = useRef(null);
+    const contentRef = useRef(null);
+
+    const textScale = textSize / 100;
+
+    useEffect(() => {
+        const syncPreferences = () => {
+            const attrTheme = document.documentElement.getAttribute("data-theme");
+            const savedTheme = localStorage.getItem(STORAGE_KEYS.colorMode);
+            const nextTheme =
+                attrTheme === "light" || attrTheme === "dark"
+                    ? attrTheme
+                    : savedTheme === "light" || savedTheme === "dark"
+                        ? savedTheme
+                        : "dark";
+
+            const cssScale = Number(
+                getComputedStyle(document.documentElement).getPropertyValue("--cfg-text-scale")
+            );
+            const savedText = Number(localStorage.getItem(STORAGE_KEYS.textSize));
+
+            setColorMode(nextTheme);
+
+            if (!Number.isNaN(cssScale) && cssScale > 0) {
+                setTextSize(Math.round(cssScale * 100));
+            } else if (savedText >= 80 && savedText <= 130) {
+                setTextSize(savedText);
+            }
+        };
+
+        syncPreferences();
+
+        const observer = new MutationObserver(syncPreferences);
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ["data-theme", "style"]
+        });
+
+        window.addEventListener("storage", syncPreferences);
+
+        return () => {
+            observer.disconnect();
+            window.removeEventListener("storage", syncPreferences);
+        };
+    }, []);
+
+    useEffect(() => {
+        const obtenerAlbumes = async () => {
+            try {
+                const response = await fetch(
+                    "http://127.0.0.1:8000/albumes/"
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    console.error(
+                        "Error obteniendo álbumes:",
+                        data
+                    );
+
+                    return;
+                }
+
+                const albumesFormateados = data.map(
+                    (album) => ({
+                        id: album.id_album,
+
+                        name: album.titulo_album,
+
+                        description:
+                            album.descripcion_album ||
+                            "Sin descripción",
+
+                        songs: 0,
+
+                        texture: albumTexture
+                    })
+                );
+
+                setAlbums(
+                    albumesFormateados
+                );
+            } catch (error) {
+                console.error(
+                    "Error conectando con el backend:",
+                    error
+                );
+            }
+        };
+
+        obtenerAlbumes();
+    }, []);
+
+    useEffect(() => {
+        const obtenerCanciones = async () => {
+            try {
+                const response = await fetch(
+                    "http://127.0.0.1:8000/pistas/"
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    console.error(
+                        "Error obteniendo canciones:",
+                        data
+                    );
+
+                    return;
+                }
+
+                const cancionesFormateadas = data.map(
+                    (pista) => ({
+                        id: pista.id_pista,
+
+                        title: pista.titulo_pista,
+
+                        artist:
+                            pista.artista ||
+                            "Artista desconocido",
+
+                        genre: "Todas",
+
+                        albumId:
+                            pista.fk_id_album,
+
+                        duration:
+                            pista.duracion_pista,
+
+                        format:
+                            pista.formato_pista,
+
+                        path:
+                            pista.ruta_pista
+                    })
+                );
+
+                setSongs(
+                    cancionesFormateadas
+                );
+            } catch (error) {
+                console.error(
+                    "Error obteniendo canciones:",
+                    error
+                );
+            }
+        };
+
+        obtenerCanciones();
+    }, []);
 
 
-    // =========================================
-    // GÉNEROS
-    // =========================================
+    /* =========================================================
+       2. HANDLERS
+       ========================================================= */
 
-    const genres = [
-        "Todas"
-    ];
+    const handleSelectAlbum = (album) => {
+        setAlbumSeleccionado(
+            album
+        );
+    };
 
+    const handleOpenFavorites = () => {
+        setMostrarFavoritos(true);
+    };
 
-    // =========================================
-    // SELECCIONAR CANCIÓN
-    // =========================================
+    const handleFavoritesContainerClick = (event) => {
+        const openButton = event.target.closest(".open-album-button");
+        if (openButton) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
 
-    const handleSongClick = (song) => {
-        setSelectedSong(song);
+        const favoriteCard = event.target.closest(".favorite-card");
+        if (favoriteCard || contentRef.current?.contains(event.target)) {
+            handleOpenFavorites();
+        }
     };
 
     const handleUploadClick = () => {
+        if (!albumSeleccionado) {
+            alert(
+                "Primero selecciona un álbum."
+            );
+
+            return;
+        }
+
         fileInputRef.current?.click();
     };
 
-    const cargarPistas = async () => {
-
-        try {
-
-            const response = await fetch(
-                "http://127.0.0.1:8000/pistas/"
-            );
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                console.error(data);
-                return;
-            }
-
-            const canciones = data.map((pista) => ({
-                id: pista.id_pista,
-                title: pista.titulo_pista,
-                artist: pista.artista || "Artista desconocido",
-                album: pista.album || "Álbum desconocido",
-                genre: "Todas",
-                duration: pista.duracion_pista,
-                format: pista.formato_pista,
-                path: pista.ruta_pista
-            }));
-
-            setSongs(canciones);
-
-            if (canciones.length > 0) {
-                setSelectedSong((actual) => actual || canciones[0]);
-            }
-
-        } catch (error) {
-
-            console.error(
-                "No se pudieron cargar las pistas:",
-                error
-            );
-
-        }
-    };
-
     const handleFileChange = async (event) => {
-
-        const archivo = event.target.files[0];
+        const archivo =
+            event.target.files[0];
 
         if (!archivo) {
             return;
         }
 
-        const formData = new FormData();
-
-        formData.append("archivo", archivo);
-
-        try {
-
-            const response = await fetch(
-                "http://127.0.0.1:8000/pistas/upload",
-                {
-                    method: "POST",
-                    body: formData
-                }
+        if (!albumSeleccionado) {
+            alert(
+                "Primero selecciona un álbum."
             );
 
-            const data = await response.json();
+            event.target.value = "";
+
+            return;
+        }
+
+        const formData =
+            new FormData();
+
+        formData.append(
+            "archivo",
+            archivo
+        );
+
+        formData.append(
+            "id_album",
+            albumSeleccionado.id
+        );
+
+        try {
+            const response =
+                await fetch(
+                    "http://127.0.0.1:8000/pistas/upload",
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+            const data =
+                await response.json();
+
+            console.log(
+                "Respuesta del servidor:",
+                data
+            );
 
             if (!response.ok) {
-                alert(data.detail || "No se pudo subir la canción");
+                alert(
+                    data.detail ||
+                    "No se pudo subir la canción"
+                );
+
                 return;
             }
 
-            alert("Canción subida correctamente");
+            alert(
+                "Canción subida correctamente"
+            );
 
-            await cargarPistas();
+            const nuevaCancion = {
+                id:
+                    data.id_pista,
 
+                title:
+                    data.titulo,
+
+                artist:
+                    data.artista ||
+                    "Artista desconocido",
+
+                genre:
+                    "Todas",
+
+                albumId:
+                    data.id_album,
+
+                duration:
+                    data.duracion,
+
+                format:
+                    data.formato,
+
+                path:
+                    data.ruta
+            };
+
+            setSongs(
+                (previousSongs) => [
+                    ...previousSongs,
+                    nuevaCancion
+                ]
+            );
         } catch (error) {
+            console.error(
+                "Error al subir la canción:",
+                error
+            );
 
-            console.error(error);
-
-            alert("No se pudo conectar con el servidor");
-
+            alert(
+                "No se pudo conectar con el servidor"
+            );
+        } finally {
+            event.target.value = "";
         }
-
-        event.target.value = "";
     };
 
-    useEffect(() => {
-        cargarPistas();
-    }, []);
+    const handleCreateAlbum = async (
+        newAlbum
+    ) => {
+        try {
+            const response =
+                await fetch(
+                    "http://127.0.0.1:8000/albumes/",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            titulo_album:
+                                newAlbum.titulo_album,
+
+                            descripcion_album:
+                                newAlbum.descripcion_album,
+
+                            fecha_lanzamiento:
+                                newAlbum.fecha_lanzamiento
+                        })
+                    }
+                );
+
+            const data =
+                await response.json();
+
+            if (!response.ok) {
+                alert(
+                    data.detail ||
+                    "No se pudo crear el álbum"
+                );
+
+                return;
+            }
+
+            const albumCreado = {
+                id:
+                    data.id_album,
+
+                name:
+                    data.titulo_album,
+
+                description:
+                    data.descripcion_album ||
+                    "Sin descripción",
+
+                songs:
+                    0,
+
+                texture:
+                    newAlbum.texture ||
+                    albumTexture
+            };
+
+            setAlbums(
+                (previousAlbums) => [
+                    ...previousAlbums,
+                    albumCreado
+                ]
+            );
+
+            setMostrarCrearAlbum(
+                false
+            );
+        } catch (error) {
+            console.error(
+                "Error creando álbum:",
+                error
+            );
+
+            alert(
+                "No se pudo conectar con el servidor"
+            );
+        }
+    };
+
+    const handleDeleteAlbum = async (
+        albumId
+    ) => {
+        try {
+            const response =
+                await fetch(
+                    `http://127.0.0.1:8000/albumes/${albumId}`,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+            const data =
+                await response.json();
+
+            if (!response.ok) {
+                alert(
+                    data.detail ||
+                    "No se pudo eliminar el álbum"
+                );
+
+                return;
+            }
+
+            setAlbums(
+                (previousAlbums) =>
+                    previousAlbums.filter(
+                        (album) =>
+                            album.id !== albumId
+                    )
+            );
+
+            if (
+                albumSeleccionado?.id ===
+                albumId
+            ) {
+                setAlbumSeleccionado(
+                    null
+                );
+            }
+        } catch (error) {
+            console.error(
+                "Error eliminando álbum:",
+                error
+            );
+
+            alert(
+                "No se pudo conectar con el servidor"
+            );
+        }
+    };
+
+    const handleUpdateAlbum = (
+        updatedAlbum
+    ) => {
+        setAlbums(
+            (previousAlbums) =>
+                previousAlbums.map(
+                    (album) =>
+                        album.id ===
+                        updatedAlbum.id
+                            ? {
+                                ...album,
+                                ...updatedAlbum
+                            }
+                            : album
+                )
+        );
+    };
 
 
-    // =========================================
-    // INTERFAZ
-    // =========================================
+    /* =========================================================
+       3. RENDER PRINCIPAL
+       ========================================================= */
 
     return (
+        <div
+            className="albumes-container"
+            data-theme={colorMode}
+            style={{ "--cfg-text-scale": textScale }}
+        >
 
-        <div className="albumes-container">
+            {/* -----------------------------------------------------
+                LISTA LATERAL
+            ----------------------------------------------------- */}
 
-
-            {/* =====================================
-                SIDEBAR DE MÚSICA
-                ===================================== */}
-
-            <aside className="playlist-side">
-
-                <div className="playlist-background-glow"></div>
-
-                <div className="playlist-content">
-
-
-                    {/* HEADER */}
-
-                    <div className="playlist-header">
-
-                        <div>
-
-                            <span className="playlist-subtitle">
-                                AETHEL MUSIC
-                            </span>
-
-                            <h1>
-                                MÚSICA
-                            </h1>
-
-                        </div>
-
-                        <span className="sort-text">
-                            Orden ↕
-                        </span>
-
-                    </div>
+            <List
+                songs={songs}
+            />
 
 
-                    {/* LISTA DE MÚSICA */}
+            {/* -----------------------------------------------------
+                CONTENIDO PRINCIPAL
+            ----------------------------------------------------- */}
 
-                    <div className="music-scroll">
-
-                        {genres.map((genre) => (
-
-                            <section
-                                className="category"
-                                key={genre}
-                            >
-
-                                <h2 className="category-title">
-                                    {genre}
-                                </h2>
-
-
-                                {songs
-                                    .filter(
-                                        (song) =>
-                                            song.genre === genre
-                                    )
-                                    .map((song) => (
-
-                                        <button
-                                            key={song.id}
-                                            type="button"
-                                            className={
-                                                selectedSong?.id === song.id
-                                                    ? "song active"
-                                                    : "song"
-                                            }
-                                            onClick={() =>
-                                                handleSongClick(song)
-                                            }
-                                        >
-
-                                            <span className="play-icon">
-
-                                                <img
-                                                    src={playIcon}
-                                                    alt="Reproducir"
-                                                />
-
-                                            </span>
-
-
-                                            <span className="song-info">
-
-                                                <span className="song-title">
-                                                    {song.title}
-                                                </span>
-
-                                                <span className="song-artist">
-                                                    {song.artist}
-                                                </span>
-
-                                            </span>
-
-
-                                            {selectedSong?.id === song.id && (
-
-                                                <span className="equalizer">
-
-                                                    <span></span>
-                                                    <span></span>
-                                                    <span></span>
-                                                    <span></span>
-
-                                                </span>
-
-                                            )}
-
-                                        </button>
-
-                                    ))}
-
-                            </section>
-
-                        ))}
-
-                    </div>
-
-                </div>
-
-            </aside>
-
-
-            {/* =====================================
-                CONTENIDO DE ÁLBUMES
-                ===================================== */}
-
-            <main className="albumes-main">
+            <main
+                className="albumes-main"
+                data-theme={colorMode}
+                style={{ "--cfg-text-scale": textScale }}
+            >
 
                 <div className="albumes-background"></div>
 
+                <div
+                    ref={contentRef}
+                    className="albumes-content"
+                >
 
-                <div className="albumes-content">
-
-
-                    {/* =================================
+                    {/* -------------------------------------------------
                         HEADER
-                        ================================= */}
+                    ------------------------------------------------- */}
 
                     <div className="albumes-header">
 
@@ -342,251 +550,137 @@ function Albumes() {
                             </h1>
 
                             <p>
-                                Organiza tu música en tus propias carpetas.
+                                Organiza tu música en tus propias playlists.
                             </p>
 
                         </div>
 
+                        <div className="albumes-header-buttons">
 
-                        {/* BOTÓN CREAR */}
+                            <button
+                                type="button"
+                                className="create-album-button"
+                                onClick={() =>
+                                    setMostrarCrearAlbum(true)
+                                }
+                            >
 
-                        <button
-                            type="button"
-                            className="create-album-button"
-                        >
+                                <span className="create-icon">
+                                    +
+                                </span>
 
-                            <span className="create-icon">
-                                +
-                            </span>
+                                <span>
+                                    CREAR PLAYLIST
+                                </span>
 
-                            <span>
-                                CREAR CARPETA
-                            </span>
+                            </button>
 
-                        </button>
+                            <button
+                                type="button"
+                                className="upload-music-button"
+                                onClick={
+                                    handleUploadClick
+                                }
+                            >
 
-                        <button
-                            type="button"
-                            className="upload-music-button"
-                            onClick={handleUploadClick}
-                        >
+                                <span className="upload-icon">
+                                    ↑
+                                </span>
 
-                            <span className="upload-icon">
-                                ↑
-                            </span>
+                                <span>
+                                    SUBIR MÚSICA
+                                </span>
 
-                            <span>
-                                SUBIR MÚSICA
-                            </span>
+                            </button>
 
-                        </button>
+                            <input
+                                ref={fileInputRef}
+                                type="file"
+                                accept=".mp3,.wav,.aiff,.m4a,.opus"
+                                style={{
+                                    display: "none"
+                                }}
+                                onChange={
+                                    handleFileChange
+                                }
+                            />
 
-                        <input
-                            ref={fileInputRef}
-                            type="file"
-                            accept=".mp3,.wav,.aiff,.m4a,.opus"
-                            style={{ display: "none" }}
-                            onChange={handleFileChange}
-                        />
+                        </div>
 
                     </div>
 
 
-                    {/* =================================
+                    {/* -------------------------------------------------
                         FAVORITAS
-                        ================================= */}
-
-                    <section className="album-section">
-
-                        <div className="section-title">
-
-                            <div>
-
-                                <span className="section-label">
-                                    COLECCIÓN ESPECIAL
-                                </span>
-
-                                <h2>
-                                    FAVORITAS
-                                </h2>
-
-                            </div>
-
-                        </div>
-
-
-                        <div className="favorite-card">
-
-                            <div
-                                className="favorite-image"
-                                style={{
-                                    backgroundImage:
-                                        `url(${favoritasTexture})`
-                                }}
-                            >
-
-                                <div className="favorite-overlay"></div>
-
-                                <div className="favorite-icon">
-
-                                    <img
-                                        src={favoritosIcon}
-                                        alt="Favoritas"
-                                    />
-
-                                </div>
-
-                            </div>
-
-
-                            <div className="favorite-info">
-
-                                <span className="card-type">
-                                    COLECCIÓN
-                                </span>
-
-                                <h3>
-                                    Mis favoritas
-                                </h3>
-
-                                <p>
-                                    Todas las canciones que has marcado
-                                    como favoritas.
-                                </p>
-
-                                <span className="song-count">
-                                    0 canciones
-                                </span>
-
-                            </div>
-
-
-                            <button
-                                type="button"
-                                className="open-album-button"
-                            >
-                                ABRIR
-                            </button>
-
-                        </div>
-
-                    </section>
-
-
-                    {/* =================================
-                        CARPETAS
-                        ================================= */}
-
-                    <section className="album-section folders-section">
-
-                        <div className="section-title">
-
-                            <div>
-
-                                <span className="section-label">
-                                    TU MÚSICA
-                                </span>
-
-                                <h2>
-                                    CARPETAS
-                                </h2>
-
-                            </div>
-
-                            <span className="folder-counter">
-                                {albums.length} carpetas
-                            </span>
-
-                        </div>
-
-
-                        <div className="albums-grid">
-
-                            {albums.map((album) => (
-
-                                <article
-                                    className="album-card"
-                                    key={album.id}
-                                >
-
-                                    <div
-                                        className="album-image"
-                                        style={{
-                                            backgroundImage:
-                                                `url(${album.texture})`
-                                        }}
-                                    >
-
-                                        <div className="album-image-overlay"></div>
-
-                                        <span className="folder-symbol">
-                                            ♪
-                                        </span>
-
-                                    </div>
-
-
-                                    <div className="album-card-info">
-
-                                        <span className="album-card-label">
-                                            CARPETA
-                                        </span>
-
-                                        <h3>
-                                            {album.name}
-                                        </h3>
-
-                                        <p>
-                                            {album.description}
-                                        </p>
-
-                                        <span className="album-song-count">
-                                            {album.songs} canciones
-                                        </span>
-
-                                    </div>
-
-
-                                    <button
-                                        type="button"
-                                        className="album-open-button"
-                                    >
-                                        ABRIR
-                                    </button>
-
-                                </article>
-
-                            ))}
-
-
-                            {/* CREAR NUEVA CARPETA */}
-
-                            <button
-                                type="button"
-                                className="new-album-card"
-                            >
-
-                                <span className="new-album-plus">
-                                    +
-                                </span>
-
-                                <span className="new-album-title">
-                                    NUEVA CARPETA
-                                </span>
-
-                                <span className="new-album-text">
-                                    Organiza tus canciones
-                                </span>
-
-                            </button>
-
-                        </div>
-
-                    </section>
+                    ------------------------------------------------- */}
+
+                    <div
+                        className="favorites-clickable-wrapper"
+                        role="button"
+                        tabIndex={0}
+                        onClick={handleFavoritesContainerClick}
+                        onKeyDown={(event) => {
+                            if (event.key === "Enter" || event.key === " ") {
+                                event.preventDefault();
+                                handleOpenFavorites();
+                            }
+                        }}
+                    >
+                        <Favoritos
+                            songs={songs}
+                            onOpen={handleOpenFavorites}
+                            onSelect={handleOpenFavorites}
+                            isOpen={mostrarFavoritos}
+                            onClose={() => setMostrarFavoritos(false)}
+                        />
+                    </div>
+
+
+                    {/* -------------------------------------------------
+                        LISTA DE ÁLBUMES
+                    ------------------------------------------------- */}
+
+                    <ListaDeAlbums
+                        albums={
+                            albums
+                        }
+                        onCreate={() =>
+                            setMostrarCrearAlbum(
+                                true
+                            )
+                        }
+                        onDelete={
+                            handleDeleteAlbum
+                        }
+                        onUpdate={
+                            handleUpdateAlbum
+                        }
+                        onSelectAlbum={
+                            handleSelectAlbum
+                        }
+                    />
 
                 </div>
 
             </main>
+
+
+            {/* -----------------------------------------------------
+                MODAL CREAR ÁLBUM
+            ----------------------------------------------------- */}
+
+            {mostrarCrearAlbum && (
+                <CrearAlbum
+                    onClose={() =>
+                        setMostrarCrearAlbum(
+                            false
+                        )
+                    }
+                    onCreate={
+                        handleCreateAlbum
+                    }
+                />
+            )}
 
         </div>
     );

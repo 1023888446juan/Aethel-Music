@@ -1,37 +1,101 @@
-import { useState } from "react";
+/* =========================================================
+   1. IMPORTS, ESTADO Y EFECTOS
+   ========================================================= */
+
+import { useEffect, useState } from "react";
 import "../styles/interfaces_navbar/config.css";
 
 import Personalizar from "../components/configuracion/personalizar";
-import Busqueda from "../components/configuracion/busqueda";
-
 import settingsIcon from "../assets/img/configuracion/settings_cons.png";
-import searchIcon from "../assets/img/configuracion/search.png";
+
+const STORAGE_KEYS = {
+    colorMode: "aethel_color_mode",
+    textSize: "aethel_text_size"
+};
 
 function Config() {
     const [activePage, setActivePage] = useState("personalizar");
 
-    return (
-        <div className="config-container">
+    const [colorMode, setColorMode] = useState(() => {
+        const saved = localStorage.getItem(STORAGE_KEYS.colorMode);
+        return saved === "light" || saved === "dark" ? saved : "dark";
+    });
 
-            {/* =====================================
+    const [textSize, setTextSize] = useState(() => {
+        const saved = Number(localStorage.getItem(STORAGE_KEYS.textSize));
+        return saved >= 80 && saved <= 130 ? saved : 100;
+    });
+
+    const textScale = textSize / 100;
+
+    useEffect(() => {
+        document.documentElement.setAttribute("data-theme", colorMode);
+        localStorage.setItem(STORAGE_KEYS.colorMode, colorMode);
+    }, [colorMode]);
+
+    useEffect(() => {
+        document.documentElement.style.setProperty("--cfg-text-scale", String(textScale));
+    }, [textScale]);
+
+
+    /* =========================================================
+       2. HANDLERS
+       ========================================================= */
+
+    const handleColorModeChange = (nextMode) => {
+        if (nextMode === "light" || nextMode === "dark") {
+            setColorMode(nextMode);
+        }
+    };
+
+    const handleTextSizeChange = (nextSize) => {
+        const numericSize = Number(nextSize);
+        if (!Number.isNaN(numericSize)) {
+            setTextSize(numericSize);
+        }
+    };
+
+    const handleSave = () => {
+        localStorage.setItem(STORAGE_KEYS.colorMode, colorMode);
+        localStorage.setItem(STORAGE_KEYS.textSize, String(textSize));
+    };
+
+    const handleClose = () => {
+        const savedMode = localStorage.getItem(STORAGE_KEYS.colorMode);
+        const savedText = Number(localStorage.getItem(STORAGE_KEYS.textSize));
+
+        setColorMode(savedMode === "light" || savedMode === "dark" ? savedMode : "dark");
+        setTextSize(savedText >= 80 && savedText <= 130 ? savedText : 100);
+    };
+
+
+    /* =========================================================
+       3. RENDER PRINCIPAL
+       ========================================================= */
+
+    return (
+        <div
+            className="config-container"
+            data-theme={colorMode}
+            style={{ "--cfg-text-scale": textScale }}
+        >
+
+            {/* -----------------------------------------------------
                 FONDO
-            ===================================== */}
+            ----------------------------------------------------- */}
 
             <div className="config-background"></div>
 
 
-            {/* =====================================
+            {/* -----------------------------------------------------
                 SIDEBAR
-            ===================================== */}
+            ----------------------------------------------------- */}
 
             <aside className="config-sidebar">
 
                 <div className="config-sidebar-title">
                     <span>CONFIGURACIÓN</span>
                 </div>
-
-
-                {/* PERSONALIZAR */}
 
                 <button
                     type="button"
@@ -44,12 +108,10 @@ function Config() {
                 >
 
                     <span className="config-menu-icon">
-
                         <img
                             src={settingsIcon}
                             alt="Personalizar"
                         />
-
                     </span>
 
                     <span>
@@ -58,75 +120,26 @@ function Config() {
 
                 </button>
 
-
-                {/* BÚSQUEDA */}
-
-                <button
-                    type="button"
-                    className={
-                        activePage === "busqueda"
-                            ? "config-menu-item active"
-                            : "config-menu-item"
-                    }
-                    onClick={() => setActivePage("busqueda")}
-                >
-
-                    <span className="config-menu-icon">
-
-                        <img
-                            src={searchIcon}
-                            alt="Búsqueda"
-                        />
-
-                    </span>
-
-                    <span>
-                        Búsqueda
-                    </span>
-
-                </button>
-
             </aside>
 
 
-            {/* =====================================
+            {/* -----------------------------------------------------
                 CONTENIDO PRINCIPAL
-            ===================================== */}
+            ----------------------------------------------------- */}
 
             <main className="config-main">
 
-                <header className="config-header">
-
-                    <span className="config-subtitle">
-                        AETHEL MUSIC
-                    </span>
-
-                    <h1>
-                        CONFIGURACIÓN
-                    </h1>
-
-                    <p>
-                        Personaliza tu experiencia en Aethel Music.
-                    </p>
-
-                </header>
-
-
-                {/* =================================
-                    PERSONALIZAR
-                ================================= */}
+        
 
                 {activePage === "personalizar" && (
-                    <Personalizar />
-                )}
-
-
-                {/* =================================
-                    BÚSQUEDA
-                ================================= */}
-
-                {activePage === "busqueda" && (
-                    <Busqueda />
+                    <Personalizar
+                        colorMode={colorMode}
+                        onColorModeChange={handleColorModeChange}
+                        textSize={textSize}
+                        onTextSizeChange={handleTextSizeChange}
+                        onSave={handleSave}
+                        onClose={handleClose}
+                    />
                 )}
 
             </main>

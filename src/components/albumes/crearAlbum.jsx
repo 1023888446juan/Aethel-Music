@@ -6,7 +6,7 @@ import albumTexture from "../../assets/img/Albumes/Album.png";
 
 
 // =========================================
-// CREAR PLAYLIST
+// CREAR ÁLBUM
 // =========================================
 
 function CrearAlbum({
@@ -33,7 +33,6 @@ function CrearAlbum({
             return;
         }
 
-
         const imageURL =
             URL.createObjectURL(file);
 
@@ -43,7 +42,7 @@ function CrearAlbum({
 
 
     // =========================================
-    // CREAR
+    // CREAR ÁLBUM
     // =========================================
 
     const handleCreate = () => {
@@ -51,20 +50,21 @@ function CrearAlbum({
         if (!name.trim()) {
 
             alert(
-                "Escribe un nombre para la playlist."
+                "Escribe un nombre para el álbum."
             );
 
             return;
-
         }
 
 
         onCreate({
 
-            name: name.trim(),
+            titulo_album: name.trim(),
 
-            description:
-                "Mi nueva playlist",
+            descripcion_album:
+                "Mi nuevo álbum",
+
+            fecha_lanzamiento: null,
 
             texture: image
 
@@ -77,9 +77,7 @@ function CrearAlbum({
 
         <div className="config-album-overlay">
 
-
             <div className="config-album-window create-album-window">
-
 
                 {/* =================================
                     HEADER
@@ -90,24 +88,21 @@ function CrearAlbum({
                     <div>
 
                         <span className="config-album-label">
-                            NUEVA PLAYLIST
+                            NUEVO ÁLBUM
                         </span>
 
                         <h2>
-                            CREAR PLAYLIST
+                            CREAR ÁLBUM
                         </h2>
 
                     </div>
-
 
                     <button
                         type="button"
                         className="config-album-close"
                         onClick={onClose}
                     >
-
                         ×
-
                     </button>
 
                 </div>
@@ -119,10 +114,7 @@ function CrearAlbum({
 
                 <div className="create-album-body">
 
-
-                    {/* =================================
-                        PREVISUALIZACIÓN
-                        ================================= */}
+                    {/* PREVISUALIZACIÓN */}
 
                     <div
                         className="create-album-preview"
@@ -132,16 +124,12 @@ function CrearAlbum({
                         }}
                     >
 
-                        <div>
-                            NUEVA
-                        </div>
+                     
 
                     </div>
 
 
-                    {/* =================================
-                        IMAGEN
-                        ================================= */}
+                    {/* IMAGEN */}
 
                     <label className="config-album-upload">
 
@@ -156,13 +144,11 @@ function CrearAlbum({
                     </label>
 
 
-                    {/* =================================
-                        NOMBRE
-                        ================================= */}
+                    {/* NOMBRE */}
 
                     <label className="create-album-label">
 
-                        NOMBRE DE LA PLAYLIST
+                        NOMBRE DEL ÁLBUM
 
                     </label>
 
@@ -173,7 +159,7 @@ function CrearAlbum({
                         onChange={(event) =>
                             setName(event.target.value)
                         }
-                        placeholder="Ej: Música para entrenar"
+                        placeholder="Ej: Mis mejores canciones"
                         maxLength={40}
                     />
 
@@ -191,32 +177,24 @@ function CrearAlbum({
                         className="config-album-cancel"
                         onClick={onClose}
                     >
-
                         CANCELAR
-
                     </button>
-
 
                     <button
                         type="button"
                         className="config-album-save"
                         onClick={handleCreate}
                     >
-
-                        CREAR PLAYLIST
-
+                        CREAR ÁLBUM
                     </button>
 
                 </div>
-
 
             </div>
 
         </div>
 
     );
-
 }
-
 
 export default CrearAlbum;

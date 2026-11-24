@@ -1,50 +1,173 @@
-import React, { useState, useEffect } from "react";
+/* =========================================================
+   1. IMPORTS, ESTADO Y EFECTOS
+   ========================================================= */
+
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/interfaces_navbar/perfil.css";
 
+const STORAGE_KEYS = {
+    colorMode: "aethel_color_mode",
+    textSize: "aethel_text_size",
+    usuario: "usuario"
+};
+
 function Perfil() {
-
     const navigate = useNavigate();
+    const avatarInputRef = useRef(null);
 
-    // Datos del usuario.
-    // Por ahora están vacíos.
-    // Posteriormente serán obtenidos desde el backend.
+    const [colorMode, setColorMode] = useState(() => {
+        const saved = localStorage.getItem(STORAGE_KEYS.colorMode);
+        return saved === "light" || saved === "dark" ? saved : "dark";
+    });
+
+    const [textSize, setTextSize] = useState(() => {
+        const saved = Number(localStorage.getItem(STORAGE_KEYS.textSize));
+        return saved >= 80 && saved <= 130 ? saved : 100;
+    });
+
     const [usuario, setUsuario] = useState({
         nombre: "",
         correo: "",
         foto: ""
     });
 
+    const textScale = textSize / 100;
+
     useEffect(() => {
+        const syncPreferences = () => {
+            const attrTheme = document.documentElement.getAttribute("data-theme");
+            const savedTheme = localStorage.getItem(STORAGE_KEYS.colorMode);
+            const nextTheme =
+                attrTheme === "light" || attrTheme === "dark"
+                    ? attrTheme
+                    : savedTheme === "light" || savedTheme === "dark"
+                        ? savedTheme
+                        : "dark";
 
-        // Aquí posteriormente irá la petición al backend.
-        //
-        // Ejemplo:
-        //
-        // fetch("http://localhost:8000/usuario/perfil")
-        //     .then(response => response.json())
-        //     .then(data => setUsuario(data));
+            const cssScale = Number(
+                getComputedStyle(document.documentElement).getPropertyValue("--cfg-text-scale")
+            );
+            const savedText = Number(localStorage.getItem(STORAGE_KEYS.textSize));
 
+            setColorMode(nextTheme);
+
+            if (!Number.isNaN(cssScale) && cssScale > 0) {
+                setTextSize(Math.round(cssScale * 100));
+            } else if (savedText >= 80 && savedText <= 130) {
+                setTextSize(savedText);
+            }
+        };
+
+        syncPreferences();
+
+        const observer = new MutationObserver(syncPreferences);
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ["data-theme", "style"]
+        });
+
+        window.addEventListener("storage", syncPreferences);
+
+        return () => {
+            observer.disconnect();
+            window.removeEventListener("storage", syncPreferences);
+        };
     }, []);
 
+    useEffect(() => {
+        const usuarioGuardado = localStorage.getItem(STORAGE_KEYS.usuario);
+
+        if (usuarioGuardado) {
+            try {
+                const datosUsuario = JSON.parse(usuarioGuardado);
+
+                setUsuario({
+                    nombre: datosUsuario.nombre_usuario || datosUsuario.nombre || "",
+                    correo: datosUsuario.correo_usuario || datosUsuario.correo || "",
+                    foto: datosUsuario.foto_perfil || datosUsuario.foto || ""
+                });
+            } catch (error) {
+                console.error(
+                    "Error al leer los datos del usuario:",
+                    error
+                );
+            }
+        }
+    }, []);
+
+
+    /* =========================================================
+       2. HANDLERS
+       ========================================================= */
+
+    const handleOpenAvatarPicker = () => {
+        avatarInputRef.current?.click();
+    };
+
+    const handleAvatarChange = (event) => {
+        const file = event.target.files?.[0];
+        if (!file || !file.type.startsWith("image/")) return;
+
+        const reader = new FileReader();
+        reader.onload = () => {
+            const nextPhoto = typeof reader.result === "string" ? reader.result : "";
+            if (!nextPhoto) return;
+
+            setUsuario((prev) => ({
+                ...prev,
+                foto: nextPhoto
+            }));
+
+            try {
+                const rawSaved = localStorage.getItem(STORAGE_KEYS.usuario);
+                const parsed = rawSaved ? JSON.parse(rawSaved) : {};
+                localStorage.setItem(
+                    STORAGE_KEYS.usuario,
+                    JSON.stringify({
+                        ...parsed,
+                        foto: nextPhoto,
+                        foto_perfil: nextPhoto
+                    })
+                );
+            } catch (error) {
+                console.error("Error al guardar la foto de perfil:", error);
+            }
+        };
+
+        reader.readAsDataURL(file);
+        event.target.value = "";
+    };
+
     const handleCerrarSesion = () => {
-
-        // Limpieza de datos de sesión.
-        // Posteriormente aquí también se podrá eliminar
-        // el token o sesión proporcionada por el backend.
-
         localStorage.removeItem("token");
-        localStorage.removeItem("usuario");
+        localStorage.removeItem(STORAGE_KEYS.usuario);
 
         sessionStorage.removeItem("token");
-        sessionStorage.removeItem("usuario");
+        sessionStorage.removeItem(STORAGE_KEYS.usuario);
 
-        // Regresar a la pantalla de usuario.
         navigate("/usuario");
     };
 
+
+    /* =========================================================
+       3. RENDER PRINCIPAL
+       ========================================================= */
+
     return (
-        <div className="perfil-container">
+        <div
+            className="perfil-container"
+            data-theme={colorMode}
+            style={{ "--cfg-text-scale": textScale }}
+        >
+
+            <input
+                ref={avatarInputRef}
+                type="file"
+                accept="image/*"
+                className="perfil-file-input"
+                onChange={handleAvatarChange}
+            />
 
             <div className="perfil-content">
 
@@ -56,22 +179,49 @@ function Perfil() {
 
                 <div className="perfil-card">
 
-                    <div className="perfil-foto">
+                    <div className="perfil-avatar-wrapper">
 
-                        {usuario.foto ? (
-                            <img
-                                src={usuario.foto}
-                                alt="Foto de perfil"
-                            />
-                        ) : (
-                            <span>U</span>
-                        )}
+                        <div className="perfil-foto">
+
+                            {usuario.foto ? (
+                                <img
+                                    src={usuario.foto}
+                                    alt="Foto de perfil"
+                                />
+                            ) : (
+                                <span>
+                                    {usuario.nombre
+                                        ? usuario.nombre.charAt(0).toUpperCase()
+                                        : "U"
+                                    }
+                                </span>
+                            )}
+
+                        </div>
+
+                        <button
+                            type="button"
+                            className="perfil-edit-pencil"
+                            onClick={handleOpenAvatarPicker}
+                            title="Cambiar foto de perfil"
+                            aria-label="Cambiar foto de perfil"
+                        >
+                            ✎
+                        </button>
 
                     </div>
 
-                    <h2>
-                        {usuario.nombre || "Usuario"}
-                    </h2>
+                    <div className="perfil-identity">
+
+                        <h2>
+                            {usuario.nombre || "Usuario"}
+                        </h2>
+
+                        <span className="perfil-status-pill">
+                            CUENTA ACTIVA
+                        </span>
+
+                    </div>
 
                     <div className="perfil-datos">
 

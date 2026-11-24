@@ -1,541 +1,423 @@
-/* =========================================
-   PERFIL
-   ========================================= */
+/* =========================================================
+   1. VARIABLES DE TEMA (MODO OSCURO Y MODO CLARO)
+   ========================================================= */
+
+:root,
+:root[data-theme="dark"],
+.perfil-container,
+.perfil-container[data-theme="dark"] {
+    --prf-bg: #202124;
+    --prf-text: #ffffff;
+    --prf-subtitle: rgba(205, 147, 252, 0.75);
+    --prf-label: rgba(205, 147, 252, 0.72);
+    --prf-text-soft: rgba(255, 255, 255, 0.68);
+
+    --prf-glow-purple: rgba(205, 147, 252, 0.14);
+    --prf-glow-blue: rgba(124, 153, 248, 0.14);
+
+    --prf-card-bg:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.055),
+            rgba(255, 255, 255, 0.015)
+        );
+    --prf-card-border: rgba(255, 255, 255, 0.09);
+    --prf-card-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+    --prf-divider: rgba(255, 255, 255, 0.08);
+
+    --prf-avatar-grad-start: #cd93fc;
+    --prf-avatar-grad-end: #7c99f8;
+    --prf-avatar-shadow: 0 12px 35px rgba(124, 153, 248, 0.28);
+
+    --prf-pencil-bg: #18191e;
+    --prf-pencil-border: rgba(205, 147, 252, 0.45);
+    --prf-pencil-color: #ffffff;
+
+    --prf-pill-bg: rgba(205, 147, 252, 0.12);
+    --prf-pill-border: rgba(205, 147, 252, 0.24);
+    --prf-pill-color: #dfb4ff;
+
+    --prf-logout-border: rgba(255, 80, 80, 0.28);
+    --prf-logout-bg: rgba(180, 45, 45, 0.14);
+    --prf-logout-text: rgba(255, 118, 118, 0.9);
+    --prf-logout-hover-bg: rgba(190, 50, 50, 0.26);
+    --prf-logout-hover-border: rgba(255, 95, 95, 0.5);
+    --prf-logout-hover-shadow: rgba(180, 40, 40, 0.24);
+}
+
+:root[data-theme="light"],
+.perfil-container[data-theme="light"] {
+    --prf-bg: #f4f3fa;
+    --prf-text: #181624;
+    --prf-subtitle: #7b3fc2;
+    --prf-label: #7b42bd;
+    --prf-text-soft: #4e4966;
+
+    --prf-glow-purple: rgba(168, 85, 247, 0.15);
+    --prf-glow-blue: rgba(74, 108, 247, 0.14);
+
+    --prf-card-bg:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.92),
+            rgba(245, 242, 252, 0.8)
+        );
+    --prf-card-border: rgba(120, 108, 165, 0.22);
+    --prf-card-shadow: 0 22px 50px rgba(85, 68, 138, 0.12);
+    --prf-divider: rgba(120, 108, 165, 0.16);
+
+    --prf-avatar-grad-start: #9b5de5;
+    --prf-avatar-grad-end: #5e7ce2;
+    --prf-avatar-shadow: 0 12px 30px rgba(94, 124, 226, 0.25);
+
+    --prf-pencil-bg: #ffffff;
+    --prf-pencil-border: rgba(137, 66, 214, 0.35);
+    --prf-pencil-color: #2b1847;
+
+    --prf-pill-bg: rgba(137, 66, 214, 0.12);
+    --prf-pill-border: rgba(137, 66, 214, 0.25);
+    --prf-pill-color: #6d28d9;
+
+    --prf-logout-border: rgba(214, 48, 48, 0.32);
+    --prf-logout-bg: rgba(220, 53, 69, 0.1);
+    --prf-logout-text: #b81d2e;
+    --prf-logout-hover-bg: rgba(220, 53, 69, 0.2);
+    --prf-logout-hover-border: rgba(214, 48, 48, 0.55);
+    --prf-logout-hover-shadow: rgba(214, 48, 48, 0.18);
+}
+
+
+/* =========================================================
+   2. CONTENEDOR Y BRILLOS DE FONDO
+   ========================================================= */
 
 .perfil-container {
-
     position: relative;
-
     width: 100%;
     height: 100%;
     min-height: 0;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     overflow: hidden;
-
-    background: #202124;
-
-    color: white;
+    background: var(--prf-bg);
+    color: var(--prf-text);
+    transition: background 0.3s ease, color 0.3s ease;
 }
-
-
-/* =========================================
-   BRILLOS DE FONDO
-   ========================================= */
 
 .perfil-container::before {
-
     content: "";
-
     position: absolute;
-
     width: 450px;
     height: 450px;
-
     top: -180px;
     left: -160px;
-
     border-radius: 50%;
-
-    background:
-        rgba(
-            205,
-            147,
-            252,
-            0.12
-        );
-
+    background: var(--prf-glow-purple);
     filter: blur(100px);
-
-    animation:
-        perfilGlow
-        8s ease-in-out
-        infinite alternate;
+    animation: perfilGlow 8s ease-in-out infinite alternate;
+    pointer-events: none;
 }
-
 
 .perfil-container::after {
-
     content: "";
-
     position: absolute;
-
     width: 400px;
     height: 400px;
-
     right: -150px;
     bottom: -170px;
-
     border-radius: 50%;
-
-    background:
-        rgba(
-            124,
-            153,
-            248,
-            0.12
-        );
-
+    background: var(--prf-glow-blue);
     filter: blur(100px);
+    animation: perfilGlow2 10s ease-in-out infinite alternate;
+    pointer-events: none;
+}
 
-    animation:
-        perfilGlow2
-        10s ease-in-out
-        infinite alternate;
+.perfil-file-input {
+    display: none;
 }
 
 
-@keyframes perfilGlow {
-
-    from {
-        transform:
-            translate(0, 0);
-    }
-
-    to {
-        transform:
-            translate(100px, 120px);
-    }
-}
-
-
-@keyframes perfilGlow2 {
-
-    from {
-        transform:
-            translate(0, 0);
-    }
-
-    to {
-        transform:
-            translate(-100px, -100px);
-    }
-}
-
-
-/* =========================================
-   CONTENIDO
-   ========================================= */
+/* =========================================================
+   3. CONTENIDO, TÍTULO Y TARJETA DE PERFIL
+   ========================================================= */
 
 .perfil-content {
-
     position: relative;
-
     z-index: 2;
-
     width: min(440px, 90%);
-
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
     text-align: center;
 }
 
-
-/* =========================================
-   TÍTULO
-   ========================================= */
-
 .perfil-subtitle {
-
     margin-bottom: 5px;
-
-    font-size: 9px;
-
+    font-size: calc(9px * var(--cfg-text-scale, 1));
     font-weight: 500;
-
     letter-spacing: 4px;
-
-    color:
-        rgba(
-            205,
-            147,
-            252,
-            0.75
-        );
+    color: var(--prf-subtitle);
 }
-
 
 .perfil-content h1 {
-
-    margin: 0 0 25px;
-
-    font-family:
-        "Oswald",
-        sans-serif;
-
-    font-size: 30px;
-
+    margin: 0 0 24px;
+    font-family: "Oswald", sans-serif;
+    font-size: calc(30px * var(--cfg-text-scale, 1));
     font-weight: 500;
-
     letter-spacing: 3px;
-
-    color: white;
+    color: var(--prf-text);
 }
-
-
-/* =========================================
-   TARJETA
-   ========================================= */
 
 .perfil-card {
-
     width: 100%;
-
-    padding: 35px 30px;
-
-    border-radius: 18px;
-
+    padding: 32px 30px 28px;
+    border-radius: 20px;
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
-    gap: 18px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(
-                255,
-                255,
-                255,
-                0.045
-            ),
-            rgba(
-                255,
-                255,
-                255,
-                0.012
-            )
-        );
-
-    border:
-        1px solid
-        rgba(
-            255,
-            255,
-            255,
-            0.08
-        );
-
-    box-shadow:
-        0 25px 60px
-        rgba(
-            0,
-            0,
-            0,
-            0.4
-        );
+    gap: 16px;
+    background: var(--prf-card-bg);
+    border: 1px solid var(--prf-card-border);
+    box-shadow: var(--prf-card-shadow);
+    box-sizing: border-box;
+    transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 
-/* =========================================
-   FOTO DE PERFIL
-   ========================================= */
+/* =========================================================
+   4. FOTO DE PERFIL, LÁPIZ, IDENTIDAD Y DATOS
+   ========================================================= */
+
+.perfil-avatar-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
 
 .perfil-foto {
-
+    position: relative;
     width: 110px;
-
     height: 110px;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     border-radius: 50%;
-
-    background:
-        linear-gradient(
-            135deg,
-            #cd93fc,
-            #7c99f8
-        );
-
-    box-shadow:
-        0 12px 35px
-        rgba(
-            124,
-            153,
-            248,
-            0.25
-        );
-
+    background: linear-gradient(
+        135deg,
+        var(--prf-avatar-grad-start),
+        var(--prf-avatar-grad-end)
+    );
+    box-shadow: var(--prf-avatar-shadow);
     overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
+.perfil-foto:hover {
+    transform: scale(1.03);
+}
 
 .perfil-foto span {
-
-    font-family:
-        "Oswald",
-        sans-serif;
-
-    font-size: 45px;
-
+    font-family: "Oswald", sans-serif;
+    font-size: calc(45px * var(--cfg-text-scale, 1));
     font-weight: 500;
-
-    color: white;
+    color: #ffffff;
 }
 
-
 .perfil-foto img {
-
     width: 100%;
-
     height: 100%;
-
     object-fit: cover;
 }
 
+/* Botón pequeño con lápiz justo debajo de la foto */
+.perfil-edit-pencil {
+    width: 26px;
+    height: 26px;
+    margin-top: -6px;
+    border-radius: 50%;
+    border: 1px solid var(--prf-pencil-border);
+    background: var(--prf-pencil-bg);
+    color: var(--prf-pencil-color);
+    font-size: calc(12px * var(--cfg-text-scale, 1));
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    transition:
+        transform 0.22s ease,
+        background 0.25s ease,
+        color 0.25s ease,
+        box-shadow 0.25s ease;
+}
 
-/* =========================================
-   NOMBRE DEL USUARIO
-   ========================================= */
+.perfil-edit-pencil:hover {
+    transform: translateY(-2px) scale(1.1);
+    background: linear-gradient(135deg, #cd93fc, #7c99f8);
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 8px 20px rgba(124, 153, 248, 0.4);
+}
+
+.perfil-identity {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
 
 .perfil-card h2 {
-
     margin: 0;
-
-    font-family:
-        "Oswald",
-        sans-serif;
-
-    font-size: 27px;
-
+    font-family: "Oswald", sans-serif;
+    font-size: calc(27px * var(--cfg-text-scale, 1));
     font-weight: 500;
-
     letter-spacing: 1px;
-
-    color: white;
+    color: var(--prf-text);
 }
 
-
-/* =========================================
-   DATOS
-   ========================================= */
+.perfil-status-pill {
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--prf-pill-bg);
+    border: 1px solid var(--prf-pill-border);
+    color: var(--prf-pill-color);
+    font-size: calc(7.5px * var(--cfg-text-scale, 1));
+    font-weight: 600;
+    letter-spacing: 2px;
+}
 
 .perfil-datos {
-
     width: 100%;
-
-    margin-top: 5px;
-
-    padding-top: 18px;
-
-    border-top:
-        1px solid
-        rgba(
-            255,
-            255,
-            255,
-            0.07
-        );
+    margin-top: 2px;
+    padding-top: 16px;
+    border-top: 1px solid var(--prf-divider);
 }
-
 
 .perfil-dato {
-
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
-    gap: 7px;
+    gap: 6px;
 }
-
 
 .perfil-label {
-
-    font-size: 8px;
-
+    font-size: calc(8px * var(--cfg-text-scale, 1));
     letter-spacing: 2px;
-
-    color:
-        rgba(
-            205,
-            147,
-            252,
-            0.7
-        );
+    color: var(--prf-label);
 }
-
 
 .perfil-dato p {
-
     margin: 0;
-
-    font-size: 11px;
-
-    color:
-        rgba(
-            255,
-            255,
-            255,
-            0.65
-        );
+    font-size: calc(11px * var(--cfg-text-scale, 1));
+    color: var(--prf-text-soft);
 }
 
 
-/* =========================================
-   CERRAR SESIÓN
-   ========================================= */
+/* =========================================================
+   5. BOTÓN CERRAR SESIÓN
+   ========================================================= */
 
 .perfil-logout {
-
     width: 100%;
-
     height: 43px;
-
-    margin-top: 10px;
-
-    border: 1px solid
-        rgba(
-            255,
-            80,
-            80,
-            0.25
-        );
-
-    border-radius: 9px;
-
-    background:
-        rgba(
-            180,
-            45,
-            45,
-            0.12
-        );
-
-    color:
-        rgba(
-            255,
-            110,
-            110,
-            0.85
-        );
-
-    font-family:
-        "Oswald",
-        sans-serif;
-
-    font-size: 10px;
-
+    margin-top: 8px;
+    border: 1px solid var(--prf-logout-border);
+    border-radius: 10px;
+    background: var(--prf-logout-bg);
+    color: var(--prf-logout-text);
+    font-family: "Oswald", sans-serif;
+    font-size: calc(10px * var(--cfg-text-scale, 1));
     letter-spacing: 1.5px;
-
     cursor: pointer;
-
     transition:
         transform 0.25s ease,
         background 0.25s ease,
         color 0.25s ease,
-        box-shadow 0.3s ease;
+        box-shadow 0.3s ease,
+        border-color 0.25s ease;
 }
-
 
 .perfil-logout:hover {
-
-    transform:
-        translateY(-2px);
-
-    background:
-        rgba(
-            190,
-            50,
-            50,
-            0.25
-        );
-
-    color: white;
-
-    border-color:
-        rgba(
-            255,
-            90,
-            90,
-            0.45
-        );
-
-    box-shadow:
-        0 8px 25px
-        rgba(
-            180,
-            40,
-            40,
-            0.2
-        );
+    transform: translateY(-2px);
+    background: var(--prf-logout-hover-bg);
+    color: var(--prf-text);
+    border-color: var(--prf-logout-hover-border);
+    box-shadow: 0 8px 25px var(--prf-logout-hover-shadow);
 }
 
 
-/* =========================================
-   RESPONSIVE
-   ========================================= */
+/* =========================================================
+   6. ANIMACIONES
+   ========================================================= */
+
+@keyframes perfilGlow {
+    from {
+        transform: translate(0, 0);
+    }
+
+    to {
+        transform: translate(100px, 120px);
+    }
+}
+
+@keyframes perfilGlow2 {
+    from {
+        transform: translate(0, 0);
+    }
+
+    to {
+        transform: translate(-100px, -100px);
+    }
+}
+
+
+/* =========================================================
+   7. RESPONSIVE
+   ========================================================= */
 
 @media (max-width: 500px) {
-
     .perfil-card {
-
         padding: 25px 20px;
     }
 
     .perfil-foto {
-
         width: 90px;
-
         height: 90px;
     }
 
     .perfil-foto span {
-
-        font-size: 38px;
+        font-size: calc(38px * var(--cfg-text-scale, 1));
     }
 
     .perfil-card h2 {
-
-        font-size: 24px;
+        font-size: calc(24px * var(--cfg-text-scale, 1));
     }
 }
 
-
 @media (max-height: 600px) {
-
     .perfil-content h1 {
-
-        margin-bottom: 15px;
+        margin-bottom: 14px;
     }
 
     .perfil-card {
-
         padding: 20px;
-
-        gap: 12px;
+        gap: 11px;
     }
 
     .perfil-foto {
-
         width: 75px;
-
         height: 75px;
     }
 
     .perfil-foto span {
-
-        font-size: 30px;
+        font-size: calc(30px * var(--cfg-text-scale, 1));
     }
 
     .perfil-logout {
-
         height: 38px;
     }
 }

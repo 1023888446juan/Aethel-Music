@@ -1,6 +1,159 @@
-/* =========================================
-   ÁLBUMES - CONTENEDOR PRINCIPAL
-   ========================================= */
+/* =========================================================
+   1. VARIABLES DE TEMA (SOLO PALETAS DE COLOR)
+   ========================================================= */
+
+:root,
+:root[data-theme="dark"],
+.albumes-container,
+.albumes-container[data-theme="dark"],
+.albumes-main,
+.albumes-main[data-theme="dark"] {
+    --alb-bg: #202124;
+    --alb-text: #ffffff;
+    --alb-text-muted: rgba(255, 255, 255, 0.42);
+    --alb-text-soft: rgba(255, 255, 255, 0.35);
+    --alb-text-dim: rgba(255, 255, 255, 0.3);
+    --alb-accent-purple: #cd93fc;
+    --alb-accent-blue: #7c99f8;
+    --alb-subtitle: rgba(205, 147, 252, 0.75);
+    --alb-section-label: rgba(205, 147, 252, 0.65);
+    --alb-card-type: rgba(205, 147, 252, 0.7);
+
+    --alb-glow-purple: rgba(205, 147, 252, 0.10);
+    --alb-glow-blue: rgba(124, 153, 248, 0.08);
+    --alb-scroll-track: rgba(255, 255, 255, 0.02);
+    --alb-scroll-thumb: rgba(205, 147, 252, 0.3);
+    --alb-scroll-thumb-hover: rgba(205, 147, 252, 0.55);
+
+    --alb-fav-bg:
+        linear-gradient(
+            135deg,
+            rgba(30, 30, 36, 0.96),
+            rgba(24, 25, 30, 0.98)
+        );
+    --alb-fav-overlay:
+        linear-gradient(
+            90deg,
+            rgba(20, 20, 25, 0.05) 0%,
+            rgba(20, 20, 25, 0.08) 25%,
+            rgba(32, 33, 36, 0.45) 65%,
+            #202124 100%
+        );
+    --alb-fav-overlay-mobile:
+        linear-gradient(
+            to bottom,
+            transparent 20%,
+            #202124 100%
+        );
+    --alb-fav-icon-bg: rgba(20, 20, 25, 0.65);
+    --alb-fav-icon-hover-bg: rgba(30, 30, 38, 0.78);
+
+    --alb-card-bg: rgba(255, 255, 255, 0.035);
+    --alb-card-border: rgba(255, 255, 255, 0.07);
+    --alb-card-hover-border: rgba(205, 147, 252, 0.25);
+    --alb-card-img-overlay:
+        linear-gradient(
+            to bottom,
+            rgba(20, 20, 25, 0.05),
+            rgba(20, 20, 25, 0.75)
+        );
+    --alb-symbol-bg: rgba(15, 15, 20, 0.65);
+    --alb-more-bg: rgba(32, 33, 36, 0.78);
+    --alb-more-border: rgba(255, 255, 255, 0.1);
+    --alb-open-bg: rgba(255, 255, 255, 0.025);
+    --alb-open-border: rgba(255, 255, 255, 0.08);
+    --alb-open-color: rgba(255, 255, 255, 0.5);
+
+    --alb-new-bg: rgba(255, 255, 255, 0.015);
+    --alb-new-border: rgba(255, 255, 255, 0.12);
+    --alb-new-hover-bg: rgba(205, 147, 252, 0.045);
+    --alb-new-hover-border: rgba(205, 147, 252, 0.4);
+    --alb-new-plus-bg:
+        linear-gradient(
+            135deg,
+            rgba(205, 147, 252, 0.18),
+            rgba(124, 153, 248, 0.18)
+        );
+    --alb-new-plus-color: rgba(255, 255, 255, 0.75);
+}
+
+/* Modo Claro Creativo: Daylight Studio Lavender & Ice Blue */
+:root[data-theme="light"],
+.albumes-container[data-theme="light"],
+.albumes-main[data-theme="light"] {
+    --alb-bg: #f4f3fa;
+    --alb-text: #181624;
+    --alb-text-muted: #5c5872;
+    --alb-text-soft: #777191;
+    --alb-text-dim: #8b85a3;
+    --alb-accent-purple: #8942d6;
+    --alb-accent-blue: #4a6cf7;
+    --alb-subtitle: #7b3fc2;
+    --alb-section-label: #7b42bd;
+    --alb-card-type: #7b42bd;
+
+    --alb-glow-purple: rgba(168, 85, 247, 0.14);
+    --alb-glow-blue: rgba(74, 108, 247, 0.13);
+    --alb-scroll-track: rgba(137, 66, 214, 0.05);
+    --alb-scroll-thumb: rgba(137, 66, 214, 0.28);
+    --alb-scroll-thumb-hover: rgba(137, 66, 214, 0.48);
+
+    --alb-fav-bg:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.96),
+            rgba(244, 241, 252, 0.98)
+        );
+    --alb-fav-overlay:
+        linear-gradient(
+            90deg,
+            rgba(244, 243, 250, 0.05) 0%,
+            rgba(244, 243, 250, 0.12) 25%,
+            rgba(248, 247, 252, 0.55) 65%,
+            #f8f7fc 100%
+        );
+    --alb-fav-overlay-mobile:
+        linear-gradient(
+            to bottom,
+            transparent 20%,
+            #f8f7fc 100%
+        );
+    --alb-fav-icon-bg: rgba(255, 255, 255, 0.85);
+    --alb-fav-icon-hover-bg: rgba(255, 255, 255, 0.98);
+
+    --alb-card-bg: rgba(255, 255, 255, 0.78);
+    --alb-card-border: rgba(120, 108, 165, 0.18);
+    --alb-card-hover-border: rgba(137, 66, 214, 0.42);
+    --alb-card-img-overlay:
+        linear-gradient(
+            to bottom,
+            rgba(24, 22, 36, 0.05),
+            rgba(24, 22, 36, 0.52)
+        );
+    --alb-symbol-bg: rgba(255, 255, 255, 0.86);
+    --alb-more-bg: rgba(255, 255, 255, 0.9);
+    --alb-more-border: rgba(120, 108, 165, 0.22);
+    --alb-open-bg: rgba(137, 66, 214, 0.05);
+    --alb-open-border: rgba(120, 108, 165, 0.2);
+    --alb-open-color: #5b5770;
+
+    --alb-new-bg: rgba(255, 255, 255, 0.52);
+    --alb-new-border: rgba(137, 66, 214, 0.25);
+    --alb-new-hover-bg: rgba(205, 147, 252, 0.12);
+    --alb-new-hover-border: rgba(137, 66, 214, 0.5);
+    --alb-new-plus-bg:
+        linear-gradient(
+            135deg,
+            rgba(205, 147, 252, 0.24),
+            rgba(124, 153, 248, 0.24)
+        );
+    --alb-new-plus-color: #2b1847;
+}
+
+
+/* =========================================================
+   2. CONTENEDOR Y FONDO
+   ========================================================= */
 
 .albumes-container {
     position: relative;
@@ -15,24 +168,16 @@
 
     overflow: hidden;
 
-    background: #202124;
+    background: var(--alb-bg);
+    color: var(--alb-text);
+    transition: background 0.3s ease, color 0.3s ease;
 }
-
-
-/* =========================================
-   CON LIST
-   ========================================= */
 
 .albumes-container:has(.playlist-side) {
     grid-template-columns:
         380px
         minmax(0, 1fr);
 }
-
-
-/* =========================================
-   CONTENIDO PRINCIPAL
-   ========================================= */
 
 .albumes-main {
     position: relative;
@@ -43,13 +188,9 @@
 
     overflow: hidden;
 
-    background: #202124;
+    background: var(--alb-bg);
+    transition: background 0.3s ease;
 }
-
-
-/* =========================================
-   BRILLO PRINCIPAL
-   ========================================= */
 
 .albumes-background {
     position: absolute;
@@ -65,12 +206,7 @@
     background:
         radial-gradient(
             circle,
-            rgba(
-                205,
-                147,
-                252,
-                0.10
-            ),
+            var(--alb-glow-purple),
             transparent 68%
         );
 
@@ -85,7 +221,6 @@
         infinite
         alternate;
 }
-
 
 .albumes-main::after {
     content: "";
@@ -103,12 +238,7 @@
     background:
         radial-gradient(
             circle,
-            rgba(
-                124,
-                153,
-                248,
-                0.08
-            ),
+            var(--alb-glow-blue),
             transparent 70%
         );
 
@@ -118,25 +248,9 @@
 }
 
 
-@keyframes albumBackgroundGlow {
-
-    from {
-        transform:
-            scale(0.9)
-            rotate(0deg);
-    }
-
-    to {
-        transform:
-            scale(1.1)
-            rotate(15deg);
-    }
-}
-
-
-/* =========================================
-   CONTENIDO
-   ========================================= */
+/* =========================================================
+   3. CONTENIDO PRINCIPAL Y SCROLLBAR
+   ========================================================= */
 
 .albumes-content {
     position: relative;
@@ -157,50 +271,28 @@
         42px 48px 50px;
 }
 
-
 .albumes-content::-webkit-scrollbar {
     width: 6px;
 }
 
-
 .albumes-content::-webkit-scrollbar-track {
-    background:
-        rgba(
-            255,
-            255,
-            255,
-            0.02
-        );
+    background: var(--alb-scroll-track);
 }
-
 
 .albumes-content::-webkit-scrollbar-thumb {
     border-radius: 10px;
 
-    background:
-        rgba(
-            205,
-            147,
-            252,
-            0.3
-        );
+    background: var(--alb-scroll-thumb);
 }
-
 
 .albumes-content::-webkit-scrollbar-thumb:hover {
-    background:
-        rgba(
-            205,
-            147,
-            252,
-            0.55
-        );
+    background: var(--alb-scroll-thumb-hover);
 }
 
 
-/* =========================================
-   HEADER
-   ========================================= */
+/* =========================================================
+   4. HEADER Y BOTONES DE ACCIÓN
+   ========================================================= */
 
 .albumes-header {
     display: flex;
@@ -213,11 +305,9 @@
     margin-bottom: 42px;
 }
 
-
 .albumes-header > div:first-child {
     min-width: 0;
 }
-
 
 .albumes-header-buttons {
     display: flex;
@@ -229,24 +319,16 @@
     flex-shrink: 0;
 }
 
-
 .albumes-subtitle {
     display: block;
 
     margin-bottom: 5px;
 
-    font-size: 10px;
+    font-size: calc(10px * var(--cfg-text-scale, 1));
     letter-spacing: 3px;
 
-    color:
-        rgba(
-            205,
-            147,
-            252,
-            0.75
-        );
+    color: var(--alb-subtitle);
 }
-
 
 .albumes-header h1 {
     margin: 0;
@@ -257,41 +339,31 @@
 
     font-size:
         clamp(
-            34px,
+            calc(34px * var(--cfg-text-scale, 1)),
             5vw,
-            52px
+            calc(52px * var(--cfg-text-scale, 1))
         );
 
     font-weight: 600;
 
     letter-spacing: 2px;
 
-    color: white;
+    color: var(--alb-text);
 }
-
 
 .albumes-header p {
     margin:
         8px 0 0;
 
-    font-size: 13px;
+    font-size: calc(13px * var(--cfg-text-scale, 1));
 
-    color:
-        rgba(
-            255,
-            255,
-            255,
-            0.42
-        );
+    color: var(--alb-text-muted);
 }
-
-
-/* =========================================
-   BOTONES DEL HEADER
-   ========================================= */
 
 .create-album-button,
 .upload-music-button {
+    position: relative;
+    overflow: hidden;
     min-height: 48px;
 
     display: flex;
@@ -310,7 +382,7 @@
 
     color: white;
 
-    font-size: 11px;
+    font-size: calc(11px * var(--cfg-text-scale, 1));
     font-weight: 600;
 
     letter-spacing: 1px;
@@ -322,11 +394,6 @@
         box-shadow 0.3s ease,
         filter 0.3s ease;
 }
-
-
-/* =========================================
-   CREAR PLAYLIST
-   ========================================= */
 
 .create-album-button {
     background:
@@ -346,7 +413,6 @@
         );
 }
 
-
 .create-album-button:hover {
     transform:
         translateY(-3px);
@@ -364,18 +430,16 @@
         brightness(1.08);
 }
 
-
-/* =========================================
-   SUBIR MÚSICA
-   ========================================= */
-
 .upload-music-button {
     background:
         linear-gradient(
-            135deg,
+            125deg,
             #7c99f8,
-            #cd93fc
+            #cd93fc,
+            #9d7cf8,
+            #7c99f8
         );
+    background-size: 240% 240%;
 
     box-shadow:
         0 10px 30px
@@ -383,35 +447,67 @@
             205,
             147,
             252,
-            0.16
+            0.22
         );
+
+    animation:
+        uploadButtonGradient 4.5s ease infinite,
+        uploadButtonPulse 2.6s ease-in-out infinite;
 }
 
+.upload-music-button::before {
+    content: "";
+    position: absolute;
+    top: -30%;
+    left: -75%;
+    width: 55%;
+    height: 160%;
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.38),
+            transparent
+        );
+    transform: skewX(-22deg);
+    animation: uploadButtonShine 3.2s ease-in-out infinite;
+    pointer-events: none;
+}
 
 .upload-music-button:hover {
     transform:
-        translateY(-3px);
+        translateY(-4px)
+        scale(1.025);
 
     box-shadow:
-        0 15px 35px
+        0 16px 38px
         rgba(
             205,
             147,
             252,
-            0.30
+            0.42
+        ),
+        0 0 22px
+        rgba(
+            124,
+            153,
+            248,
+            0.35
         );
 
     filter:
-        brightness(1.08);
+        brightness(1.1);
 }
 
-
-/* =========================================
-   ICONOS DE BOTONES
-   ========================================= */
+.upload-music-button:hover .upload-icon {
+    transform: translateY(-2px) scale(1.12);
+    background: rgba(255, 255, 255, 0.28);
+}
 
 .create-icon,
 .upload-icon {
+    position: relative;
+    z-index: 1;
     width: 23px;
     height: 23px;
 
@@ -430,20 +526,27 @@
             0.18
         );
 
-    font-size: 20px;
+    font-size: calc(20px * var(--cfg-text-scale, 1));
 
     line-height: 1;
+
+    transition:
+        transform 0.25s ease,
+        background 0.25s ease;
+}
+
+.upload-icon {
+    animation: uploadArrowBounce 2.2s ease-in-out infinite;
 }
 
 
-/* =========================================
-   SECCIONES
-   ========================================= */
+/* =========================================================
+   5. SECCIONES, FAVORITAS Y GRID DE PLAYLISTS
+   ========================================================= */
 
 .album-section {
     margin-bottom: 42px;
 }
-
 
 .section-title {
     display: flex;
@@ -454,22 +557,15 @@
     margin-bottom: 18px;
 }
 
-
 .section-label {
     display: block;
 
     margin-bottom: 4px;
 
-    font-size: 9px;
+    font-size: calc(9px * var(--cfg-text-scale, 1));
     letter-spacing: 2px;
 
-    color:
-        rgba(
-            205,
-            147,
-            252,
-            0.65
-        );
+    color: var(--alb-section-label);
 
     text-shadow:
         0 0 12px
@@ -481,7 +577,6 @@
         );
 }
 
-
 .section-title h2 {
     margin: 0;
 
@@ -489,13 +584,13 @@
         "Oswald",
         sans-serif;
 
-    font-size: 25px;
+    font-size: calc(25px * var(--cfg-text-scale, 1));
 
     font-weight: 500;
 
     letter-spacing: 1px;
 
-    color: white;
+    color: var(--alb-text);
 
     text-shadow:
         0 0 18px
@@ -507,23 +602,25 @@
         );
 }
 
-
 .folder-counter {
-    font-size: 11px;
+    font-size: calc(11px * var(--cfg-text-scale, 1));
 
-    color:
-        rgba(
-            255,
-            255,
-            255,
-            0.35
-        );
+    color: var(--alb-text-soft);
 }
 
+/* Quitar botón ABRIR de Favoritas y hacer toda la tarjeta interactiva */
+.favorite-card .open-album-button,
+.favorites-clickable-wrapper .open-album-button,
+.open-album-button {
+    display: none !important;
+}
 
-/* =========================================
-   FAVORITAS
-   ========================================= */
+.favorites-clickable-wrapper {
+    display: block;
+    width: 100%;
+    cursor: pointer;
+    border-radius: 18px;
+}
 
 .favorite-card {
     position: relative;
@@ -538,31 +635,10 @@
 
     border-radius: 18px;
 
-    /*
-        Fondo interior.
-        Se mantiene oscuro para que
-        el borde destaque.
-    */
-    background:
-        linear-gradient(
-            135deg,
-            rgba(
-                30,
-                30,
-                36,
-                0.96
-            ),
-            rgba(
-                24,
-                25,
-                30,
-                0.98
-            )
-        );
+    cursor: pointer;
 
-    /*
-        El borde real lo genera ::before.
-    */
+    background: var(--alb-fav-bg);
+
     border:
         1px solid transparent;
 
@@ -585,13 +661,9 @@
 
     transition:
         transform 0.3s ease,
-        box-shadow 0.3s ease;
+        box-shadow 0.3s ease,
+        background 0.3s ease;
 }
-
-
-/* =========================================
-   BORDE AETHEL ANIMADO
-   ========================================= */
 
 .favorite-card::before {
     content: "";
@@ -623,10 +695,6 @@
         linear
         infinite;
 
-    /*
-        Solo muestra el borde.
-        El centro permanece transparente.
-    */
     -webkit-mask:
         linear-gradient(
             #fff 0 0
@@ -644,30 +712,6 @@
 
     z-index: 10;
 }
-
-
-@keyframes favoriteBorderMove {
-
-    0% {
-        background-position:
-            0% 50%;
-    }
-
-    50% {
-        background-position:
-            150% 50%;
-    }
-
-    100% {
-        background-position:
-            300% 50%;
-    }
-}
-
-
-/* =========================================
-   BRILLO SUTIL DEL BORDE
-   ========================================= */
 
 .favorite-card::after {
     content: "";
@@ -720,25 +764,6 @@
     z-index: -1;
 }
 
-
-@keyframes favoriteGlowMove {
-
-    0% {
-        background-position:
-            0% 50%;
-    }
-
-    100% {
-        background-position:
-            300% 50%;
-    }
-}
-
-
-/* =========================================
-   FAVORITAS - HOVER
-   ========================================= */
-
 .favorite-card:hover {
     transform:
         translateY(-4px);
@@ -757,14 +782,9 @@
             205,
             147,
             252,
-            0.08
+            0.12
         );
 }
-
-
-/* =========================================
-   IMAGEN FAVORITAS
-   ========================================= */
 
 .favorite-image {
     position: relative;
@@ -783,7 +803,6 @@
         filter 0.5s ease;
 }
 
-
 .favorite-card:hover .favorite-image {
     transform:
         scale(1.035);
@@ -793,50 +812,15 @@
         saturate(1.08);
 }
 
-
-/* =========================================
-   OVERLAY FAVORITAS
-   ========================================= */
-
 .favorite-overlay {
     position: absolute;
 
     inset: 0;
 
-    background:
-        linear-gradient(
-            90deg,
-            rgba(
-                20,
-                20,
-                25,
-                0.05
-            ) 0%,
-
-            rgba(
-                20,
-                20,
-                25,
-                0.08
-            ) 25%,
-
-            rgba(
-                32,
-                33,
-                36,
-                0.45
-            ) 65%,
-
-            #202124 100%
-        );
+    background: var(--alb-fav-overlay);
 
     pointer-events: none;
 }
-
-
-/* =========================================
-   ICONO FAVORITAS
-   ========================================= */
 
 .favorite-icon {
     position: absolute;
@@ -854,13 +838,7 @@
 
     border-radius: 50%;
 
-    background:
-        rgba(
-            20,
-            20,
-            25,
-            0.65
-        );
+    background: var(--alb-fav-icon-bg);
 
     backdrop-filter:
         blur(8px);
@@ -886,7 +864,6 @@
         box-shadow 0.3s ease;
 }
 
-
 .favorite-card:hover .favorite-icon {
     transform:
         translate(
@@ -895,13 +872,7 @@
         )
         scale(1.08);
 
-    background:
-        rgba(
-            30,
-            30,
-            38,
-            0.78
-        );
+    background: var(--alb-fav-icon-hover-bg);
 
     box-shadow:
         0 0 25px
@@ -913,16 +884,12 @@
         );
 }
 
-
-/* CORRECCIÓN DEL CORAZÓN DUPLICADO */
-
 .favorite-icon::before,
 .favorite-icon::after {
     content: none !important;
 
     display: none !important;
 }
-
 
 .favorite-icon img {
     display: block;
@@ -933,10 +900,10 @@
     object-fit: contain;
 }
 
-
-/* =========================================
-   INFORMACIÓN FAVORITAS
-   ========================================= */
+.albumes-container[data-theme="light"] .favorite-icon img,
+:root[data-theme="light"] .favorite-icon img {
+    filter: invert(0.85);
+}
 
 .favorite-info {
     flex: 1;
@@ -947,19 +914,12 @@
         25px 20px;
 }
 
-
 .card-type {
-    font-size: 9px;
+    font-size: calc(9px * var(--cfg-text-scale, 1));
 
     letter-spacing: 2px;
 
-    color:
-        rgba(
-            205,
-            147,
-            252,
-            0.7
-        );
+    color: var(--alb-card-type);
 
     text-shadow:
         0 0 10px
@@ -971,7 +931,6 @@
         );
 }
 
-
 .favorite-info h3 {
     margin:
         5px 0;
@@ -980,13 +939,12 @@
         "Oswald",
         sans-serif;
 
-    font-size: 25px;
+    font-size: calc(25px * var(--cfg-text-scale, 1));
 
     font-weight: 500;
 
-    color: white;
+    color: var(--alb-text);
 }
-
 
 .favorite-info p {
     max-width: 400px;
@@ -994,126 +952,16 @@
     margin:
         0 0 12px;
 
-    font-size: 12px;
+    font-size: calc(12px * var(--cfg-text-scale, 1));
 
-    color:
-        rgba(
-            255,
-            255,
-            255,
-            0.42
-        );
+    color: var(--alb-text-muted);
 }
-
 
 .song-count {
-    font-size: 10px;
+    font-size: calc(10px * var(--cfg-text-scale, 1));
 
-    color:
-        rgba(
-            255,
-            255,
-            255,
-            0.3
-        );
+    color: var(--alb-text-dim);
 }
-
-
-/* =========================================
-   BOTÓN ABRIR FAVORITAS
-   ========================================= */
-
-.open-album-button {
-    flex-shrink: 0;
-
-    margin-right: 25px;
-
-    padding:
-        11px 18px;
-
-    border:
-        1px solid
-        rgba(
-            255,
-            255,
-            255,
-            0.1
-        );
-
-    border-radius: 9px;
-
-    background:
-        rgba(
-            255,
-            255,
-            255,
-            0.04
-        );
-
-    color:
-        rgba(
-            255,
-            255,
-            255,
-            0.65
-        );
-
-    font-size: 9px;
-
-    letter-spacing: 1px;
-
-    cursor: pointer;
-
-    transition:
-        background 0.25s ease,
-        color 0.25s ease,
-        border-color 0.25s ease,
-        box-shadow 0.25s ease;
-}
-
-
-.open-album-button:hover {
-    color: white;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(
-                205,
-                147,
-                252,
-                0.2
-            ),
-            rgba(
-                124,
-                153,
-                248,
-                0.15
-            )
-        );
-
-    border-color:
-        rgba(
-            205,
-            147,
-            252,
-            0.3
-        );
-
-    box-shadow:
-        0 0 18px
-        rgba(
-            205,
-            147,
-            252,
-            0.12
-        );
-}
-
-
-/* =========================================
-   GRID DE PLAYLISTS
-   ========================================= */
 
 .albums-grid {
     display: grid;
@@ -1130,11 +978,6 @@
     gap: 18px;
 }
 
-
-/* =========================================
-   CARD PLAYLIST
-   ========================================= */
-
 .album-card {
     position: relative;
 
@@ -1144,41 +987,23 @@
 
     border-radius: 16px;
 
-    background:
-        rgba(
-            255,
-            255,
-            255,
-            0.035
-        );
+    background: var(--alb-card-bg);
 
     border:
-        1px solid
-        rgba(
-            255,
-            255,
-            255,
-            0.07
-        );
+        1px solid var(--alb-card-border);
 
     transition:
         transform 0.3s ease,
         border-color 0.3s ease,
-        box-shadow 0.3s ease;
+        box-shadow 0.3s ease,
+        background 0.3s ease;
 }
-
 
 .album-card:hover {
     transform:
         translateY(-6px);
 
-    border-color:
-        rgba(
-            205,
-            147,
-            252,
-            0.25
-        );
+    border-color: var(--alb-card-hover-border);
 
     box-shadow:
         0 18px 40px
@@ -1189,11 +1014,6 @@
             0.25
         );
 }
-
-
-/* =========================================
-   IMAGEN PLAYLIST
-   ========================================= */
 
 .album-image {
     position: relative;
@@ -1208,34 +1028,13 @@
     background-position: center;
 }
 
-
 .album-image-overlay {
     position: absolute;
 
     inset: 0;
 
-    background:
-        linear-gradient(
-            to bottom,
-            rgba(
-                20,
-                20,
-                25,
-                0.05
-            ),
-            rgba(
-                20,
-                20,
-                25,
-                0.75
-            )
-        );
+    background: var(--alb-card-img-overlay);
 }
-
-
-/* =========================================
-   SÍMBOLO PLAYLIST
-   ========================================= */
 
 .folder-symbol {
     position: absolute;
@@ -1253,20 +1052,14 @@
 
     border-radius: 12px;
 
-    background:
-        rgba(
-            15,
-            15,
-            20,
-            0.65
-        );
+    background: var(--alb-symbol-bg);
 
     backdrop-filter:
         blur(8px);
 
-    color: white;
+    color: var(--alb-text);
 
-    font-size: 20px;
+    font-size: calc(20px * var(--cfg-text-scale, 1));
 
     box-shadow:
         0 8px 25px
@@ -1277,11 +1070,6 @@
             0.25
         );
 }
-
-
-/* =========================================
-   BOTÓN MORE
-   ========================================= */
 
 .album-more-button {
     position: absolute;
@@ -1302,23 +1090,11 @@
     justify-content: center;
 
     border:
-        1px solid
-        rgba(
-            255,
-            255,
-            255,
-            0.1
-        );
+        1px solid var(--alb-more-border);
 
     border-radius: 9px;
 
-    background:
-        rgba(
-            32,
-            33,
-            36,
-            0.78
-        );
+    background: var(--alb-more-bg);
 
     backdrop-filter:
         blur(6px);
@@ -1332,7 +1108,6 @@
         box-shadow 0.25s ease;
 }
 
-
 .album-more-button img {
     width: 17px;
     height: 17px;
@@ -1342,6 +1117,10 @@
     display: block;
 }
 
+.albumes-container[data-theme="light"] .album-more-button img,
+:root[data-theme="light"] .album-more-button img {
+    filter: invert(0.85);
+}
 
 .album-more-button:hover {
     transform:
@@ -1373,31 +1152,18 @@
         );
 }
 
-
-/* =========================================
-   INFO CARD
-   ========================================= */
-
 .album-card-info {
     padding:
         16px 17px 12px;
 }
 
-
 .album-card-label {
-    font-size: 8px;
+    font-size: calc(8px * var(--cfg-text-scale, 1));
 
     letter-spacing: 2px;
 
-    color:
-        rgba(
-            205,
-            147,
-            252,
-            0.65
-        );
+    color: var(--alb-section-label);
 }
-
 
 .album-card-info h3 {
     margin:
@@ -1407,11 +1173,11 @@
         "Oswald",
         sans-serif;
 
-    font-size: 21px;
+    font-size: calc(21px * var(--cfg-text-scale, 1));
 
     font-weight: 500;
 
-    color: white;
+    color: var(--alb-text);
 
     overflow: hidden;
 
@@ -1419,21 +1185,14 @@
 
     text-overflow: ellipsis;
 }
-
 
 .album-card-info p {
     margin:
         0 0 10px;
 
-    font-size: 11px;
+    font-size: calc(11px * var(--cfg-text-scale, 1));
 
-    color:
-        rgba(
-            255,
-            255,
-            255,
-            0.38
-        );
+    color: var(--alb-text-soft);
 
     overflow: hidden;
 
@@ -1442,23 +1201,11 @@
     text-overflow: ellipsis;
 }
 
-
 .album-song-count {
-    font-size: 9px;
+    font-size: calc(9px * var(--cfg-text-scale, 1));
 
-    color:
-        rgba(
-            255,
-            255,
-            255,
-            0.28
-        );
+    color: var(--alb-text-dim);
 }
-
-
-/* =========================================
-   BOTÓN PLAYLIST
-   ========================================= */
 
 .album-open-button {
     width:
@@ -1473,33 +1220,15 @@
         10px 0;
 
     border:
-        1px solid
-        rgba(
-            255,
-            255,
-            255,
-            0.08
-        );
+        1px solid var(--alb-open-border);
 
     border-radius: 8px;
 
-    background:
-        rgba(
-            255,
-            255,
-            255,
-            0.025
-        );
+    background: var(--alb-open-bg);
 
-    color:
-        rgba(
-            255,
-            255,
-            255,
-            0.5
-        );
+    color: var(--alb-open-color);
 
-    font-size: 9px;
+    font-size: calc(9px * var(--cfg-text-scale, 1));
 
     letter-spacing: 1.5px;
 
@@ -1511,9 +1240,8 @@
         border-color 0.25s ease;
 }
 
-
 .album-open-button:hover {
-    color: white;
+    color: var(--alb-text);
 
     background:
         linear-gradient(
@@ -1541,11 +1269,6 @@
         );
 }
 
-
-/* =========================================
-   NUEVA PLAYLIST
-   ========================================= */
-
 .new-album-card {
     min-height: 280px;
 
@@ -1559,27 +1282,15 @@
     gap: 8px;
 
     border:
-        1px dashed
-        rgba(
-            255,
-            255,
-            255,
-            0.12
-        );
+        1px dashed var(--alb-new-border);
 
     border-radius: 16px;
 
-    background:
-        rgba(
-            255,
-            255,
-            255,
-            0.015
-        );
+    background: var(--alb-new-bg);
 
     cursor: pointer;
 
-    color: white;
+    color: var(--alb-text);
 
     transition:
         transform 0.3s ease,
@@ -1588,26 +1299,13 @@
         box-shadow 0.3s ease;
 }
 
-
 .new-album-card:hover {
     transform:
         translateY(-6px);
 
-    background:
-        rgba(
-            205,
-            147,
-            252,
-            0.045
-        );
+    background: var(--alb-new-hover-bg);
 
-    border-color:
-        rgba(
-            205,
-            147,
-            252,
-            0.4
-        );
+    border-color: var(--alb-new-hover-border);
 
     box-shadow:
         0 15px 40px
@@ -1618,7 +1316,6 @@
             0.2
         );
 }
-
 
 .new-album-plus {
     width: 58px;
@@ -1631,38 +1328,16 @@
 
     border-radius: 50%;
 
-    background:
-        linear-gradient(
-            135deg,
-            rgba(
-                205,
-                147,
-                252,
-                0.18
-            ),
-            rgba(
-                124,
-                153,
-                248,
-                0.18
-            )
-        );
+    background: var(--alb-new-plus-bg);
 
-    color:
-        rgba(
-            255,
-            255,
-            255,
-            0.75
-        );
+    color: var(--alb-new-plus-color);
 
-    font-size: 30px;
+    font-size: calc(30px * var(--cfg-text-scale, 1));
 
     transition:
         transform 0.3s ease,
         background 0.3s ease;
 }
-
 
 .new-album-card:hover .new-album-plus {
     transform:
@@ -1677,7 +1352,6 @@
         );
 }
 
-
 .new-album-title {
     margin-top: 7px;
 
@@ -1685,33 +1359,127 @@
         "Oswald",
         sans-serif;
 
-    font-size: 15px;
+    font-size: calc(15px * var(--cfg-text-scale, 1));
 
     letter-spacing: 1.5px;
 
-    color: white;
+    color: var(--alb-text);
 }
-
 
 .new-album-text {
-    font-size: 10px;
+    font-size: calc(10px * var(--cfg-text-scale, 1));
 
-    color:
-        rgba(
-            255,
-            255,
-            255,
-            0.3
-        );
+    color: var(--alb-text-dim);
 }
 
 
-/* =========================================
-   RESPONSIVE
-   ========================================= */
+/* =========================================================
+   6. ANIMACIONES
+   ========================================================= */
+
+@keyframes albumBackgroundGlow {
+    from {
+        transform:
+            scale(0.9)
+            rotate(0deg);
+    }
+
+    to {
+        transform:
+            scale(1.1)
+            rotate(15deg);
+    }
+}
+
+@keyframes favoriteBorderMove {
+    0% {
+        background-position:
+            0% 50%;
+    }
+
+    50% {
+        background-position:
+            150% 50%;
+    }
+
+    100% {
+        background-position:
+            300% 50%;
+    }
+}
+
+@keyframes favoriteGlowMove {
+    0% {
+        background-position:
+            0% 50%;
+    }
+
+    100% {
+        background-position:
+            300% 50%;
+    }
+}
+
+@keyframes uploadButtonGradient {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes uploadButtonPulse {
+    0%, 100% {
+        box-shadow:
+            0 10px 28px rgba(205, 147, 252, 0.22),
+            0 0 0 0 rgba(205, 147, 252, 0.28);
+    }
+
+    50% {
+        box-shadow:
+            0 12px 34px rgba(124, 153, 248, 0.34),
+            0 0 0 6px rgba(205, 147, 252, 0);
+    }
+}
+
+@keyframes uploadButtonShine {
+    0%, 65% {
+        left: -75%;
+        opacity: 0;
+    }
+
+    75% {
+        opacity: 1;
+    }
+
+    100% {
+        left: 135%;
+        opacity: 0;
+    }
+}
+
+@keyframes uploadArrowBounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-2.5px);
+    }
+}
+
+
+/* =========================================================
+   7. RESPONSIVE
+   ========================================================= */
 
 @media (max-width: 1200px) {
-
     .albumes-container:has(.playlist-side) {
         grid-template-columns:
             300px
@@ -1721,27 +1489,22 @@
             );
     }
 
-
     .albumes-content {
         padding:
             32px 28px 40px;
     }
-
 
     .favorite-image {
         width: 180px;
     }
 }
 
-
 @media (max-width: 850px) {
-
     .albumes-header {
         align-items: flex-start;
 
         flex-direction: column;
     }
-
 
     .albumes-header-buttons {
         width: 100%;
@@ -1751,7 +1514,6 @@
         align-items: stretch;
     }
 
-
     .create-album-button,
     .upload-music-button {
         flex: 1;
@@ -1760,19 +1522,15 @@
     }
 }
 
-
 @media (max-width: 750px) {
-
     .albumes-container {
         grid-template-columns:
             1fr;
     }
 
-
     .albumes-container .playlist-side {
         display: none;
     }
-
 
     .albumes-header {
         align-items: flex-start;
@@ -1780,19 +1538,16 @@
         flex-direction: column;
     }
 
-
     .albumes-header-buttons {
         width: 100%;
 
         flex-direction: column;
     }
 
-
     .create-album-button,
     .upload-music-button {
         width: 100%;
     }
-
 
     .favorite-card {
         flex-direction: column;
@@ -1800,51 +1555,54 @@
         align-items: stretch;
     }
 
-
     .favorite-image {
         width: 100%;
         height: 170px;
     }
 
-
     .favorite-overlay {
-        background:
-            linear-gradient(
-                to bottom,
-                transparent 20%,
-                #202124 100%
-            );
+        background: var(--alb-fav-overlay-mobile);
     }
-
 
     .favorite-info {
         padding:
             15px 20px;
     }
-
-
-    .open-album-button {
-        margin:
-            0 20px 20px;
-    }
 }
 
-
 @media (max-width: 500px) {
-
     .albumes-content {
         padding:
             25px 18px 35px;
     }
 
-
     .albumes-header h1 {
-        font-size: 38px;
+        font-size: calc(38px * var(--cfg-text-scale, 1));
     }
-
 
     .albums-grid {
         grid-template-columns:
             1fr;
     }
+}
+
+
+/* Corazón en Favoritas: blanco/claro en oscuro, negro puro en modo claro */
+.favorite-image,
+.favorite-image img,
+.favorite-image svg {
+    filter: none;
+    transition: filter 0.25s ease;
+}
+
+:root[data-theme="light"] .favorite-image,
+.albumes-container[data-theme="light"] .favorite-image,
+.albumes-main[data-theme="light"] .favorite-image,
+:root[data-theme="light"] .favorite-image img,
+.albumes-container[data-theme="light"] .favorite-image img,
+.albumes-main[data-theme="light"] .favorite-image img,
+:root[data-theme="light"] .favorite-image svg,
+.albumes-container[data-theme="light"] .favorite-image svg,
+.albumes-main[data-theme="light"] .favorite-image svg {
+    filter: brightness(0) saturate(100%);
 }
