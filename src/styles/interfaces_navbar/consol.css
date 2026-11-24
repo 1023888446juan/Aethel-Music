@@ -1,0 +1,2338 @@
+/* =========================================
+   CONSOLA DJ
+   ========================================= */
+
+.consol-container {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    min-height: 0;
+
+    display: grid;
+
+    grid-template-columns:
+        350px minmax(0, 1fr);
+
+    overflow: hidden;
+
+    background:
+        #202124;
+
+    color: white;
+}
+
+
+/* =========================================
+   PANEL DEL COMPONENTE LIST
+   ========================================= */
+
+.consol-playlist {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    min-height: 0;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            #15151b,
+            #20202a,
+            #181820
+        );
+
+    border-right:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
+}
+
+
+/* =========================================
+   BRILLO DEL PANEL LIST
+   ========================================= */
+
+.consol-playlist::before {
+    content: "";
+
+    position: absolute;
+
+    width: 300px;
+    height: 300px;
+
+    top: -100px;
+    left: -120px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(
+            205,
+            147,
+            252,
+            0.13
+        );
+
+    filter:
+        blur(90px);
+
+    animation:
+        playlistGlow
+        7s ease-in-out
+        infinite alternate;
+
+    pointer-events: none;
+}
+
+
+.consol-playlist::after {
+    content: "";
+
+    position: absolute;
+
+    width: 280px;
+    height: 280px;
+
+    right: -100px;
+    bottom: -120px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(
+            124,
+            153,
+            248,
+            0.12
+        );
+
+    filter:
+        blur(90px);
+
+    animation:
+        playlistGlow2
+        9s ease-in-out
+        infinite alternate;
+
+    pointer-events: none;
+}
+
+
+@keyframes playlistGlow {
+
+    from {
+        transform:
+            translate(0, 0);
+    }
+
+    to {
+        transform:
+            translate(80px, 100px);
+    }
+
+}
+
+
+@keyframes playlistGlow2 {
+
+    from {
+        transform:
+            translate(0, 0);
+    }
+
+    to {
+        transform:
+            translate(-70px, -80px);
+    }
+
+}
+
+
+/* =========================================
+   CONTENEDOR DEL LIST
+   ========================================= */
+
+.consol-playlist-content {
+    position: relative;
+
+    z-index: 2;
+
+    width: 100%;
+    height: 100%;
+
+    min-height: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    overflow: hidden;
+}
+
+
+/*
+   El componente List ocupa todo
+   el panel izquierdo.
+*/
+
+.consol-playlist-content > * {
+    width: 100%;
+    height: 100%;
+
+    min-height: 0;
+}
+
+
+/* =========================================
+   CONSOLA
+   ========================================= */
+
+.dj-console {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    min-width: 0;
+    min-height: 0;
+
+    overflow: hidden;
+
+    display: flex;
+
+    flex-direction: column;
+
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            rgba(
+                205,
+                147,
+                252,
+                0.07
+            ),
+            transparent 48%
+        ),
+        #202124;
+}
+
+
+/* =========================================
+   HEADER
+   ========================================= */
+
+.console-header {
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding:
+        9px 22px 6px;
+
+    flex-shrink: 0;
+}
+
+
+.console-header span {
+    display: block;
+
+    font-size: 8px;
+
+    letter-spacing: 3px;
+
+    color:
+        rgba(
+            205,
+            147,
+            252,
+            0.75
+        );
+}
+
+
+.console-header h1 {
+    margin:
+        1px 0 0;
+
+    font-family:
+        "Oswald",
+        sans-serif;
+
+    font-size: 18px;
+
+    font-weight: 600;
+
+    letter-spacing: 2px;
+
+    color: #ffffff;
+}
+
+
+.console-status {
+    padding:
+        4px 10px;
+
+    border-radius: 20px;
+
+    font-size: 8px;
+
+    letter-spacing: 2px;
+
+    color:
+        #d7a9ff;
+
+    background:
+        rgba(
+            205,
+            147,
+            252,
+            0.12
+        );
+
+    box-shadow:
+        0 0 15px
+        rgba(
+            205,
+            147,
+            252,
+            0.12
+        );
+
+    animation:
+        livePulse
+        2s
+        ease-in-out
+        infinite;
+}
+
+
+@keyframes livePulse {
+
+    0%,
+    100% {
+        opacity: 0.7;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+}
+
+
+/* =========================================
+   DECKS
+   ========================================= */
+
+.decks-container {
+    flex: 1;
+
+    min-height: 0;
+
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        76px
+        minmax(0, 1fr);
+
+    align-items: stretch;
+
+    padding:
+        4px 18px 12px;
+
+    gap: 9px;
+
+    overflow: hidden;
+}
+
+
+/* =========================================
+   DECK
+   ========================================= */
+
+.deck {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    min-width: 0;
+    min-height: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    padding:
+        5px 9px 8px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(
+                255,
+                255,
+                255,
+                0.025
+            ),
+            rgba(
+                255,
+                255,
+                255,
+                0.008
+            )
+        );
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.06
+        );
+
+    overflow: hidden;
+
+    transition:
+        border 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+
+.deck-playing {
+    border-color:
+        rgba(
+            205,
+            147,
+            252,
+            0.3
+        );
+
+    box-shadow:
+        0 0 35px
+        rgba(
+            205,
+            147,
+            252,
+            0.08
+        );
+}
+
+
+/* =========================================
+   TÍTULO DECK
+   ========================================= */
+
+.deck-title {
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 7px;
+
+    flex-shrink: 0;
+
+    margin-bottom: 4px;
+}
+
+
+.deck-title > span {
+    font-family:
+        "Oswald",
+        sans-serif;
+
+    font-size: 9px;
+
+    letter-spacing: 2px;
+
+    color:
+        rgba(
+            205,
+            147,
+            252,
+            0.85
+        );
+}
+
+
+.deck-song {
+    min-width: 0;
+
+    text-align: right;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+.deck-song small {
+    display: block;
+
+    font-size: 8px;
+
+    font-weight: 400;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.45
+        );
+}
+
+
+/* =========================================
+   WAVEFORM
+   ========================================= */
+
+.waveform {
+    width: 100%;
+
+    height:
+        clamp(
+            30px,
+            5vh,
+            48px
+        );
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 2px;
+
+    padding:
+        3px 5px;
+
+    border-radius: 7px;
+
+    overflow: hidden;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.04
+        );
+}
+
+
+.waveform span {
+    flex: 1;
+
+    min-width: 1px;
+
+    border-radius: 3px;
+
+    background:
+        linear-gradient(
+            to top,
+            #7c99f8,
+            #cd93fc
+        );
+
+    opacity: 0.9;
+
+    transform-origin:
+        center;
+}
+
+
+.deck-playing .waveform span {
+    animation:
+        waveformMove
+        0.7s
+        ease-in-out
+        infinite alternate;
+}
+
+
+@keyframes waveformMove {
+
+    from {
+        transform:
+            scaleY(0.65);
+    }
+
+    to {
+        transform:
+            scaleY(1);
+    }
+
+}
+
+
+.waveform-time {
+    width: 100%;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    padding:
+        2px 5px 3px;
+
+    flex-shrink: 0;
+
+    font-size: 7px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.4
+        );
+}
+
+
+/* =========================================
+   CONTROLES
+   ========================================= */
+
+.deck-controls-top {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap:
+        clamp(
+            10px,
+            1.5vw,
+            18px
+        );
+
+    flex-shrink: 0;
+
+    margin-bottom: 3px;
+}
+
+
+.dj-icon-button {
+    width:
+        clamp(
+            28px,
+            3.5vh,
+            38px
+        );
+
+    height:
+        clamp(
+            28px,
+            3.5vh,
+            38px
+        );
+
+    border: none;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 7px;
+
+    background:
+        rgba(
+            0,
+            0,
+            0,
+            0.75
+        );
+
+    cursor: pointer;
+
+    transition:
+        transform 0.25s ease,
+        background 0.4s ease,
+        box-shadow 0.4s ease;
+}
+
+
+.dj-icon-button img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    transition:
+        filter 0.25s ease,
+        transform 0.25s ease;
+}
+
+
+.dj-icon-button:hover {
+    transform:
+        scale(1.13);
+
+    background:
+        linear-gradient(
+            135deg,
+            #cd93fc,
+            #7c99f8
+        );
+
+    background-size:
+        200% 200%;
+
+    animation:
+        gradientMove
+        1.8s
+        ease
+        infinite;
+
+    box-shadow:
+        0 6px 20px
+        rgba(
+            124,
+            153,
+            248,
+            0.35
+        );
+}
+
+
+.dj-icon-button:hover img {
+    filter:
+        brightness(0)
+        invert(1);
+
+    transform:
+        scale(1.08);
+}
+
+
+/* =========================================
+   BOTÓN PLAY
+   ========================================= */
+
+.play-icon-button {
+    width:
+        clamp(
+            36px,
+            4.5vh,
+            48px
+        );
+
+    height:
+        clamp(
+            36px,
+            4.5vh,
+            48px
+        );
+
+    padding:
+        9px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #cd93fc,
+            #7c99f8
+        );
+
+    background-size:
+        200% 200%;
+
+    animation:
+        gradientMove
+        5s
+        ease
+        infinite;
+
+    box-shadow:
+        0 7px 22px
+        rgba(
+            124,
+            153,
+            248,
+            0.28
+        );
+}
+
+
+.play-icon-button img {
+    filter:
+        brightness(0)
+        invert(1);
+}
+
+
+.play-icon-button:hover {
+    transform:
+        scale(1.12);
+}
+
+
+.playing-button {
+    box-shadow:
+        0 0 25px
+        rgba(
+            205,
+            147,
+            252,
+            0.4
+        );
+}
+
+
+@keyframes gradientMove {
+
+    0% {
+        background-position:
+            0% 50%;
+    }
+
+    50% {
+        background-position:
+            100% 50%;
+    }
+
+    100% {
+        background-position:
+            0% 50%;
+    }
+
+}
+
+
+/* =========================================
+   DISCO
+   ========================================= */
+
+.vinyl {
+    position: relative;
+
+    width:
+        min(
+            25vh,
+            185px
+        );
+
+    height:
+        min(
+            25vh,
+            185px
+        );
+
+    min-width: 105px;
+    min-height: 105px;
+
+    max-width: 185px;
+    max-height: 185px;
+
+    flex-shrink: 1;
+
+    margin:
+        3px 0 7px;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #c995ff 0%,
+            #aa8dff 35%,
+            #8a8ff8 68%,
+            #719af5 100%
+        );
+
+    border:
+        8px solid
+        #050507;
+
+    box-shadow:
+        0 14px 35px
+        rgba(
+            0,
+            0,
+            0,
+            0.45
+        );
+
+    overflow: hidden;
+
+    transition:
+        box-shadow 0.4s ease,
+        transform 0.4s ease;
+}
+
+
+/* =========================================
+   ANILLO DEL DISCO
+   ========================================= */
+
+.vinyl::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 5%;
+
+    border-radius: 50%;
+
+    border:
+        2px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.14
+        );
+
+    box-shadow:
+        inset 0 0 0 8px
+        rgba(
+            255,
+            255,
+            255,
+            0.06
+        ),
+
+        inset 0 0 0 18px
+        rgba(
+            0,
+            0,
+            0,
+            0.08
+        );
+}
+
+
+/* =========================================
+   REFLEJO
+   ========================================= */
+
+.vinyl-highlight {
+    position: absolute;
+
+    width: 45%;
+    height: 150%;
+
+    top: -25%;
+    left: -70%;
+
+    transform:
+        rotate(25deg);
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(
+                255,
+                255,
+                255,
+                0.2
+            ),
+            transparent
+        );
+
+    pointer-events: none;
+
+    transition:
+        left 0.6s ease;
+}
+
+
+.vinyl:hover .vinyl-highlight {
+    left: 130%;
+}
+
+
+/* =========================================
+   CENTRO DEL DISCO
+   ========================================= */
+
+.vinyl-center {
+    position: absolute;
+
+    width: 36%;
+    height: 36%;
+
+    left: 50%;
+    top: 50%;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        );
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #d8a7ff,
+            #8497ff
+        );
+
+    box-shadow:
+        0 0 18px
+        rgba(
+            0,
+            0,
+            0,
+            0.22
+        );
+}
+
+
+.vinyl-center-inner {
+    position: absolute;
+
+    width: 72%;
+    height: 72%;
+
+    left: 50%;
+    top: 50%;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        );
+
+    border-radius: 50%;
+
+    background:
+        #08090d;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+.vinyl-hole {
+    width: 30%;
+    height: 30%;
+
+    border-radius: 50%;
+
+    background:
+        white;
+
+    box-shadow:
+        0 0 0 4px
+        #08090d;
+}
+
+
+/* =========================================
+   DISCO GIRANDO
+   ========================================= */
+
+.vinyl-spinning {
+    animation:
+        vinylRotation
+        2.5s
+        linear
+        infinite;
+}
+
+
+@keyframes vinylRotation {
+
+    from {
+        transform:
+            rotate(0deg);
+    }
+
+    to {
+        transform:
+            rotate(360deg);
+    }
+
+}
+
+
+/* =========================================
+   BRILLO AL REPRODUCIR
+   ========================================= */
+
+.deck-playing .vinyl {
+    box-shadow:
+        0 0 35px
+        rgba(
+            205,
+            147,
+            252,
+            0.28
+        ),
+
+        0 15px 35px
+        rgba(
+            0,
+            0,
+            0,
+            0.4
+        );
+}
+
+
+/* =========================================
+   VOLUMEN
+   ========================================= */
+
+.deck-level {
+    width: 82%;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    flex-shrink: 0;
+
+    margin-bottom: 4px;
+}
+
+
+.deck-level span {
+    font-size: 7px;
+
+    letter-spacing: 1px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.4
+        );
+}
+
+
+/* =========================================
+   BARRA DE VOLUMEN
+   ========================================= */
+
+.deck-level input[type="range"] {
+    --volume-progress: 70%;
+
+    flex: 1;
+
+    width: 100%;
+
+    height: 5px;
+
+    appearance: none;
+    -webkit-appearance: none;
+
+    border: none;
+
+    outline: none;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    background:
+        linear-gradient(
+            90deg,
+            #cd93fc 0%,
+            #7c99f8 var(--volume-progress),
+            rgba(
+                255,
+                255,
+                255,
+                0.08
+            ) var(--volume-progress),
+            rgba(
+                255,
+                255,
+                255,
+                0.08
+            ) 100%
+        );
+
+    box-shadow:
+        inset 0 0 3px
+        rgba(
+            0,
+            0,
+            0,
+            0.35
+        ),
+
+        0 0 7px
+        rgba(
+            124,
+            153,
+            248,
+            0.08
+        );
+
+    transition:
+        height 0.2s ease,
+        box-shadow 0.25s ease;
+}
+
+
+.deck-level input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    -webkit-appearance: none;
+
+    width: 11px;
+    height: 11px;
+
+    border-radius: 50%;
+
+    border:
+        2px solid
+        #ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #cd93fc,
+            #7c99f8
+        );
+
+    box-shadow:
+        0 0 0 2px
+        rgba(
+            205,
+            147,
+            252,
+            0.15
+        ),
+
+        0 2px 7px
+        rgba(
+            0,
+            0,
+            0,
+            0.4
+        );
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.deck-level input[type="range"]::-webkit-slider-thumb:hover {
+    transform:
+        scale(1.25);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(
+            205,
+            147,
+            252,
+            0.12
+        ),
+
+        0 0 12px
+        rgba(
+            124,
+            153,
+            248,
+            0.35
+        );
+}
+
+
+.deck-level input[type="range"]::-moz-range-thumb {
+    width: 11px;
+    height: 11px;
+
+    border-radius: 50%;
+
+    border:
+        2px solid
+        #ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #cd93fc,
+            #7c99f8
+        );
+
+    box-shadow:
+        0 0 0 2px
+        rgba(
+            205,
+            147,
+            252,
+            0.15
+        ),
+
+        0 2px 7px
+        rgba(
+            0,
+            0,
+            0,
+            0.4
+        );
+}
+
+
+.deck-level input[type="range"]:hover {
+    height: 6px;
+
+    box-shadow:
+        inset 0 0 4px
+        rgba(
+            0,
+            0,
+            0,
+            0.4
+        ),
+
+        0 0 10px
+        rgba(
+            124,
+            153,
+            248,
+            0.15
+        );
+}
+
+
+.deck-level strong {
+    min-width: 22px;
+
+    text-align: right;
+
+    font-size: 7px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.6
+        );
+}
+
+
+/* =========================================
+   AÑADIR CANCIÓN
+   ========================================= */
+
+.add-song-button {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 5px;
+
+    padding:
+        3px 8px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.07
+        );
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.7
+        );
+
+    font-size: 8px;
+
+    cursor: pointer;
+
+    flex-shrink: 0;
+
+    transition:
+        transform 0.25s ease,
+        background 0.3s ease;
+}
+
+
+.add-song-button img {
+    width: 15px;
+    height: 15px;
+
+    object-fit: contain;
+}
+
+
+.add-song-button:hover {
+    transform:
+        translateY(-2px);
+
+    background:
+        linear-gradient(
+            135deg,
+            #cd93fc,
+            #7c99f8
+        );
+}
+
+
+/* =========================================
+   PERFORMANCE PADS
+   ========================================= */
+
+.pads-title {
+    margin-top: 4px;
+
+    margin-bottom: 3px;
+
+    font-size: 6px;
+
+    letter-spacing: 0.7px;
+
+    text-align: center;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.45
+        );
+
+    flex-shrink: 0;
+}
+
+
+.performance-pads {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 5px;
+
+    flex-shrink: 0;
+}
+
+
+.performance-pad {
+    width:
+        clamp(
+            32px,
+            4vw,
+            46px
+        );
+
+    height:
+        clamp(
+            22px,
+            3vh,
+            30px
+        );
+
+    border: none;
+
+    border-radius: 5px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.performance-pad img {
+    width: 15px;
+    height: 15px;
+
+    object-fit: contain;
+}
+
+
+.performance-pad:hover,
+.performance-pad.pad-active {
+    background:
+        linear-gradient(
+            135deg,
+            #cd93fc,
+            #7c99f8
+        );
+
+    transform:
+        scale(1.08);
+
+    box-shadow:
+        0 5px 15px
+        rgba(
+            124,
+            153,
+            248,
+            0.3
+        );
+}
+
+
+/* =========================================
+   BOTONES INFERIORES
+   ========================================= */
+
+.deck-bottom-buttons {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    margin-top: 5px;
+
+    flex-shrink: 0;
+}
+
+
+.console-action {
+    width: 29px;
+    height: 29px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 6px;
+
+    background:
+        rgba(
+            0,
+            0,
+            0,
+            0.65
+        );
+
+    cursor: pointer;
+
+    transition:
+        transform 0.25s ease,
+        background 0.35s ease,
+        box-shadow 0.35s ease;
+}
+
+
+.console-action img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    transition:
+        filter 0.25s ease,
+        transform 0.25s ease;
+}
+
+
+.console-action:hover,
+.console-action.active-action {
+    background:
+        linear-gradient(
+            135deg,
+            #cd93fc,
+            #7c99f8
+        );
+
+    background-size:
+        200% 200%;
+
+    animation:
+        gradientMove
+        1.8s
+        ease
+        infinite;
+
+    transform:
+        scale(1.12);
+
+    box-shadow:
+        0 5px 18px
+        rgba(
+            124,
+            153,
+            248,
+            0.3
+        );
+}
+
+
+.console-action:hover img,
+.console-action.active-action img {
+    filter:
+        brightness(0)
+        invert(1);
+
+    transform:
+        scale(1.08);
+}
+
+
+/* =========================================
+   MIXER
+   ========================================= */
+
+.mixer {
+    position: relative;
+
+    width: 100%;
+    height: 82%;
+
+    align-self: center;
+
+    min-width: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 9px;
+
+    border-radius: 13px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.025
+        );
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.05
+        );
+}
+
+
+.mixer-title {
+    position: absolute;
+
+    top: 6px;
+
+    font-family:
+        "Oswald",
+        sans-serif;
+
+    font-size: 7px;
+
+    letter-spacing: 2px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.4
+        );
+}
+
+
+/* =========================================
+   FADERS
+   ========================================= */
+
+.vertical-fader {
+    height: 70%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    font-size: 7px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.5
+        );
+}
+
+
+.vertical-fader input {
+    appearance: none;
+    -webkit-appearance: none;
+
+    writing-mode:
+        vertical-lr;
+
+    direction: rtl;
+
+    width: 5px;
+
+    height: 75%;
+
+    border: none;
+
+    outline: none;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            to top,
+            #cd93fc,
+            #7c99f8
+        );
+
+    box-shadow:
+        inset 0 0 4px
+        rgba(
+            0,
+            0,
+            0,
+            0.45
+        ),
+
+        0 0 7px
+        rgba(
+            124,
+            153,
+            248,
+            0.08
+        );
+
+    cursor: pointer;
+
+    accent-color:
+        #c88cff;
+
+    transition:
+        width 0.2s ease,
+        box-shadow 0.25s ease;
+}
+
+
+.vertical-fader input::-webkit-slider-thumb {
+    appearance: none;
+    -webkit-appearance: none;
+
+    width: 14px;
+    height: 14px;
+
+    border-radius: 50%;
+
+    border:
+        2px solid
+        white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #cd93fc,
+            #7c99f8
+        );
+
+    box-shadow:
+        0 0 0 2px
+        rgba(
+            205,
+            147,
+            252,
+            0.12
+        ),
+
+        0 2px 7px
+        rgba(
+            0,
+            0,
+            0,
+            0.5
+        );
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.vertical-fader input::-webkit-slider-thumb:hover {
+    transform:
+        scale(1.2);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(
+            205,
+            147,
+            252,
+            0.14
+        ),
+
+        0 0 12px
+        rgba(
+            124,
+            153,
+            248,
+            0.3
+        );
+}
+
+
+.vertical-fader input::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+
+    border-radius: 50%;
+
+    border:
+        2px solid
+        white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #cd93fc,
+            #7c99f8
+        );
+
+    box-shadow:
+        0 0 0 2px
+        rgba(
+            205,
+            147,
+            252,
+            0.12
+        ),
+
+        0 2px 7px
+        rgba(
+            0,
+            0,
+            0,
+            0.5
+        );
+}
+
+
+.vertical-fader input:hover {
+    width: 7px;
+
+    box-shadow:
+        inset 0 0 4px
+        rgba(
+            0,
+            0,
+            0,
+            0.45
+        ),
+
+        0 0 11px
+        rgba(
+            124,
+            153,
+            248,
+            0.16
+        );
+}
+
+
+/* =========================================
+   CROSSFADER
+   ========================================= */
+
+.crossfader {
+    position: absolute;
+
+    bottom: 12px;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 3px;
+
+    font-size: 7px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.4
+        );
+}
+
+
+.crossfader input {
+    width: 45px;
+
+    accent-color:
+        #c88cff;
+}
+
+
+/* =========================================
+   PANTALLAS GRANDES
+   ========================================= */
+
+@media (min-width: 1400px) {
+
+    .consol-container {
+        grid-template-columns:
+            380px minmax(0, 1fr);
+    }
+
+
+    .decks-container {
+        padding:
+            5px 25px 15px;
+
+        gap: 14px;
+    }
+
+
+    .vinyl {
+        width:
+            min(
+                27vh,
+                215px
+            );
+
+        height:
+            min(
+                27vh,
+                215px
+            );
+
+        max-width: 215px;
+        max-height: 215px;
+    }
+
+}
+
+
+/* =========================================
+   PANTALLAS MEDIANAS
+   ========================================= */
+
+@media (max-width: 1100px) {
+
+    .consol-container {
+        grid-template-columns:
+            290px minmax(0, 1fr);
+    }
+
+
+    .decks-container {
+        grid-template-columns:
+            minmax(0, 1fr)
+            65px
+            minmax(0, 1fr);
+
+        padding:
+            4px 10px 10px;
+
+        gap: 6px;
+    }
+
+
+    .vinyl {
+        width:
+            min(
+                22vh,
+                155px
+            );
+
+        height:
+            min(
+                22vh,
+                155px
+            );
+    }
+
+
+    .deck {
+        padding:
+            4px 6px;
+    }
+
+}
+
+
+/* =========================================
+   PANTALLAS BAJAS
+   ========================================= */
+
+@media (max-height: 700px) {
+
+    .console-header {
+        padding:
+            5px 18px 3px;
+    }
+
+
+    .console-header h1 {
+        font-size: 15px;
+    }
+
+
+    .decks-container {
+        padding:
+            2px 10px 7px;
+    }
+
+
+    .vinyl {
+        width:
+            min(
+                20vh,
+                135px
+            );
+
+        height:
+            min(
+                20vh,
+                135px
+            );
+
+        border-width: 6px;
+    }
+
+
+    .waveform {
+        height: 28px;
+    }
+
+
+    .deck-controls-top {
+        margin-bottom: 1px;
+    }
+
+
+    .deck-level {
+        margin-bottom: 2px;
+    }
+
+
+    .performance-pad {
+        height: 21px;
+    }
+
+
+    .console-action {
+        width: 25px;
+        height: 25px;
+
+        padding: 5px;
+    }
+
+}
+
+
+/* =========================================
+   PANTALLAS MUY BAJAS
+   ========================================= */
+
+@media (max-height: 560px) {
+
+    .console-header {
+        display: none;
+    }
+
+
+    .decks-container {
+        padding:
+            3px 6px;
+    }
+
+
+    .vinyl {
+        width:
+            min(
+                18vh,
+                110px
+            );
+
+        height:
+            min(
+                18vh,
+                110px
+            );
+
+        min-width: 90px;
+        min-height: 90px;
+
+        border-width: 5px;
+    }
+
+
+    .waveform {
+        height: 23px;
+    }
+
+
+    .waveform-time {
+        display: none;
+    }
+
+
+    .deck-title {
+        margin-bottom: 1px;
+    }
+
+
+    .deck-song {
+        font-size: 9px;
+    }
+
+
+    .deck-song small {
+        font-size: 6px;
+    }
+
+
+    .dj-icon-button {
+        width: 26px;
+        height: 26px;
+
+        padding: 5px;
+    }
+
+
+    .play-icon-button {
+        width: 32px;
+        height: 32px;
+    }
+
+
+    .pads-title {
+        display: none;
+    }
+
+
+    .performance-pad {
+        width: 28px;
+        height: 18px;
+    }
+
+
+    .deck-bottom-buttons {
+        margin-top: 3px;
+    }
+
+
+    .console-action {
+        width: 23px;
+        height: 23px;
+    }
+
+}
+
+
+/* =========================================
+   PANTALLAS PEQUEÑAS
+   ========================================= */
+
+@media (max-width: 700px) {
+
+    .consol-container {
+        grid-template-columns: 1fr;
+    }
+
+
+    .consol-playlist {
+        display: none;
+    }
+
+
+    .decks-container {
+        grid-template-columns:
+            minmax(0, 1fr)
+            48px
+            minmax(0, 1fr);
+
+        gap: 4px;
+
+        padding:
+            4px;
+    }
+
+
+    .mixer {
+        height: 75%;
+    }
+
+
+    .vinyl {
+        width:
+            min(
+                19vh,
+                130px
+            );
+
+        height:
+            min(
+                19vh,
+                130px
+            );
+    }
+
+}
+
+/* =========================================
+   DISCO INTERACTIVO
+   ========================================= */
+
+.vinyl-interactive {
+    cursor: grab;
+    user-select: none;
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.25s ease;
+}
+
+.vinyl-interactive:hover {
+    box-shadow:
+        0 0 35px
+        rgba(205, 147, 252, 0.18);
+}
+
+.vinyl-interactive:active {
+    cursor: grabbing;
+    transform: scale(0.97);
+}
+
+
+/* =========================================
+   INDICADOR DE POSICIÓN DEL DISCO
+   ========================================= */
+
+.vinyl-progress {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    top: 0;
+    left: 0;
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    z-index: 2;
+
+    border-top:
+        3px solid
+        rgba(205, 147, 252, 0.95);
+
+    filter:
+        drop-shadow(
+            0 0 8px
+            rgba(205, 147, 252, 0.8)
+        );
+}
+
+
+/* =========================================
+   TIEMPO
+   ========================================= */
+
+.waveform-time {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 100%;
+
+    margin-top: 6px;
+
+    font-size: 10px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.45
+        );
+}
