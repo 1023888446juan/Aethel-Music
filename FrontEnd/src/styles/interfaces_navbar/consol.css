@@ -1,0 +1,1434 @@
+/* =========================================================
+   1. VARIABLES DE TEMA (SOLO PALETAS DE COLOR)
+   ========================================================= */
+
+:root,
+:root[data-theme="dark"],
+.consol-container,
+.consol-container[data-theme="dark"],
+.dj-console,
+.dj-console[data-theme="dark"] {
+    --cns-bg: #202124;
+    --cns-console-bg:
+        radial-gradient(
+            circle at 50% 45%,
+            rgba(205, 147, 252, 0.07),
+            transparent 48%
+        ),
+        #202124;
+    --cns-text: #ffffff;
+    --cns-text-muted: rgba(255, 255, 255, 0.45);
+    --cns-text-soft: rgba(255, 255, 255, 0.4);
+    --cns-text-faint: rgba(255, 255, 255, 0.6);
+    --cns-accent-purple: #cd93fc;
+    --cns-accent-blue: #7c99f8;
+    --cns-subtitle: rgba(205, 147, 252, 0.75);
+    --cns-deck-label: rgba(205, 147, 252, 0.85);
+
+    --cns-playlist-bg:
+        linear-gradient(
+            145deg,
+            #15151b,
+            #20202a,
+            #181820
+        );
+    --cns-playlist-border: rgba(255, 255, 255, 0.08);
+    --cns-glow-purple: rgba(205, 147, 252, 0.13);
+    --cns-glow-blue: rgba(124, 153, 248, 0.12);
+
+    --cns-deck-bg:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.025),
+            rgba(255, 255, 255, 0.008)
+        );
+    --cns-deck-border: rgba(255, 255, 255, 0.06);
+    --cns-wave-bg: rgba(255, 255, 255, 0.04);
+    --cns-btn-dark-bg: rgba(0, 0, 0, 0.75);
+    --cns-btn-action-bg: rgba(0, 0, 0, 0.65);
+    --cns-range-track: rgba(255, 255, 255, 0.08);
+    --cns-add-bg: rgba(255, 255, 255, 0.07);
+    --cns-add-color: rgba(255, 255, 255, 0.7);
+    --cns-pad-bg: rgba(255, 255, 255, 0.08);
+    --cns-mixer-bg: rgba(255, 255, 255, 0.025);
+    --cns-mixer-border: rgba(255, 255, 255, 0.05);
+    --cns-badge-bg: rgba(205, 147, 252, 0.12);
+    --cns-badge-color: #d7a9ff;
+    --cns-icon-filter: none;
+}
+
+/* Modo Claro Creativo: Daylight Studio Lavender & Ice Blue */
+:root[data-theme="light"],
+.consol-container[data-theme="light"],
+.dj-console[data-theme="light"] {
+    --cns-bg: #f4f3fa;
+    --cns-console-bg:
+        radial-gradient(
+            circle at 50% 45%,
+            rgba(168, 85, 247, 0.12),
+            transparent 50%
+        ),
+        linear-gradient(
+            135deg,
+            #f8f7fc,
+            #f1eff9 52%,
+            #e9ecf8
+        );
+    --cns-text: #181624;
+    --cns-text-muted: #5c5872;
+    --cns-text-soft: #777191;
+    --cns-text-faint: #46425c;
+    --cns-accent-purple: #8942d6;
+    --cns-accent-blue: #4a6cf7;
+    --cns-subtitle: #7b3fc2;
+    --cns-deck-label: #7b42bd;
+
+    --cns-playlist-bg:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #f3f0fc,
+            #ebe8f8
+        );
+    --cns-playlist-border: rgba(137, 66, 214, 0.16);
+    --cns-glow-purple: rgba(168, 85, 247, 0.14);
+    --cns-glow-blue: rgba(74, 108, 247, 0.13);
+
+    --cns-deck-bg:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.85),
+            rgba(246, 244, 253, 0.72)
+        );
+    --cns-deck-border: rgba(120, 108, 165, 0.18);
+    --cns-wave-bg: rgba(137, 66, 214, 0.08);
+    --cns-btn-dark-bg: rgba(255, 255, 255, 0.88);
+    --cns-btn-action-bg: rgba(255, 255, 255, 0.84);
+    --cns-range-track: rgba(120, 108, 165, 0.18);
+    --cns-add-bg: rgba(137, 66, 214, 0.1);
+    --cns-add-color: #2b1847;
+    --cns-pad-bg: rgba(137, 66, 214, 0.11);
+    --cns-mixer-bg: rgba(255, 255, 255, 0.78);
+    --cns-mixer-border: rgba(120, 108, 165, 0.18);
+    --cns-badge-bg: rgba(137, 66, 214, 0.14);
+    --cns-badge-color: #6d28d9;
+    --cns-icon-filter: invert(0.85);
+}
+
+
+/* =========================================================
+   2. CONTENEDOR, PANEL LIST Y CONSOLA
+   ========================================================= */
+
+.consol-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 350px minmax(0, 1fr);
+    overflow: hidden;
+    background: var(--cns-bg);
+    color: var(--cns-text);
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.consol-playlist {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    background: var(--cns-playlist-bg);
+    border-right: 1px solid var(--cns-playlist-border);
+    transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.consol-playlist::before {
+    content: "";
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    top: -100px;
+    left: -120px;
+    border-radius: 50%;
+    background: var(--cns-glow-purple);
+    filter: blur(90px);
+    animation: playlistGlow 7s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+.consol-playlist::after {
+    content: "";
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    right: -100px;
+    bottom: -120px;
+    border-radius: 50%;
+    background: var(--cns-glow-blue);
+    filter: blur(90px);
+    animation: playlistGlow2 9s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+.consol-playlist-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.consol-playlist-content > * {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+}
+
+.dj-console {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: var(--cns-console-bg);
+    transition: background 0.3s ease;
+}
+
+.hidden-file-input {
+    display: none;
+}
+
+
+/* =========================================================
+   3. HEADER, BOTÓN GRABAR Y BOTÓN DESCARGAR
+   ========================================================= */
+
+.console-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 9px 22px 6px;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+.console-header span {
+    display: block;
+    font-size: calc(8px * var(--cfg-text-scale, 1));
+    letter-spacing: 3px;
+    color: var(--cns-subtitle);
+}
+
+.console-header h1 {
+    margin: 1px 0 0;
+    font-family: "Oswald", sans-serif;
+    font-size: calc(18px * var(--cfg-text-scale, 1));
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: var(--cns-text);
+}
+
+.console-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.console-record-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border: 1px solid rgba(205, 147, 252, 0.35);
+    border-radius: 20px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(205, 147, 252, 0.16),
+            rgba(124, 153, 248, 0.14)
+        );
+    color: var(--cns-badge-color);
+    font-family: "Oswald", sans-serif;
+    font-size: calc(8.5px * var(--cfg-text-scale, 1));
+    letter-spacing: 2px;
+    cursor: pointer;
+    box-shadow: 0 0 16px rgba(205, 147, 252, 0.16);
+    animation: recordStandbyPulse 2.4s ease-in-out infinite;
+    transition:
+        transform 0.22s ease,
+        background 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        color 0.25s ease;
+}
+
+.console-record-button span {
+    display: inline;
+    font-size: calc(8.5px * var(--cfg-text-scale, 1));
+    letter-spacing: 2px;
+    color: inherit;
+}
+
+.console-record-button:hover {
+    transform: translateY(-1px) scale(1.03);
+    border-color: rgba(205, 147, 252, 0.7);
+    box-shadow: 0 0 22px rgba(205, 147, 252, 0.32);
+}
+
+.console-record-button .record-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #cd93fc;
+    box-shadow: 0 0 8px #cd93fc;
+}
+
+.console-record-button.is-recording {
+    border-color: rgba(255, 88, 120, 0.75);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 72, 110, 0.28),
+            rgba(205, 147, 252, 0.22)
+        );
+    color: #ffffff;
+    box-shadow: 0 0 22px rgba(255, 72, 110, 0.45);
+    animation: recordingLivePulse 1.1s ease-in-out infinite;
+}
+
+.console-record-button.is-recording .record-dot {
+    background: #ff486e;
+    box-shadow: 0 0 12px #ff486e;
+    animation: recordDotBlink 0.9s steps(2, start) infinite;
+}
+
+.console-download-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    border: 1px solid rgba(124, 153, 248, 0.4);
+    border-radius: 20px;
+    background: linear-gradient(135deg, #7c99f8, #cd93fc);
+    color: #ffffff;
+    font-family: "Oswald", sans-serif;
+    font-size: calc(8.5px * var(--cfg-text-scale, 1));
+    letter-spacing: 1.8px;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(124, 153, 248, 0.28);
+    transition:
+        transform 0.22s ease,
+        box-shadow 0.25s ease,
+        filter 0.25s ease;
+}
+
+.console-download-button span {
+    display: inline;
+    font-size: calc(8.5px * var(--cfg-text-scale, 1));
+    letter-spacing: 1.8px;
+    color: #ffffff;
+}
+
+.console-download-button .download-arrow {
+    font-size: calc(10px * var(--cfg-text-scale, 1));
+    line-height: 1;
+    transition: transform 0.25s ease;
+}
+
+.console-download-button:hover {
+    transform: translateY(-1px) scale(1.03);
+    filter: brightness(1.08);
+    box-shadow: 0 6px 22px rgba(205, 147, 252, 0.42);
+}
+
+.console-download-button:hover .download-arrow {
+    transform: translateY(2px);
+}
+
+.console-download-button.is-downloading {
+    animation: downloadPop 0.55s ease;
+}
+
+
+/* =========================================================
+   4. DECKS, WAVEFORM INTERACTIVO Y CONTROLES
+   ========================================================= */
+
+.decks-container {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 76px minmax(0, 1fr);
+    align-items: stretch;
+    padding: 4px 18px 12px;
+    gap: 9px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.deck {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px 9px 8px;
+    box-sizing: border-box;
+    border-radius: 18px;
+    background: var(--cns-deck-bg);
+    border: 1px solid var(--cns-deck-border);
+    overflow: hidden;
+    transition:
+        border 0.3s ease,
+        box-shadow 0.3s ease,
+        background 0.3s ease;
+}
+
+.deck-playing {
+    border-color: rgba(205, 147, 252, 0.45);
+    box-shadow:
+        0 0 35px rgba(205, 147, 252, 0.14),
+        inset 0 0 24px rgba(124, 153, 248, 0.06);
+}
+
+.deck-title {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 7px;
+    flex-shrink: 0;
+    margin-bottom: 4px;
+}
+
+.deck-title > span {
+    font-family: "Oswald", sans-serif;
+    font-size: calc(9px * var(--cfg-text-scale, 1));
+    letter-spacing: 2px;
+    color: var(--cns-deck-label);
+}
+
+.deck-song {
+    min-width: 0;
+    text-align: right;
+    font-size: calc(11px * var(--cfg-text-scale, 1));
+    font-weight: 600;
+    color: var(--cns-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.deck-song small {
+    display: block;
+    font-size: calc(8px * var(--cfg-text-scale, 1));
+    font-weight: 400;
+    color: var(--cns-text-muted);
+}
+
+.waveform {
+    position: relative;
+    width: 100%;
+    height: clamp(32px, 5.2vh, 50px);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 3px 5px;
+    box-sizing: border-box;
+    border-radius: 7px;
+    overflow: hidden;
+    background: var(--cns-wave-bg);
+    user-select: none;
+    transition: height 0.1s ease-out, box-shadow 0.2s ease;
+}
+
+.waveform-interactive {
+    cursor: ew-resize;
+}
+
+.waveform-interactive:hover {
+    box-shadow: 0 0 14px rgba(205, 147, 252, 0.22);
+}
+
+.waveform span {
+    flex: 1;
+    min-width: 1px;
+    border-radius: 3px;
+    background: linear-gradient(to top, #7c99f8, #cd93fc);
+    opacity: 0.45;
+    transform-origin: center;
+    transition: height 0.08s ease-out, opacity 0.15s ease;
+}
+
+.waveform span.is-passed {
+    opacity: 1;
+    box-shadow: 0 0 6px rgba(205, 147, 252, 0.35);
+}
+
+.waveform-playhead {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #ffffff;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.95);
+    pointer-events: none;
+    z-index: 2;
+}
+
+.waveform-time {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 2px 5px 3px;
+    margin-top: 4px;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    font-size: calc(9px * var(--cfg-text-scale, 1));
+    color: var(--cns-text-muted);
+}
+
+.deck-controls-top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(10px, 1.5vw, 18px);
+    flex-shrink: 0;
+    margin-bottom: 3px;
+}
+
+.dj-icon-button {
+    width: clamp(28px, 3.5vh, 38px);
+    height: clamp(28px, 3.5vh, 38px);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px;
+    box-sizing: border-box;
+    background: var(--cns-btn-dark-bg);
+    cursor: pointer;
+    transition:
+        transform 0.25s ease,
+        background 0.4s ease,
+        box-shadow 0.4s ease;
+}
+
+.dj-icon-button img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: var(--cns-icon-filter);
+    transition:
+        filter 0.25s ease,
+        transform 0.25s ease;
+}
+
+.dj-icon-button:hover {
+    transform: scale(1.13);
+    background: linear-gradient(135deg, #cd93fc, #7c99f8);
+    background-size: 200% 200%;
+    animation: gradientMove 1.8s ease infinite;
+    box-shadow: 0 6px 20px rgba(124, 153, 248, 0.35);
+}
+
+.dj-icon-button:hover img {
+    filter: brightness(0) invert(1);
+    transform: scale(1.08);
+}
+
+.play-icon-button {
+    width: clamp(36px, 4.5vh, 48px);
+    height: clamp(36px, 4.5vh, 48px);
+    padding: 9px;
+    background: linear-gradient(135deg, #cd93fc, #7c99f8);
+    background-size: 200% 200%;
+    animation: gradientMove 5s ease infinite;
+    box-shadow: 0 7px 22px rgba(124, 153, 248, 0.28);
+}
+
+.play-icon-button img {
+    filter: brightness(0) invert(1);
+}
+
+.play-icon-button:hover {
+    transform: scale(1.12);
+}
+
+.playing-button {
+    box-shadow: 0 0 25px rgba(205, 147, 252, 0.45);
+    animation: gradientMove 3.5s ease infinite, playDeckPulse 1.8s ease-in-out infinite;
+}
+
+
+/* =========================================================
+   5. DISCO CON GUÍA DE MOUSE, VOLUMEN, PADS Y MIXER
+   ========================================================= */
+
+.vinyl-stage {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-shrink: 1;
+    min-height: 0;
+}
+
+.vinyl-guide-arrow {
+    font-size: calc(14px * var(--cfg-text-scale, 1));
+    color: var(--cns-text-soft);
+    opacity: 0.45;
+    user-select: none;
+    pointer-events: none;
+    transition: transform 0.2s ease, opacity 0.2s ease, color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.vinyl-guide-arrow.is-active {
+    opacity: 1;
+    color: var(--cns-accent-purple);
+    text-shadow: 0 0 12px rgba(205, 147, 252, 0.75);
+    transform: scale(1.25);
+}
+
+.vinyl {
+    position: relative;
+    width: min(25vh, 185px);
+    height: min(25vh, 185px);
+    min-width: 105px;
+    min-height: 105px;
+    max-width: 185px;
+    max-height: 185px;
+    flex-shrink: 1;
+    margin: 2px 0 6px;
+    border-radius: 50%;
+    background:
+        linear-gradient(
+            135deg,
+            #c995ff 0%,
+            #aa8dff 35%,
+            #8a8ff8 68%,
+            #719af5 100%
+        );
+    border: 8px solid #050507;
+    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.45);
+    overflow: hidden;
+    transition:
+        box-shadow 0.4s ease,
+        transform 0.4s ease;
+}
+
+.vinyl::before {
+    content: "";
+    position: absolute;
+    inset: 5%;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.14);
+    box-shadow:
+        inset 0 0 0 8px rgba(255, 255, 255, 0.06),
+        inset 0 0 0 18px rgba(0, 0, 0, 0.08);
+}
+
+.vinyl-mouse-guide {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 88%;
+    height: 88%;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 3;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.vinyl-mouse-guide.is-visible {
+    opacity: 1;
+}
+
+.vinyl-mouse-chevron {
+    position: absolute;
+    top: -7px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #08090d;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    box-shadow: 0 0 10px rgba(205, 147, 252, 0.9);
+}
+
+.vinyl-highlight {
+    position: absolute;
+    width: 45%;
+    height: 150%;
+    top: -25%;
+    left: -70%;
+    transform: rotate(25deg);
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.22),
+            transparent
+        );
+    pointer-events: none;
+    transition: left 0.6s ease;
+}
+
+.vinyl:hover .vinyl-highlight {
+    left: 130%;
+}
+
+.vinyl-center {
+    position: absolute;
+    width: 36%;
+    height: 36%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: linear-gradient(135deg, #d8a7ff, #8497ff);
+    box-shadow: 0 0 18px rgba(0, 0, 0, 0.22);
+}
+
+.vinyl-center-inner {
+    position: absolute;
+    width: 72%;
+    height: 72%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: #08090d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vinyl-hole {
+    width: 30%;
+    height: 30%;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 0 0 4px #08090d;
+}
+
+.vinyl-spinning {
+    animation: vinylRotation 2.2s linear infinite;
+}
+
+.deck-playing .vinyl {
+    box-shadow:
+        0 0 38px rgba(205, 147, 252, 0.36),
+        0 0 65px rgba(124, 153, 248, 0.18),
+        0 15px 35px rgba(0, 0, 0, 0.45);
+}
+
+.vinyl-interactive {
+    cursor: grab;
+    user-select: none;
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.25s ease;
+}
+
+.vinyl-interactive:hover {
+    box-shadow: 0 0 35px rgba(205, 147, 252, 0.22);
+}
+
+.vinyl-interactive:active {
+    cursor: grabbing;
+    transform: scale(0.97);
+}
+
+.vinyl-progress {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 2;
+    border-top: 3px solid rgba(255, 255, 255, 0.95);
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.85));
+    transition: opacity 0.2s ease;
+}
+
+.vinyl-progress.is-empty {
+    opacity: 0;
+    border-top-color: transparent;
+    filter: none;
+}
+
+.deck-level {
+    width: 82%;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    margin-bottom: 4px;
+}
+
+.deck-level span {
+    font-size: calc(7.5px * var(--cfg-text-scale, 1));
+    letter-spacing: 1px;
+    color: var(--cns-text-soft);
+}
+
+.deck-level input[type="range"] {
+    --volume-progress: 70%;
+    flex: 1;
+    width: 100%;
+    height: 5px;
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background:
+        linear-gradient(
+            90deg,
+            #cd93fc 0%,
+            #7c99f8 var(--volume-progress),
+            var(--cns-range-track) var(--volume-progress),
+            var(--cns-range-track) 100%
+        );
+    box-shadow:
+        inset 0 0 3px rgba(0, 0, 0, 0.35),
+        0 0 7px rgba(124, 153, 248, 0.08);
+    transition:
+        height 0.2s ease,
+        box-shadow 0.25s ease;
+}
+
+.deck-level input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    background: linear-gradient(135deg, #cd93fc, #7c99f8);
+    box-shadow:
+        0 0 0 2px rgba(205, 147, 252, 0.15),
+        0 2px 7px rgba(0, 0, 0, 0.4);
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.deck-level input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.25);
+    box-shadow:
+        0 0 0 3px rgba(205, 147, 252, 0.12),
+        0 0 12px rgba(124, 153, 248, 0.35);
+}
+
+.deck-level input[type="range"]::-moz-range-thumb {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    background: linear-gradient(135deg, #cd93fc, #7c99f8);
+    box-shadow:
+        0 0 0 2px rgba(205, 147, 252, 0.15),
+        0 2px 7px rgba(0, 0, 0, 0.4);
+}
+
+.deck-level input[type="range"]:hover {
+    height: 6px;
+    box-shadow:
+        inset 0 0 4px rgba(0, 0, 0, 0.4),
+        0 0 10px rgba(124, 153, 248, 0.15);
+}
+
+.deck-level strong {
+    min-width: 22px;
+    text-align: right;
+    font-size: calc(8px * var(--cfg-text-scale, 1));
+    color: var(--cns-text-faint);
+}
+
+.add-song-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 3px 8px;
+    border: none;
+    border-radius: 7px;
+    background: var(--cns-add-bg);
+    color: var(--cns-add-color);
+    font-size: calc(8.5px * var(--cfg-text-scale, 1));
+    cursor: pointer;
+    flex-shrink: 0;
+    transition:
+        transform 0.25s ease,
+        background 0.3s ease,
+        color 0.25s ease,
+        opacity 0.2s ease;
+}
+
+.add-song-button img {
+    width: 15px;
+    height: 15px;
+    object-fit: contain;
+    filter: var(--cns-icon-filter);
+}
+
+.add-song-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #cd93fc, #7c99f8);
+    color: #ffffff;
+}
+
+.add-song-button:hover:not(:disabled) img {
+    filter: brightness(0) invert(1);
+}
+
+.add-song-button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.pads-title {
+    margin-top: 4px;
+    margin-bottom: 3px;
+    font-size: calc(6.5px * var(--cfg-text-scale, 1));
+    letter-spacing: 0.7px;
+    text-align: center;
+    color: var(--cns-text-muted);
+    flex-shrink: 0;
+}
+
+.performance-pads-columns {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(3, auto);
+    grid-auto-columns: minmax(28px, 42px);
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    max-width: 100%;
+    flex-shrink: 0;
+}
+
+.performance-pad {
+    width: 100%;
+    height: clamp(18px, 2.3vh, 24px);
+    border: none;
+    border-radius: 5px;
+    background: var(--cns-pad-bg);
+    cursor: pointer;
+    animation: padColumnPop 0.25s ease;
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.performance-pad img {
+    width: 13px;
+    height: 13px;
+    object-fit: contain;
+    filter: var(--cns-icon-filter);
+}
+
+.performance-pad:hover,
+.performance-pad.pad-active {
+    background: linear-gradient(135deg, #cd93fc, #7c99f8);
+    transform: scale(1.09);
+    box-shadow: 0 5px 16px rgba(124, 153, 248, 0.35);
+}
+
+.performance-pad:hover img,
+.performance-pad.pad-active img {
+    filter: brightness(0) invert(1);
+}
+
+.deck-bottom-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 5px;
+    flex-shrink: 0;
+}
+
+.console-action {
+    width: 29px;
+    height: 29px;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    box-sizing: border-box;
+    background: var(--cns-btn-action-bg);
+    cursor: pointer;
+    transition:
+        transform 0.25s ease,
+        background 0.35s ease,
+        box-shadow 0.35s ease;
+}
+
+.console-action img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: var(--cns-icon-filter);
+    transition:
+        filter 0.25s ease,
+        transform 0.25s ease;
+}
+
+.console-action:hover,
+.console-action.active-action {
+    background: linear-gradient(135deg, #cd93fc, #7c99f8);
+    background-size: 200% 200%;
+    animation: gradientMove 1.8s ease infinite;
+    transform: scale(1.12);
+    box-shadow: 0 5px 18px rgba(124, 153, 248, 0.3);
+}
+
+.console-action:hover img,
+.console-action.active-action img {
+    filter: brightness(0) invert(1);
+    transform: scale(1.08);
+}
+
+.mixer {
+    position: relative;
+    width: 100%;
+    height: 82%;
+    align-self: center;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    border-radius: 13px;
+    background: var(--cns-mixer-bg);
+    border: 1px solid var(--cns-mixer-border);
+    transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.mixer-title {
+    position: absolute;
+    top: 6px;
+    font-family: "Oswald", sans-serif;
+    font-size: calc(7.5px * var(--cfg-text-scale, 1));
+    letter-spacing: 2px;
+    color: var(--cns-text-soft);
+}
+
+.vertical-fader {
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    font-size: calc(7.5px * var(--cfg-text-scale, 1));
+    color: var(--cns-text-muted);
+}
+
+.vertical-fader input {
+    appearance: none;
+    -webkit-appearance: none;
+    writing-mode: vertical-lr;
+    direction: rtl;
+    width: 5px;
+    height: 75%;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    background: linear-gradient(to top, #cd93fc, #7c99f8);
+    box-shadow:
+        inset 0 0 4px rgba(0, 0, 0, 0.45),
+        0 0 7px rgba(124, 153, 248, 0.08);
+    cursor: pointer;
+    accent-color: #c88cff;
+    transition:
+        width 0.2s ease,
+        box-shadow 0.25s ease;
+}
+
+.vertical-fader input::-webkit-slider-thumb {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid white;
+    background: linear-gradient(135deg, #cd93fc, #7c99f8);
+    box-shadow:
+        0 0 0 2px rgba(205, 147, 252, 0.12),
+        0 2px 7px rgba(0, 0, 0, 0.5);
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.vertical-fader input::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow:
+        0 0 0 3px rgba(205, 147, 252, 0.14),
+        0 0 12px rgba(124, 153, 248, 0.3);
+}
+
+.vertical-fader input::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid white;
+    background: linear-gradient(135deg, #cd93fc, #7c99f8);
+    box-shadow:
+        0 0 0 2px rgba(205, 147, 252, 0.12),
+        0 2px 7px rgba(0, 0, 0, 0.5);
+}
+
+.vertical-fader input:hover {
+    width: 7px;
+    box-shadow:
+        inset 0 0 4px rgba(0, 0, 0, 0.45),
+        0 0 11px rgba(124, 153, 248, 0.16);
+}
+
+.crossfader {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: calc(7.5px * var(--cfg-text-scale, 1));
+    color: var(--cns-text-soft);
+}
+
+.crossfader input {
+    width: 45px;
+    accent-color: #c88cff;
+}
+
+
+/* =========================================================
+   6. ANIMACIONES
+   ========================================================= */
+
+@keyframes playlistGlow {
+    from {
+        transform: translate(0, 0);
+    }
+
+    to {
+        transform: translate(80px, 100px);
+    }
+}
+
+@keyframes playlistGlow2 {
+    from {
+        transform: translate(0, 0);
+    }
+
+    to {
+        transform: translate(-70px, -80px);
+    }
+}
+
+@keyframes recordStandbyPulse {
+    0%, 100% {
+        box-shadow: 0 0 14px rgba(205, 147, 252, 0.16);
+    }
+
+    50% {
+        box-shadow: 0 0 22px rgba(124, 153, 248, 0.32);
+    }
+}
+
+@keyframes recordingLivePulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 18px rgba(255, 72, 110, 0.35);
+    }
+
+    50% {
+        transform: scale(1.03);
+        box-shadow: 0 0 28px rgba(255, 72, 110, 0.65);
+    }
+}
+
+@keyframes recordDotBlink {
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.25;
+    }
+}
+
+@keyframes downloadPop {
+    0% {
+        transform: scale(1);
+    }
+
+    45% {
+        transform: scale(1.12);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes playDeckPulse {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(205, 147, 252, 0.35);
+    }
+
+    50% {
+        box-shadow: 0 0 32px rgba(124, 153, 248, 0.6);
+    }
+}
+
+@keyframes vinylRotation {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes padColumnPop {
+    0% {
+        transform: scale(0.7);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+
+/* =========================================================
+   7. RESPONSIVE
+   ========================================================= */
+
+@media (min-width: 1400px) {
+    .consol-container {
+        grid-template-columns: 380px minmax(0, 1fr);
+    }
+
+    .decks-container {
+        padding: 5px 25px 15px;
+        gap: 14px;
+    }
+
+    .vinyl {
+        width: min(27vh, 215px);
+        height: min(27vh, 215px);
+        max-width: 215px;
+        max-height: 215px;
+    }
+}
+
+@media (max-width: 1100px) {
+    .consol-container {
+        grid-template-columns: 290px minmax(0, 1fr);
+    }
+
+    .decks-container {
+        grid-template-columns: minmax(0, 1fr) 65px minmax(0, 1fr);
+        padding: 4px 10px 10px;
+        gap: 6px;
+    }
+
+    .vinyl {
+        width: min(22vh, 155px);
+        height: min(22vh, 155px);
+    }
+
+    .deck {
+        padding: 4px 6px;
+    }
+}
+
+@media (max-height: 700px) {
+    .console-header {
+        padding: 5px 18px 3px;
+    }
+
+    .console-header h1 {
+        font-size: calc(15px * var(--cfg-text-scale, 1));
+    }
+
+    .decks-container {
+        padding: 2px 10px 7px;
+    }
+
+    .vinyl {
+        width: min(20vh, 135px);
+        height: min(20vh, 135px);
+        border-width: 6px;
+    }
+
+    .waveform {
+        height: 28px;
+    }
+
+    .deck-controls-top {
+        margin-bottom: 1px;
+    }
+
+    .deck-level {
+        margin-bottom: 2px;
+    }
+
+    .performance-pad {
+        height: 17px;
+    }
+
+    .console-action {
+        width: 25px;
+        height: 25px;
+        padding: 5px;
+    }
+}
+
+@media (max-height: 560px) {
+    .console-header {
+        display: none;
+    }
+
+    .decks-container {
+        padding: 3px 6px;
+    }
+
+    .vinyl {
+        width: min(18vh, 110px);
+        height: min(18vh, 110px);
+        min-width: 90px;
+        min-height: 90px;
+        border-width: 5px;
+    }
+
+    .waveform {
+        height: 23px;
+    }
+
+    .waveform-time {
+        display: none;
+    }
+
+    .deck-title {
+        margin-bottom: 1px;
+    }
+
+    .deck-song {
+        font-size: calc(9px * var(--cfg-text-scale, 1));
+    }
+
+    .deck-song small {
+        font-size: calc(6px * var(--cfg-text-scale, 1));
+    }
+
+    .dj-icon-button {
+        width: 26px;
+        height: 26px;
+        padding: 5px;
+    }
+
+    .play-icon-button {
+        width: 32px;
+        height: 32px;
+    }
+
+    .pads-title {
+        display: none;
+    }
+
+    .performance-pad {
+        height: 15px;
+    }
+
+    .deck-bottom-buttons {
+        margin-top: 3px;
+    }
+
+    .console-action {
+        width: 23px;
+        height: 23px;
+    }
+}
+
+@media (max-width: 700px) {
+    .consol-container {
+        grid-template-columns: 1fr;
+    }
+
+    .consol-playlist {
+        display: none;
+    }
+
+    .decks-container {
+        grid-template-columns: minmax(0, 1fr) 48px minmax(0, 1fr);
+        gap: 4px;
+        padding: 4px;
+    }
+
+    .mixer {
+        height: 75%;
+    }
+
+    .vinyl {
+        width: min(19vh, 130px);
+        height: min(19vh, 130px);
+    }
+}

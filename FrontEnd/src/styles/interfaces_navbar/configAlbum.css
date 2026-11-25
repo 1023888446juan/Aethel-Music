@@ -1,0 +1,938 @@
+/* =========================================
+   CONFIGURACIÓN DE PLAYLIST
+   ========================================= */
+
+.config-album-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 25px;
+
+    background: rgba(0, 0, 0, 0.65);
+
+    backdrop-filter: blur(8px);
+}
+
+
+/* =========================================
+   VENTANA
+   ========================================= */
+
+.config-album-window {
+    width: min(700px, 100%);
+    max-height: 90vh;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            #18191d,
+            #202124
+        );
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
+
+    border-radius: 22px;
+
+    box-shadow:
+        0 25px 70px
+        rgba(
+            0,
+            0,
+            0,
+            0.55
+        );
+
+    animation:
+        configAlbumAppear
+        0.25s
+        ease-out;
+}
+
+
+@keyframes configAlbumAppear {
+
+    from {
+        opacity: 0;
+        transform: translateY(15px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+}
+
+
+/* =========================================
+   HEADER
+   ========================================= */
+
+.config-album-header {
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 25px 28px;
+
+    border-bottom:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.07
+        );
+}
+
+
+.config-album-label {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-size: 10px;
+
+    letter-spacing: 3px;
+
+    color:
+        rgba(
+            205,
+            147,
+            252,
+            0.7
+        );
+}
+
+
+.config-album-header h2 {
+
+    margin: 0;
+
+    font-family:
+        "Oswald",
+        sans-serif;
+
+    font-size: 28px;
+
+    font-weight: 500;
+
+    letter-spacing: 1px;
+
+    color: white;
+}
+
+
+/* =========================================
+   BOTÓN CERRAR
+   ========================================= */
+
+.config-album-close {
+
+    width: 38px;
+    height: 38px;
+
+    border: none;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.06
+        );
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.7
+        );
+
+    font-size: 24px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.25s ease,
+        background 0.25s ease,
+        color 0.25s ease;
+}
+
+
+.config-album-close:hover {
+
+    transform: scale(1.08);
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.1
+        );
+
+    color: white;
+}
+
+
+/* =========================================
+   CONTENIDO
+   ========================================= */
+
+.config-album-body {
+
+    display: grid;
+
+    grid-template-columns:
+        260px
+        minmax(0, 1fr);
+
+    gap: 30px;
+
+    padding: 30px;
+}
+
+
+/* =========================================
+   PREVISUALIZACIÓN
+   ========================================= */
+
+.config-album-image-section {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 15px;
+}
+
+
+.config-album-preview {
+
+    position: relative;
+
+    width: 230px;
+    height: 230px;
+
+    border-radius: 18px;
+
+    background-size: cover;
+    background-position: center;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
+
+    box-shadow:
+        0 15px 40px
+        rgba(
+            0,
+            0,
+            0,
+            0.4
+        );
+
+    overflow: hidden;
+}
+
+
+.config-album-preview::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(
+                205,
+                147,
+                252,
+                0.15
+            ),
+            transparent 70%
+        );
+
+    pointer-events: none;
+}
+
+
+.config-album-preview-overlay {
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    background:
+        linear-gradient(
+            transparent 45%,
+            rgba(
+                0,
+                0,
+                0,
+                0.7
+            )
+        );
+
+    color: white;
+
+    font-size: 10px;
+
+    letter-spacing: 2px;
+}
+
+
+/* =========================================
+   SUBIR IMAGEN
+   ========================================= */
+
+.config-album-upload {
+
+    width: 100%;
+    max-width: 230px;
+
+    padding: 11px 15px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border:
+        1px solid
+        rgba(
+            205,
+            147,
+            252,
+            0.35
+        );
+
+    border-radius: 10px;
+
+    background:
+        rgba(
+            205,
+            147,
+            252,
+            0.06
+        );
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.8
+        );
+
+    font-size: 10px;
+
+    letter-spacing: 1.5px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.25s ease;
+}
+
+
+.config-album-upload:hover {
+
+    background:
+        rgba(
+            205,
+            147,
+            252,
+            0.12
+        );
+
+    border-color:
+        rgba(
+            205,
+            147,
+            252,
+            0.65
+        );
+
+    transform: translateY(-2px);
+}
+
+
+.config-album-upload input {
+
+    display: none;
+}
+
+
+/* =========================================
+   CAMPOS
+   ========================================= */
+
+.config-album-fields {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+
+.config-album-fields > label,
+.create-album-label {
+
+    margin-top: 5px;
+
+    font-size: 10px;
+
+    letter-spacing: 2px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.45
+        );
+}
+
+
+.config-album-fields input,
+.create-album-input {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 13px 15px;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
+
+    border-radius: 10px;
+
+    outline: none;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.04
+        );
+
+    color: white;
+
+    font-size: 14px;
+
+    transition:
+        border-color 0.25s ease,
+        background 0.25s ease;
+}
+
+
+.config-album-fields input:focus,
+.create-album-input:focus {
+
+    border-color:
+        rgba(
+            205,
+            147,
+            252,
+            0.65
+        );
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.06
+        );
+}
+
+
+.config-album-fields input::placeholder,
+.create-album-input::placeholder {
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.25
+        );
+}
+
+
+/* =========================================
+   INFORMACIÓN
+   ========================================= */
+
+.config-album-info-box {
+
+    margin-top: 15px;
+
+    padding: 18px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.06
+        );
+
+    border-radius: 12px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.025
+        );
+}
+
+
+.config-album-info-box span {
+
+    font-size: 10px;
+
+    letter-spacing: 2px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.4
+        );
+}
+
+
+.config-album-info-box strong {
+
+    font-size: 18px;
+
+    color: white;
+}
+
+
+/* =========================================
+   FOOTER
+   ========================================= */
+
+.config-album-footer {
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 20px 28px;
+
+    border-top:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.07
+        );
+}
+
+
+.config-album-actions {
+
+    display: flex;
+
+    gap: 10px;
+}
+
+
+/* =========================================
+   BOTONES
+   ========================================= */
+
+.config-album-footer button {
+
+    border: none;
+
+    border-radius: 9px;
+
+    padding: 11px 17px;
+
+    font-size: 10px;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.25s ease,
+        background 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+.config-album-footer button:hover {
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================================
+   ELIMINAR
+   ========================================= */
+
+.config-album-delete {
+
+    background:
+        rgba(
+            220,
+            60,
+            70,
+            0.12
+        );
+
+    border:
+        1px solid
+        rgba(
+            220,
+            60,
+            70,
+            0.3
+        ) !important;
+
+    color:
+        #ff737c;
+}
+
+
+.config-album-delete:hover {
+
+    background:
+        rgba(
+            220,
+            60,
+            70,
+            0.2
+        );
+}
+
+
+/* =========================================
+   CANCELAR
+   ========================================= */
+
+.config-album-cancel {
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.05
+        );
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.65
+        );
+}
+
+
+.config-album-cancel:hover {
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.09
+        );
+}
+
+
+/* =========================================
+   GUARDAR
+   ========================================= */
+
+.config-album-save {
+
+    background:
+        linear-gradient(
+            135deg,
+            #cd93fc,
+            #7c99f8
+        );
+
+    color: white;
+
+    box-shadow:
+        0 7px 20px
+        rgba(
+            124,
+            153,
+            248,
+            0.2
+        );
+}
+
+
+.config-album-save:hover {
+
+    background:
+        linear-gradient(
+            135deg,
+            #dcaaff,
+            #8ca8ff
+        );
+
+    box-shadow:
+        0 10px 28px
+        rgba(
+            124,
+            153,
+            248,
+            0.35
+        );
+}
+
+
+/* =========================================
+   CREAR PLAYLIST
+   ========================================= */
+
+.create-album-window {
+
+    width: min(600px, 100%);
+}
+
+
+.create-album-body {
+
+    padding: 30px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 15px;
+}
+
+
+.create-album-preview {
+
+    position: relative;
+
+    width: 200px;
+    height: 200px;
+
+    border-radius: 18px;
+
+    background-size: cover;
+    background-position: center;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
+
+    box-shadow:
+        0 15px 40px
+        rgba(
+            0,
+            0,
+            0,
+            0.35
+        );
+
+    overflow: hidden;
+
+    display: flex;
+
+    align-items: flex-end;
+    justify-content: center;
+
+    padding-bottom: 20px;
+
+    box-sizing: border-box;
+}
+
+
+.create-album-preview::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(
+                205,
+                147,
+                252,
+                0.15
+            ),
+            transparent 70%
+        );
+}
+
+
+.create-album-preview div {
+
+    position: relative;
+
+    z-index: 2;
+
+    font-size: 10px;
+
+    letter-spacing: 3px;
+
+    color: white;
+}
+
+
+.create-album-body .config-album-upload {
+
+    max-width: 200px;
+}
+
+
+.create-album-label {
+
+    width: 100%;
+
+    margin-top: 10px;
+}
+
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 700px) {
+
+    .config-album-overlay {
+
+        padding: 15px;
+    }
+
+
+    .config-album-body {
+
+        grid-template-columns: 1fr;
+
+        overflow-y: auto;
+
+        max-height: 65vh;
+    }
+
+
+    .config-album-preview {
+
+        width: 180px;
+        height: 180px;
+    }
+
+
+    .config-album-footer {
+
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+
+    .config-album-actions {
+
+        width: 100%;
+    }
+
+
+    .config-album-actions button {
+
+        flex: 1;
+    }
+
+
+    .config-album-delete {
+
+        width: 100%;
+    }
+
+}

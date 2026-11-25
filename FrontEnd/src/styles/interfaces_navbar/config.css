@@ -1,0 +1,1041 @@
+/* =========================================================
+   1. VARIABLES DE TEMA (SOLO PALETAS DE COLOR)
+   ========================================================= */
+
+:root,
+:root[data-theme="dark"],
+.config-container,
+.config-container[data-theme="dark"],
+.personalizar-overlay[data-theme="dark"],
+.personalizar-modal[data-theme="dark"] {
+    --cfg-bg: #07080b;
+    --cfg-text: #ffffff;
+    --cfg-text-muted: #555963;
+    --cfg-accent-purple: #cd93fc;
+    --cfg-accent-blue: #7c99f8;
+    --cfg-subtitle: #8d5db1;
+
+    --cfg-bg-gradient:
+        radial-gradient(
+            circle at 80% 15%,
+            rgba(124, 153, 248, 0.06),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 20% 85%,
+            rgba(205, 147, 252, 0.045),
+            transparent 32%
+        ),
+        linear-gradient(
+            135deg,
+            #050609,
+            #090a0e 50%,
+            #0b0c11
+        );
+
+    --cfg-ring-purple: rgba(205, 147, 252, 0.035);
+    --cfg-ring-blue: rgba(124, 153, 248, 0.025);
+
+    --cfg-sidebar-bg:
+        linear-gradient(
+            180deg,
+            rgba(12, 13, 17, 0.98),
+            rgba(7, 8, 11, 0.99)
+        );
+    --cfg-sidebar-border: rgba(255, 255, 255, 0.045);
+    --cfg-sidebar-shadow: 15px 0 45px rgba(0, 0, 0, 0.3);
+    --cfg-sidebar-title: #555862;
+
+    --cfg-item-color: #646771;
+    --cfg-item-hover-bg: rgba(255, 255, 255, 0.025);
+    --cfg-item-hover-color: #eeeeF2;
+    --cfg-item-active-color: #ffffff;
+    --cfg-item-active-border: rgba(205, 147, 252, 0.09);
+    --cfg-item-active-bg:
+        linear-gradient(
+            135deg,
+            rgba(80, 38, 115, 0.4),
+            rgba(42, 55, 105, 0.4)
+        );
+    --cfg-item-active-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+    --cfg-header-title: #ededf2;
+
+    --cfg-overlay-bg: rgba(2, 3, 6, 0.78);
+    --cfg-modal-bg:
+        linear-gradient(
+            145deg,
+            #191a20,
+            #0b0c10
+        );
+    --cfg-modal-border: rgba(255, 255, 255, 0.08);
+    --cfg-modal-shadow:
+        0 30px 100px rgba(0, 0, 0, 0.75),
+        0 0 80px rgba(124, 153, 248, 0.08);
+    --cfg-divider: rgba(255, 255, 255, 0.055);
+    --cfg-modal-label: #9c72c7;
+    --cfg-modal-title: #f4f4f7;
+    --cfg-modal-desc: #7d808a;
+
+    --cfg-card-bg: rgba(255, 255, 255, 0.025);
+    --cfg-card-border: rgba(255, 255, 255, 0.06);
+    --cfg-card-hover-bg: rgba(255, 255, 255, 0.045);
+    --cfg-card-selected-bg:
+        linear-gradient(
+            135deg,
+            rgba(205, 147, 252, 0.09),
+            rgba(124, 153, 248, 0.045)
+        );
+    --cfg-card-selected-border: rgba(205, 147, 252, 0.45);
+    --cfg-option-title: #e8e8eb;
+    --cfg-option-sub: #666871;
+
+    --cfg-footer-bg: rgba(7, 8, 11, 0.45);
+    --cfg-cancel-bg: rgba(255, 255, 255, 0.03);
+    --cfg-cancel-border: rgba(255, 255, 255, 0.08);
+    --cfg-cancel-color: #85868e;
+    --cfg-scroll-track: #060609;
+    --cfg-scroll-thumb:
+        linear-gradient(
+            180deg,
+            #30263a,
+            #202538
+        );
+}
+
+/* Modo Claro Creativo: Daylight Studio Lavender & Ice Blue */
+:root[data-theme="light"],
+.config-container[data-theme="light"],
+.personalizar-overlay[data-theme="light"],
+.personalizar-modal[data-theme="light"] {
+    --cfg-bg: #f4f3fa;
+    --cfg-text: #181624;
+    --cfg-text-muted: #5c5872;
+    --cfg-accent-purple: #8942d6;
+    --cfg-accent-blue: #4a6cf7;
+    --cfg-subtitle: #7b3fc2;
+
+    --cfg-bg-gradient:
+        radial-gradient(
+            circle at 82% 14%,
+            rgba(74, 108, 247, 0.13),
+            transparent 34%
+        ),
+        radial-gradient(
+            circle at 18% 84%,
+            rgba(168, 85, 247, 0.14),
+            transparent 36%
+        ),
+        linear-gradient(
+            135deg,
+            #f8f7fc,
+            #f1eff9 52%,
+            #e9ecf8
+        );
+
+    --cfg-ring-purple: rgba(137, 66, 214, 0.08);
+    --cfg-ring-blue: rgba(74, 108, 247, 0.08);
+
+    --cfg-sidebar-bg:
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.94),
+            rgba(244, 242, 251, 0.98)
+        );
+    --cfg-sidebar-border: rgba(137, 66, 214, 0.12);
+    --cfg-sidebar-shadow: 12px 0 35px rgba(84, 65, 130, 0.08);
+    --cfg-sidebar-title: #7c7696;
+
+    --cfg-item-color: #5b5770;
+    --cfg-item-hover-bg: rgba(137, 66, 214, 0.06);
+    --cfg-item-hover-color: #1b1829;
+    --cfg-item-active-color: #2b1847;
+    --cfg-item-active-border: rgba(137, 66, 214, 0.28);
+    --cfg-item-active-bg:
+        linear-gradient(
+            135deg,
+            rgba(205, 147, 252, 0.24),
+            rgba(124, 153, 248, 0.22)
+        );
+    --cfg-item-active-shadow:
+        0 10px 24px rgba(110, 74, 175, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+
+    --cfg-header-title: #161322;
+
+    --cfg-overlay-bg: rgba(32, 27, 52, 0.32);
+    --cfg-modal-bg:
+        linear-gradient(
+            150deg,
+            #ffffff,
+            #f6f4fc
+        );
+    --cfg-modal-border: rgba(137, 66, 214, 0.16);
+    --cfg-modal-shadow:
+        0 28px 75px rgba(46, 35, 84, 0.18),
+        0 0 60px rgba(124, 153, 248, 0.12);
+    --cfg-divider: rgba(120, 108, 165, 0.14);
+    --cfg-modal-label: #7b42bd;
+    --cfg-modal-title: #171424;
+    --cfg-modal-desc: #5f5b75;
+
+    --cfg-card-bg: rgba(255, 255, 255, 0.75);
+    --cfg-card-border: rgba(120, 108, 165, 0.18);
+    --cfg-card-hover-bg: rgba(255, 255, 255, 0.98);
+    --cfg-card-selected-bg:
+        linear-gradient(
+            135deg,
+            rgba(205, 147, 252, 0.18),
+            rgba(124, 153, 248, 0.16)
+        );
+    --cfg-card-selected-border: rgba(137, 66, 214, 0.52);
+    --cfg-option-title: #191627;
+    --cfg-option-sub: #64607a;
+
+    --cfg-footer-bg: rgba(243, 241, 251, 0.85);
+    --cfg-cancel-bg: rgba(255, 255, 255, 0.8);
+    --cfg-cancel-border: rgba(120, 108, 165, 0.22);
+    --cfg-cancel-color: #5b5770;
+    --cfg-scroll-track: #eceaf5;
+    --cfg-scroll-thumb:
+        linear-gradient(
+            180deg,
+            #b88ef0,
+            #8ba3f7
+        );
+}
+
+
+/* =========================================================
+   2. CONTENEDOR Y FONDO
+   ========================================================= */
+
+.config-container {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 80px);
+    display: flex;
+    overflow: hidden;
+    background: var(--cfg-bg);
+    color: var(--cfg-text);
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.config-background {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: var(--cfg-bg-gradient);
+    transition: background 0.3s ease;
+}
+
+.config-container::before {
+    content: "";
+    position: absolute;
+    width: 650px;
+    height: 650px;
+    top: -420px;
+    right: -260px;
+    border: 1px solid var(--cfg-ring-purple);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.config-container::after {
+    content: "";
+    position: absolute;
+    width: 420px;
+    height: 420px;
+    bottom: -280px;
+    left: 20%;
+    border: 1px solid var(--cfg-ring-blue);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   3. SIDEBAR Y NAVEGACIÓN
+   ========================================================= */
+
+.config-sidebar {
+    position: relative;
+    z-index: 2;
+    width: 230px;
+    height: 100%;
+    flex-shrink: 0;
+    padding: 30px 15px;
+    box-sizing: border-box;
+    background: var(--cfg-sidebar-bg);
+    border-right: 1px solid var(--cfg-sidebar-border);
+    box-shadow: var(--cfg-sidebar-shadow);
+    transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.config-sidebar::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 25px;
+    right: 25px;
+    height: 1px;
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(205, 147, 252, 0.35),
+            rgba(124, 153, 248, 0.35),
+            transparent
+        );
+}
+
+.config-sidebar-title {
+    margin-bottom: 28px;
+    padding: 0 12px;
+    color: var(--cfg-sidebar-title);
+    font-family: "Oswald", sans-serif;
+    font-size: calc(10px * var(--cfg-text-scale, 1));
+    letter-spacing: 3px;
+}
+
+.config-menu-item {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 7px;
+    padding: 13px 14px;
+    box-sizing: border-box;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    background: transparent;
+    color: var(--cfg-item-color);
+    font-family: "Oswald", sans-serif;
+    font-size: calc(14px * var(--cfg-text-scale, 1));
+    text-align: left;
+    cursor: pointer;
+    transition:
+        background 0.25s ease,
+        color 0.25s ease,
+        transform 0.25s ease,
+        border-color 0.25s ease;
+}
+
+.config-menu-item:hover {
+    transform: translateX(3px);
+    background: var(--cfg-item-hover-bg);
+    color: var(--cfg-item-hover-color);
+}
+
+.config-menu-item.active {
+    color: var(--cfg-item-active-color);
+    border-color: var(--cfg-item-active-border);
+    background: var(--cfg-item-active-bg);
+    box-shadow: var(--cfg-item-active-shadow);
+}
+
+.config-menu-item.active::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 22%;
+    width: 2px;
+    height: 56%;
+    border-radius: 5px;
+    background:
+        linear-gradient(
+            180deg,
+            var(--cfg-accent-purple),
+            var(--cfg-accent-blue)
+        );
+    box-shadow: 0 0 12px rgba(205, 147, 252, 0.65);
+}
+
+.config-menu-icon {
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    opacity: 0.65;
+    transition:
+        transform 0.25s ease,
+        opacity 0.25s ease,
+        filter 0.25s ease;
+}
+
+.config-menu-icon img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    display: block;
+}
+
+.config-container[data-theme="light"] .config-menu-icon img,
+:root[data-theme="light"] .config-menu-icon img {
+    filter: invert(0.82);
+}
+
+.config-menu-item:hover .config-menu-icon,
+.config-menu-item.active .config-menu-icon {
+    opacity: 1;
+}
+
+.config-menu-item:hover .config-menu-icon {
+    transform: scale(1.08);
+}
+
+
+/* =========================================================
+   4. CONTENIDO PRINCIPAL Y HEADER
+   ========================================================= */
+
+.config-main {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 42px 50px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.config-header {
+    width: 100%;
+    max-width: 1050px;
+    margin-bottom: 30px;
+}
+
+.config-subtitle {
+    display: block;
+    margin-bottom: 7px;
+    color: var(--cfg-subtitle);
+    font-size: calc(10px * var(--cfg-text-scale, 1));
+    font-weight: 600;
+    letter-spacing: 4px;
+}
+
+.config-header h1 {
+    margin: 0;
+    color: var(--cfg-header-title);
+    font-family: "Oswald", sans-serif;
+    font-size: calc(34px * var(--cfg-text-scale, 1));
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+.config-header p {
+    margin: 7px 0 0;
+    color: var(--cfg-text-muted);
+    font-size: calc(13px * var(--cfg-text-scale, 1));
+}
+
+.config-page {
+    width: 100%;
+    max-width: 1050px;
+}
+
+
+/* =========================================================
+   5. MODAL PERSONALIZAR Y CONTROLES
+   ========================================================= */
+
+.personalizar-overlay {
+    position: fixed;
+    top: 80px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+    box-sizing: border-box;
+    background: var(--cfg-overlay-bg);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    animation: personalizarOverlayIn 0.25s ease;
+}
+
+.personalizar-modal {
+    position: relative;
+    width: min(720px, 100%);
+    max-height: calc(100vh - 130px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--cfg-modal-bg);
+    border: 1px solid var(--cfg-modal-border);
+    border-radius: 22px;
+    box-shadow: var(--cfg-modal-shadow);
+    animation:
+        personalizarModalIn
+        0.3s
+        cubic-bezier(.2, .8, .2, 1);
+}
+
+.personalizar-modal::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 8%;
+    right: 8%;
+    height: 1px;
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #cd93fc,
+            #7c99f8,
+            transparent
+        );
+    box-shadow: 0 0 15px rgba(205, 147, 252, 0.45);
+    pointer-events: none;
+}
+
+.personalizar-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 28px 34px 24px;
+    border-bottom: 1px solid var(--cfg-divider);
+    background:
+        linear-gradient(
+            180deg,
+            rgba(156, 114, 199, 0.05),
+            transparent
+        );
+}
+
+.config-modal-label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--cfg-modal-label);
+    font-family: "Oswald", sans-serif;
+    font-size: calc(10.5px * var(--cfg-text-scale, 1));
+    font-weight: 500;
+    letter-spacing: 3.4px;
+    text-transform: uppercase;
+}
+
+.personalizar-modal-header h2 {
+    margin: 0;
+    color: var(--cfg-modal-title);
+    font-family: "Oswald", sans-serif;
+    font-size: calc(28px * var(--cfg-text-scale, 1));
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: 0.4px;
+}
+
+.personalizar-modal-header p {
+    margin: 9px 0 0;
+    color: var(--cfg-modal-desc);
+    font-size: calc(13px * var(--cfg-text-scale, 1));
+    line-height: 1.45;
+}
+
+.personalizar-content {
+    overflow-y: auto;
+    padding: 5px 32px 18px;
+}
+
+.personalizar-content::-webkit-scrollbar {
+    width: 5px;
+}
+
+.personalizar-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.personalizar-content::-webkit-scrollbar-thumb {
+    background: rgba(137, 66, 214, 0.22);
+    border-radius: 10px;
+}
+
+.personalizar-section {
+    padding: 21px 0;
+    border-bottom: 1px solid var(--cfg-divider);
+}
+
+.personalizar-section:last-child {
+    border-bottom: none;
+}
+
+.personalizar-section-title {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 18px;
+}
+
+.personalizar-section-icon {
+    width: 37px;
+    height: 37px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1px solid rgba(137, 66, 214, 0.25);
+    border-radius: 10px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(205, 147, 252, 0.16),
+            rgba(124, 153, 248, 0.1)
+        );
+    color: var(--cfg-accent-purple);
+    font-family: "Oswald", sans-serif;
+    font-size: calc(13px * var(--cfg-text-scale, 1));
+}
+
+.personalizar-section-title h3 {
+    margin: 0 0 3px;
+    color: var(--cfg-option-title);
+    font-size: calc(14px * var(--cfg-text-scale, 1));
+    font-weight: 600;
+}
+
+.personalizar-section-title p {
+    margin: 0;
+    color: var(--cfg-option-sub);
+    font-size: calc(12px * var(--cfg-text-scale, 1));
+}
+
+.appearance-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.appearance-option {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 13px;
+    border: 1px solid var(--cfg-card-border);
+    border-radius: 13px;
+    background: var(--cfg-card-bg);
+    color: var(--cfg-text);
+    text-align: left;
+    cursor: pointer;
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.appearance-option:hover {
+    background: var(--cfg-card-hover-bg);
+    border-color: rgba(137, 66, 214, 0.3);
+    transform: translateY(-1px);
+}
+
+.appearance-option.selected {
+    background: var(--cfg-card-selected-bg);
+    border-color: var(--cfg-card-selected-border);
+    box-shadow: 0 0 25px rgba(137, 66, 214, 0.1);
+}
+
+.appearance-preview {
+    width: 62px;
+    height: 44px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 7px;
+    box-sizing: border-box;
+    overflow: hidden;
+    border-radius: 7px;
+}
+
+.dark-preview {
+    background: #0d0e12;
+    border: 1px solid #292a31;
+}
+
+.light-preview {
+    background: #fbfaff;
+    border: 1px solid #d5ccf0;
+}
+
+.appearance-preview span {
+    display: block;
+    height: 4px;
+    border-radius: 5px;
+}
+
+.dark-preview span:nth-child(1) {
+    width: 75%;
+    background: #cd93fc;
+}
+
+.dark-preview span:nth-child(2) {
+    width: 90%;
+    background: #292b34;
+}
+
+.dark-preview span:nth-child(3) {
+    width: 55%;
+    background: #7c99f8;
+}
+
+.light-preview span:nth-child(1) {
+    width: 75%;
+    background: #8942d6;
+}
+
+.light-preview span:nth-child(2) {
+    width: 90%;
+    background: #dcd6f2;
+}
+
+.light-preview span:nth-child(3) {
+    width: 55%;
+    background: #4a6cf7;
+}
+
+.appearance-option-info {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.appearance-option-info strong {
+    color: var(--cfg-option-title);
+    font-size: calc(13px * var(--cfg-text-scale, 1));
+}
+
+.appearance-option-info small {
+    color: var(--cfg-option-sub);
+    font-size: calc(10px * var(--cfg-text-scale, 1));
+    line-height: 1.35;
+}
+
+.appearance-check {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-left: auto;
+    border-radius: 50%;
+    color: transparent;
+    font-size: calc(11px * var(--cfg-text-scale, 1));
+}
+
+.appearance-option.selected .appearance-check {
+    background:
+        linear-gradient(
+            135deg,
+            #cd93fc,
+            #7c99f8
+        );
+    color: #ffffff;
+    box-shadow: 0 0 12px rgba(205, 147, 252, 0.3);
+}
+
+.range-setting {
+    padding: 4px 2px;
+}
+
+.range-labels {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 9px;
+}
+
+.text-small {
+    color: var(--cfg-option-sub);
+    font-size: calc(11px * var(--cfg-text-scale, 1));
+}
+
+.text-large {
+    color: var(--cfg-option-title);
+    font-size: calc(18px * var(--cfg-text-scale, 1));
+}
+
+.current-setting {
+    padding: 4px 9px;
+    border-radius: 6px;
+    background: rgba(137, 66, 214, 0.12);
+    color: var(--cfg-accent-purple);
+    font-family: "Oswald", sans-serif;
+    font-size: calc(11px * var(--cfg-text-scale, 1));
+}
+
+.range-setting input[type="range"] {
+    width: 100%;
+    appearance: none;
+    height: 3px;
+    border-radius: 10px;
+    background:
+        linear-gradient(
+            90deg,
+            #cd93fc,
+            #7c99f8
+        );
+    cursor: pointer;
+}
+
+.range-setting input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border: 2px solid #111217;
+    border-radius: 50%;
+    background: #e0c2ff;
+    box-shadow: 0 0 12px rgba(205, 147, 252, 0.5);
+    cursor: pointer;
+}
+
+.range-setting input[type="range"]::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border: 2px solid #111217;
+    border-radius: 50%;
+    background: #e0c2ff;
+    box-shadow: 0 0 12px rgba(205, 147, 252, 0.5);
+    cursor: pointer;
+}
+
+.personalizar-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 17px 32px;
+    border-top: 1px solid var(--cfg-divider);
+    background: var(--cfg-footer-bg);
+}
+
+.settings-status {
+    color: var(--cfg-option-sub);
+    font-size: calc(10px * var(--cfg-text-scale, 1));
+}
+
+.personalizar-actions {
+    display: flex;
+    gap: 9px;
+}
+
+.personalizar-cancel,
+.personalizar-save {
+    height: 36px;
+    padding: 0 16px;
+    border-radius: 8px;
+    font-family: "Oswald", sans-serif;
+    font-size: calc(10px * var(--cfg-text-scale, 1));
+    letter-spacing: 0.8px;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.personalizar-cancel {
+    border: 1px solid var(--cfg-cancel-border);
+    background: var(--cfg-cancel-bg);
+    color: var(--cfg-cancel-color);
+}
+
+.personalizar-cancel:hover {
+    background: rgba(137, 66, 214, 0.08);
+    color: var(--cfg-option-title);
+}
+
+.personalizar-save {
+    border: 1px solid rgba(205, 147, 252, 0.25);
+    background:
+        linear-gradient(
+            100deg,
+            #a96fe0,
+            #6e88dc
+        );
+    color: #ffffff;
+    box-shadow: 0 5px 20px rgba(124, 153, 248, 0.16);
+}
+
+.personalizar-save:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 7px 25px rgba(124, 153, 248, 0.28);
+}
+
+
+/* =========================================================
+   6. ANIMACIONES Y SCROLLBARS
+   ========================================================= */
+
+@keyframes personalizarOverlayIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes personalizarModalIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.config-main::-webkit-scrollbar {
+    width: 6px;
+}
+
+.config-main::-webkit-scrollbar-track {
+    background: var(--cfg-scroll-track);
+}
+
+.config-main::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: var(--cfg-scroll-thumb);
+}
+
+
+/* =========================================================
+   7. RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+    .config-sidebar {
+        width: 190px;
+    }
+
+    .config-main {
+        padding: 30px;
+    }
+}
+
+@media (max-width: 700px) {
+    .config-main {
+        padding: 25px 20px;
+    }
+
+    .config-header h1 {
+        font-size: calc(28px * var(--cfg-text-scale, 1));
+    }
+
+    .personalizar-overlay {
+        top: 70px;
+        padding: 15px;
+    }
+
+    .personalizar-modal {
+        max-height: calc(100vh - 100px);
+    }
+
+    .personalizar-modal-header {
+        padding: 23px;
+    }
+
+    .personalizar-content {
+        padding: 5px 23px 15px;
+    }
+
+    .personalizar-modal-footer {
+        padding: 15px 23px;
+        align-items: flex-end;
+        flex-direction: column;
+    }
+
+    .settings-status {
+        width: 100%;
+    }
+
+    .personalizar-actions {
+        width: 100%;
+    }
+
+    .personalizar-actions button {
+        flex: 1;
+    }
+
+    .appearance-options {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 650px) {
+    .config-sidebar {
+        width: 65px;
+        padding: 25px 8px;
+    }
+
+    .config-sidebar-title {
+        font-size: 0;
+        padding: 0;
+    }
+
+    .config-menu-item {
+        justify-content: center;
+        padding: 13px 5px;
+    }
+
+    .config-menu-item > span:last-child {
+        display: none;
+    }
+
+    .config-menu-icon {
+        width: auto;
+    }
+}
+
+@media (max-width: 450px) {
+    .config-sidebar {
+        width: 55px;
+    }
+
+    .config-main {
+        padding: 20px 14px;
+    }
+
+    .config-header {
+        margin-bottom: 20px;
+    }
+
+    .config-header h1 {
+        font-size: calc(25px * var(--cfg-text-scale, 1));
+    }
+
+    .personalizar-modal-header h2 {
+        font-size: calc(20px * var(--cfg-text-scale, 1));
+    }
+
+    .personalizar-modal-header p {
+        font-size: calc(11px * var(--cfg-text-scale, 1));
+    }
+
+    .personalizar-actions {
+        flex-direction: column;
+    }
+
+    .personalizar-actions button {
+        width: 100%;
+    }
+}

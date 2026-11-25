@@ -1,0 +1,491 @@
+Al ver el listado de los 5 DJ con mas descargas se observo también de cada uno sus listas de reproduccion (las canciones pertenecientes a ella), creadas en el ultimo mes y que en conjunto suman 17 y cuentan en total con mas de 30 canciones y cada una por lo menos con 15
+
+Info clave:
+
+5 usuarios con mas descargas de sus propios mixes
+
+entre los 5 tienen un total de 17 playlist que sumadas sus canciones dan +30 pero cada playlist mínimo 15
+
+Acciones realizadas: 
+
+Crear únicamente 8 usuarios, los dj y extras
+
+Crear un historial de descargas por top
+
+Crear 51 canciones
+
+Añadirle playlist a cada DJ para que en total sean 17 playlist
+
+Ordenar las 51 canciones en las play list de cada DJ
+
+create table usuario(
+id_usuario int auto_increment primary key,
+nombre_usuario varchar(50),
+correo_usuario varchar (50),
+contraseña_usuario varchar(50),
+rol_usuario varchar (20) default 'usuario' 'admin' 'dj'
+);
+
+create table playlist ( 
+id_playlist int auto_increment primary key not null,
+nombre_playlist varchar(30),
+descripcion_playlist varchar(80),
+fecha_creacion_playlist date,
+id_usuario int
+);
+
+create table playlist_pista(
+id_playlist_pista int auto_increment primary key not null,
+id_playlist int,
+id_pista int
+);
+
+create table pista(
+id_pista int auto_increment primary key not null,
+titulo_pista varchar (30),
+duracio_pista time,
+formato_pista varchar (30)
+);
+
+create table descarga (
+id_descarga int auto_increment primary key not null,
+fecha_descarga date,
+genero_descarga varchar (30),
+id_usuario_fk int
+);
+
+create table DJ_seccion(
+id_secciondj int auto_increment primary key,
+descripcion_dj_seccion varchar(50),
+id_usuario int
+);
+
+create table Efecto_DJSeccion(
+id_secciondj int,
+id_efecto int
+);
+
+create table efectos(
+id_efecto int auto_increment primary key not null,
+titulo varchar(30),
+duracion time,
+formato varchar(30)
+);
+
+create table Configuracion(
+id_configuracion int auto_increment primary key not null,
+tamaño_configuracion varchar(30),
+color_configuracion varchar (30),
+idioma_configuracion varchar (30),
+notificacion_configuracion varchar (30),
+id_usuario int
+);
+
+
+
+create table favorito (
+id_favorito  int auto_increment primary key not null,
+fecha_agregado_favorito date,
+nombre_favorito varchar(30),
+id_usuario int
+);
+
+create table Historial_reproducion(
+id_historial int auto_increment primary key not null,
+tiempo_escuchado_historial_reproducion  bigint,
+fecha_historial_reproducion date,
+id_usuario int
+);
+
+create table Album (
+id_album int auto_increment primary key not null,
+titulo_album varchar(30),
+descripcion_album varchar(30),
+id_pista int
+);
+ 
+create table Artistas(
+id_artista int auto_increment primary key not null,
+nombre_artista varchar(30),
+id_album int
+); 
+
+create table Genero(
+id_genero int auto_increment primary key not null,
+nombre_genero varchar(30), 
+descripcion_genero varchar(50),
+id_pista int
+); 
+
+
+alter table Configuracion add foreign key (id_usuario) references usuario(id_usuario);
+alter table descarga add foreign key (id_usuario_fk) references usuario(id_usuario);
+alter table DJ_seccion add foreign key (id_usuario) references usuario(id_usuario);
+alter table Efecto_DJSeccion add foreign key (id_secciondj) references DJ_seccion(id_secciondj);
+alter table Efecto_DJSeccion add foreign key (id_efecto) references efectos(id_efecto);
+alter table playlist add foreign key (id_usuario) references usuario(id_usuario);
+alter table playlist_pista add foreign key (id_playlist) references playlist(id_playlist);
+alter table playlist_pista add foreign key (id_pista) references pista(id_pista);
+alter table Historial_reproducion add foreign key (id_usuario) references usuario(id_usuario);
+alter table favorito add foreign key (id_usuario) references usuario(id_usuario);
+alter table Genero add foreign key (id_pista) references pista(id_pista);
+alter table Album add foreign key (id_pista) references pista(id_pista);
+alter table Artistas add foreign key (id_album) references Album(id_album);
+
+#USUARIO
+INSERT INTO usuario (nombre_usuario, correo_usuario, contraseña_usuario, rol_usuario) VALUES
+('Dj_top_1', 'carlos@gmail.com', 'pass1234', 'dj'),
+('Dj_top_2', 'ana.lopez@gmail.com', 'ana5678', 'dj'),
+('Dj_top_3', 'djperez@hotmail.com', 'djpass99', 'dj'),
+('Dj_top_4', 'maria.r@yahoo.com', 'maria2024', 'dj'),
+('Dj_top_5', 'juan.admin@gmail.com', 'adminpass', 'dj'),
+('Dj_top_6', 'luisa.v@gmail.com', 'luisa321', 'dj'),
+('mixer', 'djmixer@gmail.com', 'mix2024', 'usuario'),
+('pedro_j', 'pedro.j@hotmail.com', 'pedro999', 'usuario');
+
+#PISTA
+INSERT INTO pista (titulo_pista, duracio_pista, formato_pista) VALUES
+('Noche de Luna', '00:03:45', 'MP3'),
+('Fuego Eterno', '00:04:10', 'FLAC'),
+('Sombras del Sur', '00:03:20', 'MP3'),
+('Viento Libre', '00:05:00', 'WAV'),
+('Caminos Perdidos', '00:03:55', 'MP3'),
+('Lluvia de Abril', '00:04:30', 'FLAC'),
+('Cielo Rojo', '00:02:50', 'MP3'),
+('Tormenta Interior', '00:06:00', 'WAV'),
+('Melodía Urbana', '00:03:15', 'MP3'),
+('Ritmo del Caribe', '00:04:45', 'FLAC'),
+('Ecos del Mar', '00:03:30', 'MP3'),
+('Sueños de Cristal', '00:05:20', 'WAV'),
+('Latidos', '00:03:00', 'MP3'),
+('Luz de Amanecer', '00:04:00', 'FLAC'),
+('Pasión Profunda', '00:03:40', 'MP3'),
+('Entre Nubes', '00:04:55', 'WAV'),
+('Sinfonía Digital', '00:07:00', 'FLAC'),
+('Pulso de Ciudad', '00:03:25', 'MP3'),
+('Horizonte Azul', '00:04:15', 'FLAC'),
+('Despertar', '00:03:50', 'MP3'),
+('Aurora Boreal', '00:04:12', 'AAC'),
+('Laberinto Azul', '00:05:08', 'FLAC'),
+('Constelación', '00:03:47', 'MP3'),
+('Destino Final', '00:06:14', 'WAV'),
+('Brisa Nocturna', '00:02:58', 'OGG'),
+('Eclipse Total', '00:04:39', 'AAC'),
+('Horizonte Infinito', '00:05:51', 'FLAC'),
+('Viaje Astral', '00:03:33', 'MP3'),
+('Reflejos', '00:04:27', 'ALAC'),
+('Océano Profundo', '00:06:05', 'WAV'),
+('Alma Libre', '00:03:42', 'MP3'),
+('Camino de Luz', '00:04:18', 'AAC'),
+('Estrella Fugaz', '00:05:23', 'FLAC'),
+('Universo Interior', '00:06:40', 'OGG'),
+('Tiempo Perdido', '00:03:16', 'MP3'),
+('Silencio Eterno', '00:04:55', 'WAV'),
+('Raíces del Viento', '00:05:36', 'FLAC'),
+('Niebla Gris', '00:03:09', 'AAC'),
+('Amanecer Dorado', '00:04:44', 'MP3'),
+('Pasos Lejanos', '00:02:49', 'OGG'),
+('Energía Vital', '00:05:18', 'ALAC'),
+('Corazón Eléctrico', '00:03:58', 'MP3'),
+('Luz de Invierno', '00:04:50', 'FLAC'),
+('Melodía Oculta', '00:05:27', 'AAC'),
+('Ritmo Cósmico', '00:03:21', 'MP3'),
+('Sueños del Alba', '00:04:37', 'WAV'),
+('Cielo Infinito', '00:05:42', 'OGG'),
+('Ecos del Horizonte', '00:03:54', 'FLAC'),
+('Volver a Empezar', '00:04:09', 'AAC'),
+('Luna Plateada', '00:05:12', 'ALAC'),
+('Última Estación', '00:04:31', 'MP3');
+
+#ALBUM
+INSERT INTO Album (titulo_album, descripcion_album, id_pista) VALUES
+('Noches Infinitas', 'Album de baladas', 1),
+('Fuego y Agua', 'Rock alternativo', 2),
+('Rutas del Sur', 'Música andina', 3),
+('Libertad', 'Pop latino', 4),
+('Lo Perdido', 'Indie folk', 5),
+('Estaciones', 'Música ambiental', 6),
+('Atardecer Rojo', 'R&B urbano', 7),
+('Tormentas', 'Metal progresivo', 8),
+('Ciudad Viva', 'Hip-hop urbano', 9),
+('Caribe Mix', 'Tropical y salsa', 10),
+('Mar Profundo', 'Electrónica', 11),
+('Cristalino', 'New age', 12),
+('Corazón', 'Pop romántico', 13),
+('Amanecer', 'Jazz moderno', 14),
+('Pasiones', 'Reggaeton', 15),
+('Entre Cielos', 'Música clásica', 16),
+('Fusión Digital', 'EDM', 17),
+('Metrópoli', 'Trap latino', 18),
+('Azul Infinito', 'Bossa nova', 19),
+('Renacimiento', 'Soul', 20);
+
+#ARTISTAS
+INSERT INTO Artistas (nombre_artista, id_album) VALUES
+('Sebastián Mora', 1),
+('Luna Roja', 2),
+('Andinos del Sur', 3),
+('Valentina Cruz', 4),
+('El Caminante', 5),
+('Brisa Suave', 6),
+('Urban Kings', 7),
+('Thunder Band', 8),
+('MC Vital', 9),
+('Los Tropicales', 10),
+('DeepWave', 11),
+('Crystal Sound', 12),
+('Amor Puro', 13),
+('Jazz Collective', 14),
+('Rey Flow', 15),
+('Orquesta Celeste', 16),
+('DJ Synthos', 17),
+('Trap Master', 18),
+('Bossa Rio', 19),
+('Soul Revival', 20);
+
+#GENERO
+INSERT INTO Genero (nombre_genero, descripcion_genero, id_pista) VALUES
+('Balada', 'Canciones lentas y emotivas', 1),
+('Rock', 'Género de guitarra eléctrica', 2),
+('Andino', 'Música de las montañas', 3),
+('Pop', 'Música popular moderna', 4),
+('Indie', 'Música independiente', 5),
+('Ambiental', 'Música relajante de fondo', 6),
+('R&B', 'Ritmo y blues urbano', 7),
+('Metal', 'Género de alto volumen', 8),
+('Hip-Hop', 'Rap y beatbox urbano', 9),
+('Tropical', 'Música caribeña bailable', 10),
+('Electrónica', 'Música generada digitalmente', 11),
+('New Age', 'Música meditativa', 12),
+('Romántico', 'Canciones de amor', 13),
+('Jazz', 'Improvisación musical clásica', 14),
+('Reggaeton', 'Género urbano latinoamericano', 15),
+('Clásica', 'Música orquestal tradicional', 16),
+('EDM', 'Música electrónica de baile', 17),
+('Trap', 'Subgénero del hip-hop', 18),
+('Bossa Nova', 'Jazz brasileño', 19),
+('Soul', 'Música de alma y sentimiento', 20);
+
+#PLAYLIST
+INSERT INTO playlist (nombre_playlist, descripcion_playlist, fecha_creacion_playlist, id_usuario) VALUES
+('Mis Favoritas', 'Las mejores canciones', '2024-01-10', 1),
+('Bass Attack', 'Drops intensos y bajos que hacen vibrar la pista.', '2024-04-03', 1),
+('After Party Sessions', 'Selección para mantener la fiesta hasta el amanecer.', '2024-04-10', 1),
+('Sunset Vibes', 'Mezclas relajadas para cerrar el día con estilo.', '2024-04-18', 1),
+('Para Estudiar', 'Música sin letra', '2024-02-15', 2),
+('Neon Beats', 'Electrónica moderna con sonidos futuristas.', '2024-04-04', 2),
+('Club Revolution', 'Temas explosivos para la pista principal.', '2024-04-09', 2),
+('Midnight Frequency', 'Mezclas perfectas para sesiones nocturnas.', '2024-04-16', 2),
+('Festival Energy', 'Canciones con la energía de un gran festival.', '2024-04-24', 2),
+('Progressive Dreams', 'House y Progressive para mezclas largas.', '2024-04-07', 3),
+('Deep House Escape', 'Ritmos elegantes para ambientes exclusivos.', '2024-04-20', 3),
+('Mix DJ Perez', 'Sets de mezcla', '2024-03-01', 3),
+('Tarde de Domingo', 'Relax total', '2024-03-20', 4),
+('Latin Groove', 'Ritmos latinos para mantener el público bailando.', '2024-04-08', 4),
+('Electro Fusion', 'Combinación de electrónica con sonidos urbanos.', '2024-04-22', 4),
+('Top Hits', 'Lo más escuchado', '2024-04-05', 5),
+('Ultimate Dance Floor', 'Los éxitos imprescindibles para cualquier evento.', '2024-04-14', 5),
+('Gym Playlist', 'Motivación al máximo', '2024-04-18', 6),
+('Set Electrónico', 'Mezclas de DJ Mixer', '2024-05-01', 7),
+('Nostálgica', 'Canciones del pasado', '2024-05-12', 8);
+
+#PLAYLIST_PISTA
+INSERT INTO playlist_pista (id_playlist, id_pista) VALUES
+(1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (1, 9), (1, 10), (1, 11), (1, 12),(1, 13), (1, 14), (1, 15),
+(2, 8), (2, 9), (2, 10), (2, 11), (2, 12), (2, 13), (2, 14), (2, 15), (2, 16), (2, 17), (2, 18), (2, 19), (2, 20), (2, 21), (2, 22),
+(3, 15), (3, 16), (3, 17), (3, 18), (3, 19), (3, 20), (3, 21), (3, 22), (3, 23), (3, 24), (3, 25), (3, 26), (3, 27), (3, 28), (3, 29),
+(4, 22), (4, 23), (4, 24), (4, 25), (4, 26), (4, 27), (4, 28), (4, 29), (4, 30), (4, 31), (4, 32), (4, 33), (4, 34), (4, 35), (4, 36),
+(5, 29), (5, 30), (5, 31), (5, 32), (5, 33), (5, 34), (5, 35), (5, 36), (5, 37), (5, 38), (5, 39), (5, 40), (5, 41), (5, 42), (5, 43), 
+
+;
+
+# DJ_SECCION
+INSERT INTO DJ_seccion (descripcion_dj_seccion, id_usuario) VALUES
+('Set de apertura electrónica', 1),
+('Mezcla tropical de medianoche', 2),
+('Sesión de trap y urbano', 3),
+('Set ambiental para eventos', 4),
+('Mezcla de reggaeton clásico', 5),
+('Set de house progresivo', 6),
+('Sesión de deep house', 7),
+('Set de techno industrial', 8);
+
+# EFECTOS
+INSERT INTO efectos (titulo, duracion, formato) VALUES
+('Reverb Espacial', '00:00:05', 'WAV'),
+('Echo Profundo', '00:00:03', 'MP3'),
+('Flanger Suave', '00:00:04', 'WAV'),
+('Distorsión Total', '00:00:02', 'MP3'),
+('Chorus Amplio', '00:00:06', 'WAV'),
+('Delay Rítmico', '00:00:04', 'MP3'),
+('Phaser Lento', '00:00:05', 'WAV'),
+('Compressor HD', '00:00:02', 'MP3'),
+('BitCrusher', '00:00:03', 'WAV'),
+('Wah-Wah Dinámico', '00:00:05', 'MP3'),
+('Tremolo Rápido', '00:00:03', 'WAV'),
+('Filter Sweep', '00:00:04', 'MP3'),
+('Ring Modulator', '00:00:06', 'WAV'),
+('Pitch Shifter', '00:00:05', 'MP3'),
+('Granular Freeze', '00:00:07', 'WAV'),
+('Sidechain Pump', '00:00:03', 'MP3'),
+('Limiter Pro', '00:00:02', 'WAV'),
+('EQ Dynamic', '00:00:04', 'MP3'),
+('Saturator Cálido', '00:00:05', 'WAV'),
+('Stutter Edit', '00:00:03', 'MP3');
+
+#EFECTO_DJSECCION
+INSERT INTO Efecto_DJSeccion (id_secciondj, id_efecto) VALUES
+(1, 1), (2, 2),
+(3, 3), (4, 4),
+(5, 5), (6, 6),
+(7, 7), (8, 8);
+
+# CONFIGURACION
+INSERT INTO Configuracion (tamaño_configuracion, color_configuracion, idioma_configuracion, notificacion_configuracion, id_usuario) VALUES
+('Grande', 'Oscuro', 'Español', 'Activada', 1),
+('Mediano', 'Claro', 'Español', 'Desactivada', 2),
+('Pequeño', 'Oscuro', 'Inglés', 'Activada', 3),
+('Grande', 'Azul', 'Español', 'Activada', 4),
+('Mediano', 'Oscuro', 'Francés', 'Desactivada', 5),
+('Grande', 'Verde', 'Español', 'Activada', 6),
+('Pequeño', 'Claro', 'Inglés', 'Activada', 7),
+('Mediano', 'Rojo', 'Español', 'Desactivada', 8);
+
+# DESCARGA
+INSERT INTO descarga (fecha_descarga, genero_descarga, id_usuario_fk) VALUES
+('2024-01-01','Pop',1),
+('2024-01-02','Rock',1),
+('2024-01-03','Jazz',1),
+('2024-01-04','EDM',1),
+('2024-01-05','Hip-Hop',1),
+('2024-01-06','Reggaeton',1),
+('2024-01-07','Balada',1),
+('2024-01-08','Electrónica',1),
+('2024-01-09','Salsa',1),
+('2024-01-10','Merengue',1),
+('2024-01-11','Bachata',1),
+('2024-01-12','Rap',1),
+('2024-01-13','Trap',1),
+('2024-01-14','K-Pop',1),
+('2024-01-15','Indie',1),
+('2024-01-16','Country',1),
+('2024-01-17','Metal',1),
+('2024-01-18','Funk',1),
+('2024-01-19','R&B',1),
+('2024-01-20','House',1),
+('2024-01-21','Techno',1),
+('2024-01-01','Rock',2),
+('2024-01-02','Pop',2),
+('2024-01-03','Trap',2),
+('2024-01-04','Hip-Hop',2),
+('2024-01-05','Jazz',2),
+('2024-01-06','EDM',2),
+('2024-01-07','Reggaeton',2),
+('2024-01-08','Balada',2),
+('2024-01-09','Electrónica',2),
+('2024-01-10','Salsa',2),
+('2024-01-11','Bachata',2),
+('2024-01-12','Merengue',2),
+('2024-01-13','Country',2),
+('2024-01-14','Metal',2),
+('2024-01-15','K-Pop',2),
+('2024-01-16','House',2),
+('2024-01-17','Techno',2),
+('2024-01-01','Jazz',3),
+('2024-01-02','Pop',3),
+('2024-01-03','Rock',3),
+('2024-01-04','EDM',3),
+('2024-01-05','Hip-Hop',3),
+('2024-01-06','Trap',3),
+('2024-01-07','Balada',3),
+('2024-01-08','Electrónica',3),
+('2024-01-09','Rap',3),
+('2024-01-10','R&B',3),
+('2024-01-11','House',3),
+('2024-01-12','Techno',3),
+('2024-01-13','Funk',3),
+('2024-01-14','Indie',3),
+('2024-01-15','Country',3),
+('2024-02-20', 'EDM', 3),
+('2024-01-01','Reggaeton',4),
+('2024-01-02','Pop',4),
+('2024-01-03','Rock',4),
+('2024-01-04','Jazz',4),
+('2024-01-05','EDM',4),
+('2024-01-06','Hip-Hop',4),
+('2024-01-07','Trap',4),
+('2024-01-08','Balada',4),
+('2024-01-09','Electrónica',4),
+('2024-01-10','House',4),
+('2024-01-11','Techno',4),
+('2024-01-12','R&B',4),
+('2024-01-01','Pop',5),
+('2024-01-02','Rock',5),
+('2024-01-03','Jazz',5),
+('2024-01-04','EDM',5),
+('2024-01-05','Hip-Hop',5),
+('2024-01-06','Trap',5),
+('2024-01-07','Balada',5),
+('2024-01-08','Electrónica',5),
+('2024-01-09','Salsa',5),
+('2024-04-01', 'Reggaeton', 6),
+('2024-04-22', 'Electrónica', 7),
+('2024-05-07', 'Hip-Hop', 8);
+
+#FAVORITO
+INSERT INTO favorito (fecha_agregado_favorito, nombre_favorito, id_usuario) VALUES
+('2024-01-20', 'Noche de Luna', 1),
+('2024-02-14', 'Fuego Eterno', 2),
+('2024-03-01', 'Sombras del Sur', 3),
+('2024-03-15', 'Viento Libre', 4),
+('2024-04-05', 'Caminos Perdidos', 5),
+('2024-04-20', 'Lluvia de Abril', 6),
+('2024-05-01', 'Cielo Rojo', 7),
+('2024-05-18', 'Tormenta Interior', 8);
+
+#HISTORIAL_REPRODUCCION
+INSERT INTO Historial_reproducion (tiempo_escuchado_historial_reproducion, fecha_historial_reproducion, id_usuario) VALUES
+(225, '2024-01-10', 1),
+(250, '2024-02-12', 2),
+(200, '2024-03-05', 3),
+(300, '2024-03-22', 4),
+(235, '2024-04-08', 5),
+(270, '2024-04-25', 6),
+(420, '2024-05-10', 7),
+(180, '2024-05-28', 8);
+
+
+SELECT 
+    u.id_usuario,
+    u.nombre_usuario,
+    u.rol_usuario,
+    pl.id_playlist,
+    pl.nombre_playlist,
+    pl.fecha_creacion_playlist,
+    pp.id_pista,
+    p.id_pista,
+    p.titulo_pista,
+    p.duracio_pista,
+    p.formato_pista
+FROM    
+        usuario AS u, 
+        /*descarga AS d,*/
+        playlist AS pl, 
+        playlist_pista AS pp,
+        pista AS p 
+where /*u.id_usuario = d.id_usuario_fk 
+and*/   u.id_usuario = pl.id_usuario 
+and   pl.id_playlist = pp.id_playlist 
+and   p.id_pista = pp.id_pista /*
+and   pl.id_usuario = d.id_usuario_fk
+and   u.rol_usuario = 'dj'; */
+
+
+
+
+-- SELECT * FROM usuario;
+-- SELECT * FROM playlist;
+-- SELECT * FROM playlist_pista;
+
+
+ 
