@@ -97,16 +97,16 @@ function FormularioRegi() {
 
         try {
             const respuesta = await fetch(
-                `${API_URL}/usuarios/`,
+                `${API_URL}/api/usuarios/registro`,
                 {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        nombre_usuario: usuario,
-                        correo_usuario: correo,
-                        contrasena_usuario: contrasena
+                        nombre: usuario,
+                        correo: correo,
+                        password: contrasena
                     })
                 }
             );

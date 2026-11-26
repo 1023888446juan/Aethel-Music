@@ -88,15 +88,15 @@ function FormularioIni() {
 
         try {
             const respuesta = await fetch(
-                `${API_URL}/usuarios/login`,
+                `${API_URL}/api/auth/login`,
                 {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        correo_usuario: correo,
-                        contrasena_usuario: password
+                        correo: correo,
+                        password: password
                     })
                 }
             );
@@ -114,8 +114,12 @@ function FormularioIni() {
 
             localStorage.setItem(
                 "usuario",
-                JSON.stringify(datos)
+                JSON.stringify(datos.usuario || datos)
             );
+
+            if (datos.access_token) {
+                localStorage.setItem("token", datos.access_token);
+            }
 
             navigate("/perfil");
         } catch (err) {
