@@ -1,0 +1,9 @@
+from Routes.auth_routes import router as auth_router
+from Routes.usuario_routes import router as usuario_router
+from Routes.pista_routes import router as pista_router
+from Routes.playlist_routes import router as playlist_router
+from Routes.playlist_pista_routes import router as playlist_pista_router
+from Routes.favorito_routes import router as favorito_router
+from Routes.grabacion_routes import router as grabacion_router
+from Routes.efecto_routes import router as efecto_router
+from Routes.pad_routes import router as pad_router
