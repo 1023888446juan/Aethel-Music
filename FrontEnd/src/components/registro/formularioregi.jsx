@@ -4,6 +4,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../../services/api";
 import "../../styles/interfaces_navbar/registro.css";
 
 const STORAGE_KEYS = {
@@ -96,7 +97,7 @@ function FormularioRegi() {
 
         try {
             const respuesta = await fetch(
-                "http://127.0.0.1:8000/usuarios/",
+                `${API_URL}/usuarios/`,
                 {
                     method: "POST",
                     headers: {

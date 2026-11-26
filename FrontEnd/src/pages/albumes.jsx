@@ -3,6 +3,7 @@
    ========================================================= */
 
 import { useEffect, useRef, useState } from "react";
+import { API_URL } from "../services/api";
 
 import "../styles/interfaces_navbar/albumes.css";
 
@@ -93,7 +94,7 @@ function Albumes() {
         const obtenerAlbumes = async () => {
             try {
                 const response = await fetch(
-                    "http://127.0.0.1:8000/albumes/"
+                    `${API_URL}/albumes/`
                 );
 
                 const data = await response.json();
@@ -141,7 +142,7 @@ function Albumes() {
         const obtenerCanciones = async () => {
             try {
                 const response = await fetch(
-                    "http://127.0.0.1:8000/pistas/"
+                    `${API_URL}/pistas/`
                 );
 
                 const data = await response.json();
@@ -269,7 +270,7 @@ function Albumes() {
         try {
             const response =
                 await fetch(
-                    "http://127.0.0.1:8000/pistas/upload",
+                    `${API_URL}/pistas/upload`,
                     {
                         method: "POST",
                         body: formData
@@ -350,7 +351,7 @@ function Albumes() {
         try {
             const response =
                 await fetch(
-                    "http://127.0.0.1:8000/albumes/",
+                    `${API_URL}/albumes/`,
                     {
                         method: "POST",
 
@@ -431,7 +432,7 @@ function Albumes() {
         try {
             const response =
                 await fetch(
-                    `http://127.0.0.1:8000/albumes/${albumId}`,
+                    `${API_URL}/albumes/${albumId}`,
                     {
                         method: "DELETE"
                     }

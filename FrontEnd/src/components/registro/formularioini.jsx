@@ -4,6 +4,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../../services/api";
 import "../../styles/interfaces_navbar/iniciar_sesion.css";
 
 const STORAGE_KEYS = {
@@ -87,7 +88,7 @@ function FormularioIni() {
 
         try {
             const respuesta = await fetch(
-                "http://127.0.0.1:8000/usuarios/login",
+                `${API_URL}/usuarios/login`,
                 {
                     method: "POST",
                     headers: {

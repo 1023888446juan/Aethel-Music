@@ -3,6 +3,7 @@
    ========================================================= */
 
 import { useEffect, useRef, useState } from "react";
+import { API_URL } from "../services/api";
 import "../styles/interfaces_navbar/consol.css";
 
 import List from "../components/List";
@@ -16,9 +17,6 @@ const STORAGE_KEYS = {
     textSize: "aethel_text_size"
 };
 
-const API_BASE_URL =
-    import.meta.env?.VITE_API_URL || "http://localhost:8000";
-
 const MAX_PADS = 9;
 
 /* =========================================================
@@ -28,7 +26,7 @@ const MAX_PADS = 9;
 const djBackendApi = {
     async syncSessionState(payload) {
         try {
-            const response = await fetch(`${API_BASE_URL}/api/dj/session/state`, {
+            const response = await fetch(`${API_URL}/api/dj/session/state`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload)
@@ -47,7 +45,7 @@ const djBackendApi = {
             formData.append("pad_index", String(padIndex));
             formData.append("file", file);
 
-            const response = await fetch(`${API_BASE_URL}/api/dj/pads/upload`, {
+            const response = await fetch(`${API_URL}/api/dj/pads/upload`, {
                 method: "POST",
                 body: formData
             });
@@ -64,7 +62,7 @@ const djBackendApi = {
             formData.append("audio", blob, `aethel-dj-sesion-${Date.now()}.webm`);
             formData.append("metadata", JSON.stringify(sessionPayload));
 
-            const response = await fetch(`${API_BASE_URL}/api/dj/recordings`, {
+            const response = await fetch(`${API_URL}/api/dj/recordings`, {
                 method: "POST",
                 body: formData
             });
