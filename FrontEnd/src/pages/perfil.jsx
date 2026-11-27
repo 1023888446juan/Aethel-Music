@@ -160,6 +160,7 @@ function Perfil() {
 
     const handleCerrarSesion = () => {
         localStorage.removeItem("token");
+        localStorage.removeItem("token_type");
         localStorage.removeItem(STORAGE_KEYS.usuario);
 
         sessionStorage.removeItem("token");
