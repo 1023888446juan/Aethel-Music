@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { useRef } from "react";
 
 import "./styles/App.css";
 
@@ -17,18 +18,30 @@ import Perfil from "./pages/perfil";
 import logoTri from "./assets/img/Logotri.png";
 import logoText from "./assets/img/Logotext.png";
 import carpeta from "./assets/img/carp.png";
+import { addLocalFiles } from "./services/localLibrary";
 
 function Inicio() {
 
     const navigate = useNavigate();
+    const audioFilesRef = useRef(null);
+    const folderFilesRef = useRef(null);
 
-    const handleArchivo = (e) => {
+    const handleArchivo = async (e) => {
+        const files = e.target.files;
+        if (!files?.length) return;
 
-        const archivo = e.target.files[0];
-
-        if (!archivo) return;
-
-        navigate("/home");
+        try {
+            const addedTracks = await addLocalFiles(files);
+            if (!addedTracks.length) {
+                window.alert("No se encontraron archivos de audio compatibles.");
+                return;
+            }
+            navigate("/home");
+        } catch (error) {
+            window.alert(error.message || "No se pudo guardar la música en este dispositivo.");
+        } finally {
+            e.target.value = "";
+        }
     };
 
     return (
@@ -87,9 +100,19 @@ function Inicio() {
 
                         <input
                             type="file"
-                            id="archivo"
+                            ref={audioFilesRef}
                             hidden
                             accept="audio/*"
+                            multiple
+                            onChange={handleArchivo}
+                        />
+                        <input
+                            ref={folderFilesRef}
+                            type="file"
+                            hidden
+                            accept="audio/*"
+                            multiple
+                            webkitdirectory=""
                             onChange={handleArchivo}
                         />
 
@@ -97,9 +120,7 @@ function Inicio() {
                             type="button"
                             className="boton-archivo"
                             onClick={() => {
-                                document
-                                    .getElementById("archivo")
-                                    .click();
+                                audioFilesRef.current?.click();
                             }}
                         >
 
@@ -120,6 +141,19 @@ function Inicio() {
 
                         </button>
 
+                        <button
+                            type="button"
+                            className="boton-archivo"
+                            onClick={() => folderFilesRef.current?.click()}
+                        >
+                            <span className="icono-archivo">
+                                <img src={carpeta} alt="" />
+                            </span>
+                            <span className="texto-archivo">
+                                ABRIR CARPETA DE MÚSICA
+                            </span>
+                            <span className="brillo-boton"></span>
+                        </button>
                     </div>
 
                     <div className="inicio-status">

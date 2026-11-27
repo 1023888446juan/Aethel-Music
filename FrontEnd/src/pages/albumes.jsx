@@ -3,7 +3,6 @@
    ========================================================= */
 
 import { useEffect, useRef, useState } from "react";
-import { API_URL } from "../services/api";
 
 import "../styles/interfaces_navbar/albumes.css";
 
@@ -14,6 +13,9 @@ import ListaDeAlbums from "../components/albumes/listadeAlbums";
 import CrearAlbum from "../components/albumes/crearAlbum";
 
 import albumTexture from "../assets/img/Albumes/Album.png";
+import { useLibrary } from "../hooks/useLibrary";
+import { api, loadTrackAudioUrl } from "../services/api";
+import { addLocalFiles, addTracksToLocalPlaylist, getLocalPlaylistTrackIds } from "../services/localLibrary";
 
 const STORAGE_KEYS = {
     colorMode: "aethel_color_mode",
@@ -36,7 +38,7 @@ function Albumes() {
     const [mostrarCrearAlbum, setMostrarCrearAlbum] =
         useState(false);
 
-    const [songs, setSongs] = useState([]);
+    const { songs, loadingSongs, libraryError, refreshSongs } = useLibrary();
 
     const [albumSeleccionado, setAlbumSeleccionado] =
         useState(null);
@@ -46,8 +48,19 @@ function Albumes() {
 
     const fileInputRef = useRef(null);
     const contentRef = useRef(null);
+    const libraryAudioRef = useRef(null);
+    const localAudioUrlRef = useRef(null);
+    const [playingTrackId, setPlayingTrackId] = useState(null);
+    const [playlistRevision, setPlaylistRevision] = useState(0);
 
     const textScale = textSize / 100;
+    const selectedPlaylistTrackIds = albumSeleccionado
+        ? getLocalPlaylistTrackIds(albumSeleccionado.id)
+        : [];
+
+    useEffect(() => () => {
+        if (localAudioUrlRef.current) URL.revokeObjectURL(localAudioUrlRef.current);
+    }, []);
 
     useEffect(() => {
         const syncPreferences = () => {
@@ -93,30 +106,15 @@ function Albumes() {
     useEffect(() => {
         const obtenerAlbumes = async () => {
             try {
-                const response = await fetch(
-                    `${API_URL}/albumes/`
-                );
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    console.error(
-                        "Error obteniendo álbumes:",
-                        data
-                    );
-
-                    return;
-                }
+                const data = await api.playlists();
 
                 const albumesFormateados = data.map(
                     (album) => ({
-                        id: album.id_album,
+                        id: album.id_playlist,
 
-                        name: album.titulo_album,
+                        name: album.nombre,
 
-                        description:
-                            album.descripcion_album ||
-                            "Sin descripción",
+                        description: "Playlist personal",
 
                         songs: 0,
 
@@ -138,65 +136,6 @@ function Albumes() {
         obtenerAlbumes();
     }, []);
 
-    useEffect(() => {
-        const obtenerCanciones = async () => {
-            try {
-                const response = await fetch(
-                    `${API_URL}/pistas/`
-                );
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    console.error(
-                        "Error obteniendo canciones:",
-                        data
-                    );
-
-                    return;
-                }
-
-                const cancionesFormateadas = data.map(
-                    (pista) => ({
-                        id: pista.id_pista,
-
-                        title: pista.titulo_pista,
-
-                        artist:
-                            pista.artista ||
-                            "Artista desconocido",
-
-                        genre: "Todas",
-
-                        albumId:
-                            pista.fk_id_album,
-
-                        duration:
-                            pista.duracion_pista,
-
-                        format:
-                            pista.formato_pista,
-
-                        path:
-                            pista.ruta_pista
-                    })
-                );
-
-                setSongs(
-                    cancionesFormateadas
-                );
-            } catch (error) {
-                console.error(
-                    "Error obteniendo canciones:",
-                    error
-                );
-            }
-        };
-
-        obtenerCanciones();
-    }, []);
-
-
     /* =========================================================
        2. HANDLERS
        ========================================================= */
@@ -205,6 +144,32 @@ function Albumes() {
         setAlbumSeleccionado(
             album
         );
+    };
+
+    const handlePlayLibraryTrack = async (song) => {
+        const audio = libraryAudioRef.current;
+        if (!audio) return;
+        if (playingTrackId === song.id && !audio.paused) {
+            audio.pause();
+            setPlayingTrackId(null);
+            return;
+        }
+        try {
+            audio.pause();
+            if (localAudioUrlRef.current) {
+                URL.revokeObjectURL(localAudioUrlRef.current);
+                localAudioUrlRef.current = null;
+            }
+            const audioUrl = song.local
+                ? URL.createObjectURL(song.file)
+                : await loadTrackAudioUrl(song.id);
+            if (song.local) localAudioUrlRef.current = audioUrl;
+            audio.src = audioUrl;
+            await audio.play();
+            setPlayingTrackId(song.id);
+        } catch (error) {
+            alert(error.message || "No se pudo reproducir la canción.");
+        }
     };
 
     const handleOpenFavorites = () => {
@@ -237,10 +202,8 @@ function Albumes() {
     };
 
     const handleFileChange = async (event) => {
-        const archivo =
-            event.target.files[0];
-
-        if (!archivo) {
+        const files = event.target.files;
+        if (!files?.length) {
             return;
         }
 
@@ -254,92 +217,24 @@ function Albumes() {
             return;
         }
 
-        const formData =
-            new FormData();
-
-        formData.append(
-            "archivo",
-            archivo
-        );
-
-        formData.append(
-            "id_album",
-            albumSeleccionado.id
-        );
-
         try {
-            const response =
-                await fetch(
-                    `${API_URL}/pistas/upload`,
-                    {
-                        method: "POST",
-                        body: formData
-                    }
-                );
-
-            const data =
-                await response.json();
-
-            console.log(
-                "Respuesta del servidor:",
-                data
-            );
-
-            if (!response.ok) {
-                alert(
-                    data.detail ||
-                    "No se pudo subir la canción"
-                );
-
-                return;
+            const importedTracks = await addLocalFiles(files);
+            if (!importedTracks.length) {
+                throw new Error("No se encontraron archivos de audio compatibles.");
             }
-
-            alert(
-                "Canción subida correctamente"
+            addTracksToLocalPlaylist(
+                albumSeleccionado.id,
+                importedTracks.map((track) => track.id)
             );
+            setPlaylistRevision((revision) => revision + 1);
+            await refreshSongs();
 
-            const nuevaCancion = {
-                id:
-                    data.id_pista,
+            alert(`${importedTracks.length} canción(es) agregada(s) a ${albumSeleccionado.name}.`);
 
-                title:
-                    data.titulo,
-
-                artist:
-                    data.artista ||
-                    "Artista desconocido",
-
-                genre:
-                    "Todas",
-
-                albumId:
-                    data.id_album,
-
-                duration:
-                    data.duracion,
-
-                format:
-                    data.formato,
-
-                path:
-                    data.ruta
-            };
-
-            setSongs(
-                (previousSongs) => [
-                    ...previousSongs,
-                    nuevaCancion
-                ]
-            );
         } catch (error) {
-            console.error(
-                "Error al subir la canción:",
-                error
-            );
+            console.error("Error al agregar música local:", error);
 
-            alert(
-                "No se pudo conectar con el servidor"
-            );
+            alert(error.message || "No se pudo guardar la música localmente.");
         } finally {
             event.target.value = "";
         }
@@ -349,52 +244,17 @@ function Albumes() {
         newAlbum
     ) => {
         try {
-            const response =
-                await fetch(
-                    `${API_URL}/albumes/`,
-                    {
-                        method: "POST",
-
-                        headers: {
-                            "Content-Type":
-                                "application/json"
-                        },
-
-                        body: JSON.stringify({
-                            titulo_album:
-                                newAlbum.titulo_album,
-
-                            descripcion_album:
-                                newAlbum.descripcion_album,
-
-                            fecha_lanzamiento:
-                                newAlbum.fecha_lanzamiento
-                        })
-                    }
-                );
-
-            const data =
-                await response.json();
-
-            if (!response.ok) {
-                alert(
-                    data.detail ||
-                    "No se pudo crear el álbum"
-                );
-
-                return;
-            }
+            const data = await api.createPlaylist(newAlbum.titulo_album);
 
             const albumCreado = {
                 id:
-                    data.id_album,
+                    data.id_playlist,
 
                 name:
-                    data.titulo_album,
+                    data.nombre,
 
                 description:
-                    data.descripcion_album ||
-                    "Sin descripción",
+                    "Playlist personal",
 
                 songs:
                     0,
@@ -421,7 +281,7 @@ function Albumes() {
             );
 
             alert(
-                "No se pudo conectar con el servidor"
+                error.message || "No se pudo crear la carpeta"
             );
         }
     };
@@ -430,25 +290,7 @@ function Albumes() {
         albumId
     ) => {
         try {
-            const response =
-                await fetch(
-                    `${API_URL}/albumes/${albumId}`,
-                    {
-                        method: "DELETE"
-                    }
-                );
-
-            const data =
-                await response.json();
-
-            if (!response.ok) {
-                alert(
-                    data.detail ||
-                    "No se pudo eliminar el álbum"
-                );
-
-                return;
-            }
+            await api.deletePlaylist(albumId);
 
             setAlbums(
                 (previousAlbums) =>
@@ -478,9 +320,14 @@ function Albumes() {
         }
     };
 
-    const handleUpdateAlbum = (
-        updatedAlbum
-    ) => {
+    const handleAddSongToPlaylist = (song) => {
+        if (!albumSeleccionado) return;
+        addTracksToLocalPlaylist(albumSeleccionado.id, [song.id]);
+        setPlaylistRevision((revision) => revision + 1);
+    };
+
+    const handleUpdateAlbum = async (updatedAlbum) => {
+        await api.updatePlaylist(updatedAlbum.id, updatedAlbum.name);
         setAlbums(
             (previousAlbums) =>
                 previousAlbums.map(
@@ -514,6 +361,9 @@ function Albumes() {
 
             <List
                 songs={songs}
+                loading={loadingSongs}
+                error={libraryError}
+                onSongSelect={handlePlayLibraryTrack}
             />
 
 
@@ -589,7 +439,7 @@ function Albumes() {
                                 </span>
 
                                 <span>
-                                    SUBIR MÚSICA
+                                    AGREGAR MÚSICA LOCAL
                                 </span>
 
                             </button>
@@ -597,7 +447,8 @@ function Albumes() {
                             <input
                                 ref={fileInputRef}
                                 type="file"
-                                accept=".mp3,.wav,.aiff,.m4a,.opus"
+                                accept="audio/*"
+                                multiple
                                 style={{
                                     display: "none"
                                 }}
@@ -661,6 +512,43 @@ function Albumes() {
                         }
                     />
 
+                    {albumSeleccionado && (
+                        <section className="selected-playlist-tracks">
+                            <div className="section-title">
+                                <div>
+                                    <span className="section-label">LISTA SELECCIONADA</span>
+                                    <h2>{albumSeleccionado.name}</h2>
+                                </div>
+                                <span className="folder-counter">Lista guardada en este navegador</span>
+                            </div>
+                            {songs.length ? (
+                                <div className="selected-playlist-song-list" data-playlist-revision={playlistRevision}>
+                                    {songs.map((song) => {
+                                        const isInPlaylist = selectedPlaylistTrackIds.includes(song.id);
+                                        return (
+                                            <div className="selected-playlist-song-row" key={song.id}>
+                                                <button type="button" className="selected-playlist-play" onClick={() => handlePlayLibraryTrack(song)}>
+                                                    <span>{song.title}</span>
+                                                    <small>{song.artist}</small>
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className="selected-playlist-add"
+                                                    disabled={isInPlaylist}
+                                                    onClick={() => handleAddSongToPlaylist(song)}
+                                                >
+                                                    {isInPlaylist ? "AGREGADA" : "+ AGREGAR"}
+                                                </button>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            ) : (
+                                <p>Aún no hay canciones en tu biblioteca. Agrega archivos desde el computador o una carpeta usando los controles de la lista.</p>
+                            )}
+                        </section>
+                    )}
+
                 </div>
 
             </main>
@@ -682,6 +570,13 @@ function Albumes() {
                     }
                 />
             )}
+
+            <audio
+                ref={libraryAudioRef}
+                preload="none"
+                onEnded={() => setPlayingTrackId(null)}
+                onPause={() => setPlayingTrackId(null)}
+            />
 
         </div>
     );

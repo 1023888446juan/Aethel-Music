@@ -2,7 +2,7 @@
    1. IMPORTS, ESTADO Y EFECTOS
    ========================================================= */
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "../styles/interfaces_navbar/home.css";
 
 import List from "../components/List";
@@ -16,6 +16,8 @@ import adelante15Icon from "../assets/img/reproductor_icons/adelante15.png";
 import adelanteIcon from "../assets/img/reproductor_icons/adelante.png";
 import favoritosIcon from "../assets/img/reproductor_icons/favoritos.png";
 import Noseencontro from "../assets/img/reproductor_icons/notfound.png";
+import { useLibrary } from "../hooks/useLibrary";
+import { loadTrackAudioUrl } from "../services/api";
 
 const STORAGE_KEYS = {
     colorMode: "aethel_color_mode",
@@ -23,6 +25,12 @@ const STORAGE_KEYS = {
 };
 
 function Home() {
+    const { songs, loadingSongs, libraryError } = useLibrary();
+    const audioRef = useRef(null);
+    const localAudioUrlRef = useRef(null);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [duration, setDuration] = useState(0);
+    const [audioError, setAudioError] = useState("");
     const [colorMode, setColorMode] = useState(() => {
         const saved = localStorage.getItem(STORAGE_KEYS.colorMode);
         return saved === "light" || saved === "dark" ? saved : "dark";
@@ -91,14 +99,68 @@ function Home() {
        2. HANDLERS
        ========================================================= */
 
-    const handleSongClick = (song) => {
-        setSelectedSong(song);
-        setIsPlaying(true);
+    const handleSongClick = async (song) => {
+        setIsPlaying(false);
+        audioRef.current?.pause();
+        setCurrentTime(0);
+        setAudioError("");
+        if (localAudioUrlRef.current) {
+            URL.revokeObjectURL(localAudioUrlRef.current);
+            localAudioUrlRef.current = null;
+        }
+        try {
+            const audioUrl = song.local
+                ? URL.createObjectURL(song.file)
+                : await loadTrackAudioUrl(song.id);
+            if (song.local) localAudioUrlRef.current = audioUrl;
+            setSelectedSong({ ...song, audioUrl });
+        } catch (error) {
+            setSelectedSong(song);
+            setAudioError(error.message);
+        }
     };
 
+    useEffect(() => () => {
+        audioRef.current?.pause();
+        if (localAudioUrlRef.current) URL.revokeObjectURL(localAudioUrlRef.current);
+    }, []);
+
     const handleTogglePlay = () => {
-        setIsPlaying((prev) => !prev);
+        const audio = audioRef.current;
+        if (!audio || !selectedSong?.audioUrl) {
+            setAudioError(selectedSong ? "No se pudo cargar el audio." : "Selecciona una canción primero.");
+            return;
+        }
+        if (audio.paused) {
+            audio.play().then(() => setIsPlaying(true)).catch(() => setAudioError("El navegador no pudo reproducir este archivo de audio."));
+        } else {
+            audio.pause();
+            setIsPlaying(false);
+        }
     };
+
+    const seekTo = (event) => {
+        if (!audioRef.current || !duration) return;
+        const rect = event.currentTarget.getBoundingClientRect();
+        audioRef.current.currentTime = Math.max(0, Math.min(duration, ((event.clientX - rect.left) / rect.width) * duration));
+    };
+    const skipBy = (seconds) => {
+        if (audioRef.current) audioRef.current.currentTime = Math.max(0, Math.min(duration || 0, audioRef.current.currentTime + seconds));
+    };
+    const selectAdjacent = (step) => {
+        if (!songs.length) return;
+        const index = songs.findIndex((song) => song.id === selectedSong?.id);
+        const next = (index + step + songs.length) % songs.length;
+        handleSongClick(songs[next]);
+    };
+    const formatTime = (seconds) => `${Math.floor((seconds || 0) / 60)}:${String(Math.floor((seconds || 0) % 60)).padStart(2, "0")}`;
+
+    useEffect(() => {
+        const audio = audioRef.current;
+        if (!audio || !selectedSong?.audioUrl) return;
+        audio.src = selectedSong.audioUrl;
+        audio.load();
+    }, [selectedSong?.audioUrl]);
 
     const handleToggleRepeat = () => {
         setIsRepeat((prev) => !prev);
@@ -135,6 +197,9 @@ function Home() {
             <aside className="playlist-side">
 
                 <List
+                    songs={songs}
+                    loading={loadingSongs}
+                    error={libraryError}
                     onSongSelect={handleSongClick}
                 />
 
@@ -205,19 +270,19 @@ function Home() {
                     <div className="time-controls">
 
                         <span>
-                            00:00
+                            {formatTime(currentTime)}
                         </span>
 
-                        <div className="progress-bar">
+                        <div className="progress-bar" onClick={seekTo} role="slider" aria-label="Posición de reproducción" aria-valuemin={0} aria-valuemax={Math.floor(duration)} aria-valuenow={Math.floor(currentTime)} tabIndex={0}>
 
-                            <div className="progress-fill"></div>
+                            <div className="progress-fill" style={{ width: duration ? `${(currentTime / duration) * 100}%` : "0%" }}></div>
 
                             <div className="progress-dot"></div>
 
                         </div>
 
                         <span>
-                            {selectedSong?.duration || "02:49"}
+                            {formatTime(duration || selectedSong?.duration)}
                         </span>
 
                     </div>
@@ -232,6 +297,7 @@ function Home() {
                         <button
                             type="button"
                             title="Retroceder 15 segundos"
+                            onClick={() => skipBy(-15)}
                         >
                             <img
                                 src={atras15Icon}
@@ -242,6 +308,7 @@ function Home() {
                         <button
                             type="button"
                             title="Canción anterior"
+                            onClick={() => selectAdjacent(-1)}
                         >
                             <img
                                 src={atrasIcon}
@@ -276,6 +343,7 @@ function Home() {
                         <button
                             type="button"
                             title="Canción siguiente"
+                            onClick={() => selectAdjacent(1)}
                         >
                             <img
                                 src={adelanteIcon}
@@ -286,6 +354,7 @@ function Home() {
                         <button
                             type="button"
                             title="Avanzar 15 segundos"
+                            onClick={() => skipBy(15)}
                         >
                             <img
                                 src={adelante15Icon}
@@ -344,6 +413,18 @@ function Home() {
                     </div>
 
                 </div>
+
+                <audio
+                    ref={audioRef}
+                    preload="metadata"
+                    onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)}
+                    onLoadedMetadata={(event) => setDuration(event.currentTarget.duration || 0)}
+                    loop={isRepeat}
+                    onEnded={() => {
+                        setIsPlaying(false);
+                    }}
+                />
+                {(audioError || libraryError) && <p role="alert" className="player-error">{audioError || libraryError}</p>}
 
             </main>
 

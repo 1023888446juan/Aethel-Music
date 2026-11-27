@@ -239,6 +239,29 @@
     color: white;
 }
 
+.library-import-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 6px;
+}
+
+.library-import-actions button {
+    border: 1px solid rgba(205, 147, 252, 0.28);
+    border-radius: 999px;
+    padding: 7px 10px;
+    background: rgba(205, 147, 252, 0.08);
+    color: rgba(255, 255, 255, 0.8);
+    font: inherit;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.library-import-actions button:hover {
+    background: rgba(205, 147, 252, 0.2);
+    color: white;
+}
+
 
 /* =========================================
    SCROLL DE MÚSICA
