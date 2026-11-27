@@ -69,6 +69,15 @@ function Usuario() {
         };
     }, []);
 
+    // Si ya existe una sesión guardada, abrir el perfil en vez de volver
+    // a mostrar la pantalla de inicio de sesión.
+    useEffect(() => {
+        if (localStorage.getItem("token")) {
+            navigate("/perfil", { replace: true });
+        }
+    }, [navigate]);
+
+
 
     /* =========================================================
        2. RENDER PRINCIPAL
