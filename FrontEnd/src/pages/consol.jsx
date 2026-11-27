@@ -3,7 +3,6 @@
    ========================================================= */
 
 import { useEffect, useRef, useState } from "react";
-import { API_URL } from "../services/api";
 import "../styles/interfaces_navbar/consol.css";
 
 import List from "../components/List";
@@ -11,6 +10,8 @@ import List from "../components/List";
 import DeckA from "../components/consola/deckA";
 import DeckB from "../components/consola/deckB";
 import Mixer from "../components/consola/mixer";
+import { useLibrary } from "../hooks/useLibrary";
+import { loadTrackAudioUrl } from "../services/api";
 
 const STORAGE_KEYS = {
     colorMode: "aethel_color_mode",
@@ -19,62 +20,9 @@ const STORAGE_KEYS = {
 
 const MAX_PADS = 9;
 
-/* =========================================================
-   SERVICIO BACKEND (CON FALLBACK LOCAL SI AÚN NO HAY API)
-   ========================================================= */
-
-const djBackendApi = {
-    async syncSessionState(payload) {
-        try {
-            const response = await fetch(`${API_URL}/api/dj/session/state`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            });
-            if (!response.ok) return null;
-            return await response.json();
-        } catch {
-            return null;
-        }
-    },
-
-    async uploadPadSample(deck, file, padIndex) {
-        try {
-            const formData = new FormData();
-            formData.append("deck", deck);
-            formData.append("pad_index", String(padIndex));
-            formData.append("file", file);
-
-            const response = await fetch(`${API_URL}/api/dj/pads/upload`, {
-                method: "POST",
-                body: formData
-            });
-            if (!response.ok) return null;
-            return await response.json();
-        } catch {
-            return null;
-        }
-    },
-
-    async uploadSessionRecording(blob, sessionPayload) {
-        try {
-            const formData = new FormData();
-            formData.append("audio", blob, `aethel-dj-sesion-${Date.now()}.webm`);
-            formData.append("metadata", JSON.stringify(sessionPayload));
-
-            const response = await fetch(`${API_URL}/api/dj/recordings`, {
-                method: "POST",
-                body: formData
-            });
-            if (!response.ok) return null;
-            return await response.json();
-        } catch {
-            return null;
-        }
-    }
-};
-
 function Consol() {
+    const { songs, loadingSongs, libraryError } = useLibrary();
+    const localAudioUrlsRef = useRef(new Set());
     const [colorMode, setColorMode] = useState(() => {
         const saved = localStorage.getItem(STORAGE_KEYS.colorMode);
         return saved === "light" || saved === "dark" ? saved : "dark";
@@ -123,6 +71,11 @@ function Consol() {
 
     const textScale = textSize / 100;
 
+    useEffect(() => () => {
+        localAudioUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
+        localAudioUrlsRef.current.clear();
+    }, []);
+
     useEffect(() => {
         const syncPreferences = () => {
             const attrTheme = document.documentElement.getAttribute("data-theme");
@@ -164,44 +117,29 @@ function Consol() {
         };
     }, []);
 
-    useEffect(() => {
-        djBackendApi.syncSessionState({
-            leftSongId: leftSong?.id ?? null,
-            rightSongId: rightSong?.id ?? null,
-            leftVolume,
-            rightVolume,
-            leftChannelLevel,
-            rightChannelLevel,
-            crossfade,
-            leftPadsCount: leftPads.length,
-            rightPadsCount: rightPads.length
-        });
-    }, [
-        leftSong,
-        rightSong,
-        leftVolume,
-        rightVolume,
-        leftChannelLevel,
-        rightChannelLevel,
-        crossfade,
-        leftPads.length,
-        rightPads.length
-    ]);
-
-
     /* =========================================================
        2. HANDLERS
        ========================================================= */
 
-    const selectSong = (song) => {
-        if (!leftPlaying) {
-            setLeftSong(song);
-            setLeftCurrentTime(0);
-            setLeftDuration(Number(song?.duration) || 0);
-        } else {
-            setRightSong(song);
-            setRightCurrentTime(0);
-            setRightDuration(Number(song?.duration) || 0);
+    const selectSong = async (song) => {
+        const side = leftPlaying ? "right" : "left";
+        try {
+            const audioUrl = song.local
+                ? URL.createObjectURL(song.file)
+                : await loadTrackAudioUrl(song.id);
+            if (song.local) localAudioUrlsRef.current.add(audioUrl);
+            const playableSong = { ...song, audioUrl };
+            if (side === "left") {
+                setLeftSong(playableSong);
+                setLeftCurrentTime(0);
+                setLeftDuration(Number(song.duration) || 0);
+            } else {
+                setRightSong(playableSong);
+                setRightCurrentTime(0);
+                setRightDuration(Number(song.duration) || 0);
+            }
+        } catch (error) {
+            window.alert(error.message);
         }
     };
 
@@ -237,14 +175,13 @@ function Consol() {
         );
     };
 
-    const handleImportLeftPadFile = async (file) => {
+    const handleImportLeftPadFile = (file) => {
         if (!file) return;
 
-        let addedPad = null;
         setLeftPads((prev) => {
             if (prev.length >= MAX_PADS) return prev;
             const nextIndex = prev.length + 1;
-            addedPad = {
+            const addedPad = {
                 id: nextIndex,
                 name: file.name.replace(/\.[^/.]+$/, ""),
                 url: URL.createObjectURL(file)
@@ -252,32 +189,15 @@ function Consol() {
             return [...prev, addedPad];
         });
 
-        if (addedPad) {
-            const backendResponse = await djBackendApi.uploadPadSample(
-                "A",
-                file,
-                addedPad.id
-            );
-            if (backendResponse?.url) {
-                setLeftPads((prev) =>
-                    prev.map((item) =>
-                        item.id === addedPad.id
-                            ? { ...item, backendUrl: backendResponse.url }
-                            : item
-                    )
-                );
-            }
-        }
     };
 
-    const handleImportRightPadFile = async (file) => {
+    const handleImportRightPadFile = (file) => {
         if (!file) return;
 
-        let addedPad = null;
         setRightPads((prev) => {
             if (prev.length >= MAX_PADS) return prev;
             const nextIndex = prev.length + 1;
-            addedPad = {
+            const addedPad = {
                 id: nextIndex,
                 name: file.name.replace(/\.[^/.]+$/, ""),
                 url: URL.createObjectURL(file)
@@ -285,26 +205,10 @@ function Consol() {
             return [...prev, addedPad];
         });
 
-        if (addedPad) {
-            const backendResponse = await djBackendApi.uploadPadSample(
-                "B",
-                file,
-                addedPad.id
-            );
-            if (backendResponse?.url) {
-                setRightPads((prev) =>
-                    prev.map((item) =>
-                        item.id === addedPad.id
-                            ? { ...item, backendUrl: backendResponse.url }
-                            : item
-                    )
-                );
-            }
-        }
     };
 
     const playPadSample = (padItem) => {
-        const sampleSrc = padItem?.backendUrl || padItem?.url;
+        const sampleSrc = padItem?.url;
         if (!sampleSrc) return;
 
         const padAudio = new Audio(sampleSrc);
@@ -375,14 +279,6 @@ function Consol() {
                     setRecordedChunks(finalChunks);
                     stream.getTracks().forEach((track) => track.stop());
 
-                    if (finalChunks.length > 0) {
-                        const blob = new Blob(finalChunks, { type: "audio/webm" });
-                        await djBackendApi.uploadSessionRecording(blob, {
-                            leftSong: leftSong?.title || null,
-                            rightSong: rightSong?.title || null,
-                            crossfade
-                        });
-                    }
                 };
 
                 recorder.start();
@@ -474,6 +370,9 @@ function Consol() {
                 <div className="consol-playlist-content">
 
                     <List
+                        songs={songs}
+                        loading={loadingSongs}
+                        error={libraryError}
                         onSongSelect={selectSong}
                     />
 
