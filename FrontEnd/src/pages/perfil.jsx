@@ -4,6 +4,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { apiFetch } from "../services/api";
 import "../styles/interfaces_navbar/perfil.css";
 
 const STORAGE_KEYS = {
@@ -76,25 +77,43 @@ function Perfil() {
     }, []);
 
     useEffect(() => {
-        const usuarioGuardado = localStorage.getItem(STORAGE_KEYS.usuario);
+        let activo = true;
 
-        if (usuarioGuardado) {
-            try {
-                const datosUsuario = JSON.parse(usuarioGuardado);
-
-                setUsuario({
-                    nombre: datosUsuario.nombre_usuario || datosUsuario.nombre || "",
-                    correo: datosUsuario.correo_usuario || datosUsuario.correo || "",
-                    foto: datosUsuario.foto_perfil || datosUsuario.foto || ""
-                });
-            } catch (error) {
-                console.error(
-                    "Error al leer los datos del usuario:",
-                    error
-                );
+        const cargarPerfil = async () => {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                navigate("/iniciar-sesion", { replace: true });
+                return;
             }
-        }
-    }, []);
+
+            try {
+                const response = await apiFetch("/api/usuarios/perfil");
+                const datos = await response.json().catch(() => ({}));
+
+                if (!response.ok) {
+                    if (activo) navigate("/iniciar-sesion", { replace: true });
+                    return;
+                }
+
+                if (activo) {
+                    setUsuario({
+                        nombre: datos.nombre || "",
+                        correo: datos.correo || "",
+                        foto: datos.ruta_foto_perfil || ""
+                    });
+                    localStorage.setItem(STORAGE_KEYS.usuario, JSON.stringify(datos));
+                }
+            } catch (error) {
+                console.error("No se pudo verificar la sesión:", error);
+                if (activo) navigate("/iniciar-sesion", { replace: true });
+            }
+        };
+
+        cargarPerfil();
+        return () => {
+            activo = false;
+        };
+    }, [navigate]);
 
 
     /* =========================================================
