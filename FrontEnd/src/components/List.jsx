@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import "../styles/interfaces_navbar/list.css";
 
 // =========================================
@@ -12,11 +12,27 @@ import "../styles/interfaces_navbar/list.css";
 // =========================================
 
 import playIcon from "../assets/img/reproductor_icons/play.png";
+import { addLocalFiles } from "../services/localLibrary";
 
 
-function List({ songs = [], onSongSelect }) {
+function List({ songs = [], onSongSelect, loading = false, error = "" }) {
 
     const [selectedSong, setSelectedSong] = useState(null);
+    const filesRef = useRef(null);
+    const folderRef = useRef(null);
+
+    const handleImport = async (event) => {
+        try {
+            const imported = await addLocalFiles(event.target.files);
+            if (event.target.files?.length && !imported.length) {
+                window.alert("No se encontraron archivos de audio compatibles.");
+            }
+        } catch (importError) {
+            window.alert(importError.message || "No se pudo guardar la música localmente.");
+        } finally {
+            event.target.value = "";
+        }
+    };
 
     const genres = ["Todas"];
 
@@ -60,9 +76,12 @@ function List({ songs = [], onSongSelect }) {
 
                     </div>
 
-                    <span className="sort-text">
-                        Orden ↕
-                    </span>
+                    <div className="library-import-actions">
+                        <input ref={filesRef} type="file" accept="audio/*" multiple hidden onChange={handleImport} />
+                        <input ref={folderRef} type="file" accept="audio/*" multiple hidden webkitdirectory="" onChange={handleImport} />
+                        <button type="button" onClick={() => filesRef.current?.click()} title="Agregar canciones desde el computador">+ Archivos</button>
+                        <button type="button" onClick={() => folderRef.current?.click()} title="Agregar una carpeta de música">+ Carpeta</button>
+                    </div>
 
                 </div>
 
@@ -70,6 +89,12 @@ function List({ songs = [], onSongSelect }) {
                 {/* LISTA DE MÚSICA */}
 
                 <div className="music-scroll">
+
+                    {!songs.length && (
+                        <p className="empty-library" role={error ? "alert" : undefined}>
+                            {loading ? "Cargando tu música…" : error || "Aún no hay canciones en tu biblioteca."}
+                        </p>
+                    )}
 
                     {genres.map((genre) => (
 
