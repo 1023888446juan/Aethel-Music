@@ -1,0 +1,665 @@
+/* =========================================
+   LISTA DE MÚSICA
+   ========================================= */
+
+.playlist-side {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    min-width: 0;
+    min-height: 0;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            #15151b,
+            #20202a,
+            #181820
+        );
+
+    border-right:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
+}
+
+
+/* =========================================
+   BRILLO SIDEBAR
+   ========================================= */
+
+.playlist-side::before {
+    content: "";
+
+    position: absolute;
+
+    width: 300px;
+    height: 300px;
+
+    top: -100px;
+    left: -120px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(
+            205,
+            147,
+            252,
+            0.13
+        );
+
+    filter: blur(90px);
+
+    animation:
+        listSidebarGlow
+        7s
+        ease-in-out
+        infinite
+        alternate;
+}
+
+
+.playlist-side::after {
+    content: "";
+
+    position: absolute;
+
+    width: 280px;
+    height: 280px;
+
+    bottom: -120px;
+    right: -100px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(
+            124,
+            153,
+            248,
+            0.12
+        );
+
+    filter: blur(90px);
+
+    animation:
+        listSidebarGlow2
+        9s
+        ease-in-out
+        infinite
+        alternate;
+}
+
+
+@keyframes listSidebarGlow {
+
+    from {
+        transform:
+            translate(
+                0,
+                0
+            );
+    }
+
+    to {
+        transform:
+            translate(
+                80px,
+                100px
+            );
+    }
+}
+
+
+@keyframes listSidebarGlow2 {
+
+    from {
+        transform:
+            translate(
+                0,
+                0
+            );
+    }
+
+    to {
+        transform:
+            translate(
+                -70px,
+                -80px
+            );
+    }
+}
+
+
+/* =========================================
+   CONTENIDO SIDEBAR
+   ========================================= */
+
+.playlist-content {
+    position: relative;
+
+    z-index: 2;
+
+    width: 100%;
+    height: 100%;
+
+    min-height: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    padding:
+        28px 22px;
+}
+
+
+/* =========================================
+   HEADER
+   ========================================= */
+
+.playlist-header {
+    display: flex;
+
+    align-items: flex-end;
+    justify-content: space-between;
+
+    margin-bottom: 22px;
+
+    padding:
+        0 5px;
+
+    flex-shrink: 0;
+}
+
+
+.playlist-subtitle {
+    display: block;
+
+    margin-bottom: 4px;
+
+    font-size: 10px;
+    font-weight: 500;
+
+    letter-spacing: 3px;
+
+    color:
+        rgba(
+            205,
+            147,
+            252,
+            0.8
+        );
+}
+
+
+.playlist-header h1 {
+    margin: 0;
+
+    font-family:
+        "Oswald",
+        sans-serif;
+
+    font-size: 32px;
+    font-weight: 600;
+
+    letter-spacing: 2px;
+
+    color: white;
+}
+
+
+.sort-text {
+    font-size: 12px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.45
+        );
+
+    cursor: pointer;
+
+    transition:
+        color 0.25s ease;
+}
+
+
+.sort-text:hover {
+    color: white;
+}
+
+.library-import-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 6px;
+}
+
+.library-import-actions button {
+    border: 1px solid rgba(205, 147, 252, 0.28);
+    border-radius: 999px;
+    padding: 7px 10px;
+    background: rgba(205, 147, 252, 0.08);
+    color: rgba(255, 255, 255, 0.8);
+    font: inherit;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.library-import-actions button:hover {
+    background: rgba(205, 147, 252, 0.2);
+    color: white;
+}
+
+
+/* =========================================
+   SCROLL DE MÚSICA
+   ========================================= */
+
+.music-scroll {
+    flex: 1;
+
+    min-height: 0;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding-right: 6px;
+}
+
+
+.music-scroll::-webkit-scrollbar {
+    width: 5px;
+}
+
+
+.music-scroll::-webkit-scrollbar-track {
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.03
+        );
+}
+
+
+.music-scroll::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+
+    background:
+        rgba(
+            205,
+            147,
+            252,
+            0.35
+        );
+}
+
+
+.music-scroll::-webkit-scrollbar-thumb:hover {
+    background:
+        rgba(
+            205,
+            147,
+            252,
+            0.65
+        );
+}
+
+
+/* =========================================
+   CATEGORÍAS
+   ========================================= */
+
+.category {
+    margin-bottom: 22px;
+}
+
+
+.category-title {
+    margin:
+        0 0 8px 5px;
+
+    font-family:
+        "Oswald",
+        sans-serif;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    letter-spacing: 1.5px;
+
+    text-transform: uppercase;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.55
+        );
+}
+
+
+/* =========================================
+   CANCIONES
+   ========================================= */
+
+.song {
+    position: relative;
+
+    width: 100%;
+    min-height: 54px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 4px;
+
+    padding:
+        8px 12px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: transparent;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.68
+        );
+
+    cursor: pointer;
+
+    text-align: left;
+
+    transition:
+        background 0.25s ease,
+        transform 0.25s ease,
+        color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+.song:hover {
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.055
+        );
+
+    color: white;
+
+    transform:
+        translateX(4px);
+}
+
+
+.song.active {
+    color: white;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(
+                205,
+                147,
+                252,
+                0.18
+            ),
+            rgba(
+                124,
+                153,
+                248,
+                0.08
+            )
+        );
+
+    box-shadow:
+        inset 3px 0 0 #c88cff;
+
+    transform:
+        translateX(4px);
+}
+
+
+/* =========================================
+   PLAY ICON
+   ========================================= */
+
+.play-icon {
+    width: 27px;
+    height: 27px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.06
+        );
+
+    transition:
+        background 0.25s ease,
+        transform 0.25s ease;
+}
+
+
+.play-icon img {
+    width: 14px;
+    height: 14px;
+
+    object-fit: contain;
+
+    display: block;
+
+    transition:
+        transform 0.25s ease;
+}
+
+
+.song:hover .play-icon,
+.song.active .play-icon {
+    background:
+        linear-gradient(
+            135deg,
+            #cd93fc,
+            #7c99f8
+        );
+
+    transform:
+        scale(1.08);
+}
+
+
+.song:hover .play-icon img,
+.song.active .play-icon img {
+    transform:
+        scale(1.08);
+}
+
+
+/* =========================================
+   INFORMACIÓN DE CANCIÓN
+   ========================================= */
+
+.song-info {
+    min-width: 0;
+
+    flex: 1;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+
+.song-title {
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+
+    font-size: 13px;
+    font-weight: 500;
+}
+
+
+.song-artist {
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+
+    font-size: 11px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.4
+        );
+}
+
+
+.song.active .song-artist {
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.65
+        );
+}
+
+
+/* =========================================
+   EQUALIZER
+   ========================================= */
+
+.equalizer {
+    width: 18px;
+    height: 20px;
+
+    display: flex;
+
+    align-items: flex-end;
+    justify-content: center;
+
+    gap: 2px;
+
+    flex-shrink: 0;
+}
+
+
+.equalizer span {
+    width: 3px;
+
+    border-radius: 3px;
+
+    background:
+        linear-gradient(
+            to top,
+            #cd93fc,
+            #7c99f8
+        );
+
+    animation:
+        listEqualizer
+        0.8s
+        ease-in-out
+        infinite;
+}
+
+
+.equalizer span:nth-child(1) {
+    height: 8px;
+}
+
+
+.equalizer span:nth-child(2) {
+    height: 15px;
+
+    animation-delay:
+        0.15s;
+}
+
+
+.equalizer span:nth-child(3) {
+    height: 11px;
+
+    animation-delay:
+        0.3s;
+}
+
+
+.equalizer span:nth-child(4) {
+    height: 17px;
+
+    animation-delay:
+        0.45s;
+}
+
+
+@keyframes listEqualizer {
+
+    0%,
+    100% {
+        transform:
+            scaleY(0.5);
+    }
+
+    50% {
+        transform:
+            scaleY(1);
+    }
+}
+
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 750px) {
+
+    .playlist-side {
+        display: none;
+    }
+
+}
+
