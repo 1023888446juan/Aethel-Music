@@ -2,10 +2,10 @@
    1. IMPORTS, ESTADO Y EFECTOS
    ========================================================= */
 
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { apiFetch } from "../services/api";
 import "../styles/interfaces_navbar/perfil.css";
+import { api, loadProfilePhotoUrl } from "../services/api";
 
 const STORAGE_KEYS = {
     colorMode: "aethel_color_mode",
@@ -13,9 +13,25 @@ const STORAGE_KEYS = {
     usuario: "usuario"
 };
 
+function leerUsuarioGuardado() {
+    try {
+        const datos = JSON.parse(localStorage.getItem(STORAGE_KEYS.usuario) || "{}");
+        return {
+            nombre: datos.nombre_usuario || datos.nombre || "",
+            correo: datos.correo_usuario || datos.correo || "",
+            foto: datos.foto_perfil || datos.foto || ""
+        };
+    } catch {
+        return { nombre: "", correo: "", foto: "" };
+    }
+}
+
 function Perfil() {
     const navigate = useNavigate();
     const avatarInputRef = useRef(null);
+    const photoUrlRef = useRef(null);
+    const [savingPhoto, setSavingPhoto] = useState(false);
+    const [photoError, setPhotoError] = useState("");
 
     const [colorMode, setColorMode] = useState(() => {
         const saved = localStorage.getItem(STORAGE_KEYS.colorMode);
@@ -27,11 +43,7 @@ function Perfil() {
         return saved >= 80 && saved <= 130 ? saved : 100;
     });
 
-    const [usuario, setUsuario] = useState({
-        nombre: "",
-        correo: "",
-        foto: ""
-    });
+    const [usuario, setUsuario] = useState(leerUsuarioGuardado);
 
     const textScale = textSize / 100;
 
@@ -77,43 +89,37 @@ function Perfil() {
     }, []);
 
     useEffect(() => {
-        let activo = true;
-
+        let cancelled = false;
         const cargarPerfil = async () => {
-            const token = localStorage.getItem("token");
-            if (!token) {
-                navigate("/iniciar-sesion", { replace: true });
-                return;
-            }
-
+            if (!localStorage.getItem("aethel_access_token") && !localStorage.getItem("token")) return;
             try {
-                const response = await apiFetch("/api/usuarios/perfil");
-                const datos = await response.json().catch(() => ({}));
-
-                if (!response.ok) {
-                    if (activo) navigate("/iniciar-sesion", { replace: true });
-                    return;
-                }
-
-                if (activo) {
-                    setUsuario({
-                        nombre: datos.nombre || "",
-                        correo: datos.correo || "",
-                        foto: datos.ruta_foto_perfil || ""
-                    });
-                    localStorage.setItem(STORAGE_KEYS.usuario, JSON.stringify(datos));
+                const datos = await api.profile();
+                if (cancelled) return;
+                setUsuario((previous) => ({
+                    ...previous,
+                    nombre: datos.nombre || previous.nombre,
+                    correo: datos.correo || previous.correo
+                }));
+                localStorage.setItem(STORAGE_KEYS.usuario, JSON.stringify(datos));
+                if (datos.ruta_foto_perfil) {
+                    const photoUrl = await loadProfilePhotoUrl();
+                    if (cancelled) {
+                        URL.revokeObjectURL(photoUrl);
+                        return;
+                    }
+                    photoUrlRef.current = photoUrl;
+                    setUsuario((previous) => ({ ...previous, foto: photoUrl }));
                 }
             } catch (error) {
-                console.error("No se pudo verificar la sesión:", error);
-                if (activo) navigate("/iniciar-sesion", { replace: true });
+                console.error("No se pudo cargar el perfil desde la API:", error);
             }
         };
-
         cargarPerfil();
         return () => {
-            activo = false;
+            cancelled = true;
+            if (photoUrlRef.current) URL.revokeObjectURL(photoUrlRef.current);
         };
-    }, [navigate]);
+    }, []);
 
 
     /* =========================================================
@@ -124,43 +130,40 @@ function Perfil() {
         avatarInputRef.current?.click();
     };
 
-    const handleAvatarChange = (event) => {
+    const handleAvatarChange = async (event) => {
         const file = event.target.files?.[0];
         if (!file || !file.type.startsWith("image/")) return;
-
-        const reader = new FileReader();
-        reader.onload = () => {
-            const nextPhoto = typeof reader.result === "string" ? reader.result : "";
-            if (!nextPhoto) return;
-
-            setUsuario((prev) => ({
-                ...prev,
-                foto: nextPhoto
+        const previousPhoto = usuario.foto;
+        const previewUrl = URL.createObjectURL(file);
+        setUsuario((prev) => ({ ...prev, foto: previewUrl }));
+        setSavingPhoto(true);
+        setPhotoError("");
+        try {
+            const savedPhoto = await api.uploadProfilePhoto(file);
+            const persistedUrl = await loadProfilePhotoUrl();
+            if (photoUrlRef.current) URL.revokeObjectURL(photoUrlRef.current);
+            photoUrlRef.current = persistedUrl;
+            URL.revokeObjectURL(previewUrl);
+            setUsuario((prev) => ({ ...prev, foto: persistedUrl }));
+            const savedUser = JSON.parse(localStorage.getItem(STORAGE_KEYS.usuario) || "{}");
+            localStorage.setItem(STORAGE_KEYS.usuario, JSON.stringify({
+                ...savedUser,
+                nombre: usuario.nombre,
+                correo: usuario.correo,
+                ruta_foto_perfil: savedPhoto.ruta_foto_perfil
             }));
-
-            try {
-                const rawSaved = localStorage.getItem(STORAGE_KEYS.usuario);
-                const parsed = rawSaved ? JSON.parse(rawSaved) : {};
-                localStorage.setItem(
-                    STORAGE_KEYS.usuario,
-                    JSON.stringify({
-                        ...parsed,
-                        foto: nextPhoto,
-                        foto_perfil: nextPhoto
-                    })
-                );
-            } catch (error) {
-                console.error("Error al guardar la foto de perfil:", error);
-            }
-        };
-
-        reader.readAsDataURL(file);
-        event.target.value = "";
+        } catch (error) {
+            URL.revokeObjectURL(previewUrl);
+            setUsuario((prev) => ({ ...prev, foto: previousPhoto }));
+            setPhotoError(error.message || "No se pudo guardar la foto de perfil.");
+        } finally {
+            setSavingPhoto(false);
+            event.target.value = "";
+        }
     };
 
     const handleCerrarSesion = () => {
         localStorage.removeItem("token");
-        localStorage.removeItem("token_type");
         localStorage.removeItem(STORAGE_KEYS.usuario);
 
         sessionStorage.removeItem("token");
@@ -223,11 +226,15 @@ function Perfil() {
                             type="button"
                             className="perfil-edit-pencil"
                             onClick={handleOpenAvatarPicker}
-                            title="Cambiar foto de perfil"
+                            title={savingPhoto ? "Guardando foto de perfil" : "Cambiar foto de perfil"}
                             aria-label="Cambiar foto de perfil"
+                            disabled={savingPhoto}
                         >
                             ✎
                         </button>
+
+                        {savingPhoto && <span role="status">Guardando foto…</span>}
+                        {photoError && <span role="alert">{photoError}</span>}
 
                     </div>
 
