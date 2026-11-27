@@ -110,18 +110,21 @@ function FormularioIni() {
                 return;
             }
 
-            console.log("Inicio de sesión exitoso:", datos);
-
-            localStorage.setItem(
-                "usuario",
-                JSON.stringify(datos.usuario || datos)
-            );
-
-            if (datos.access_token) {
-                localStorage.setItem("token", datos.access_token);
+            if (!datos.access_token) {
+                setError("El servidor no devolvió el token de acceso. Inténtalo nuevamente.");
+                return;
             }
 
-            navigate("/perfil");
+            // Guardar la sesión antes de navegar para que Perfil y las demás
+            // pantallas puedan autenticar sus peticiones desde el primer render.
+            localStorage.setItem("token", datos.access_token);
+            localStorage.setItem("token_type", datos.token_type || "bearer");
+            localStorage.setItem(
+                "usuario",
+                JSON.stringify(datos.usuario || {})
+            );
+
+            navigate("/perfil", { replace: true });
         } catch (err) {
             console.error(
                 "Error al conectar con el backend:",
